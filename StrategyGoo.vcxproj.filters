@@ -16,6 +16,9 @@
     <Filter Include="Header Files\nlohmann">
       <UniqueIdentifier>{9b45d049-8aa0-4c25-9ad4-652c0fe72898}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\entt">
+      <UniqueIdentifier>{fe681145-37a4-41ed-a4e9-19906520a346}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -25,6 +28,9 @@
   <ItemGroup>
     <ClInclude Include="External\Include\nlohmann\json.hpp">
       <Filter>Header Files\nlohmann</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Include\entt\entt.hpp">
+      <Filter>Header Files\entt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
