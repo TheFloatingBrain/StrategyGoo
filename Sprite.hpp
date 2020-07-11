@@ -57,13 +57,14 @@ namespace StrategyGoo
 
 	struct Sprite
 	{
-		Sprite( std::string spriteName_, Direction currentDirection = DEFAULT_DIRECTION );
-		Sprite( const sf::Texture& alternativeTexture, FRAMES_TYPE frames );
-		Sprite( sf::Sprite spriteName_ );
+		Sprite( std::string spriteName_, Direction currentDirection_ = DEFAULT_DIRECTION );
+		Sprite( const sf::Texture& alternativeTexture, FRAMES_TYPE frames_ );
 
-		void Draw( sf::RenderWindow& window );
+		void Draw( sf::RenderWindow& toRenderTo );
 		Sprite Copy();
 
+
+		void ChangeAnimation( size_t to );
 		std::vector< sf::IntRect > ObtainFramesForDirection( Direction spriteDirection );
 		std::vector< size_t > ObtainAnimationFramesForDirection( Direction spriteDirection );
 		std::vector< sf::IntRect > ObtainIntRectAnimationFramesForDirection( size_t animation, Direction spriteDirection );
@@ -72,6 +73,8 @@ namespace StrategyGoo
 		sf::IntRect ObtainAnimationFrameBounds( size_t animation, Direction spriteDirection, size_t frame );
 		sf::IntRect ObtainCurrentAnimationFrameBounds( Direction spriteDirection, size_t frame );
 		sf::IntRect ObtainFrameBounds( Direction spriteDirection, size_t frame );
+		size_t ObtainFramesForAnimation( Direction spriteDirection, size_t animation );
+		size_t ObtainFramesForCurrentAnimation();
 		void ModifyTexture( const sf::Texture& texture );
 		void AddAnimation( ANIMATION_TYPE toAdd );
 		size_t ObtainAmountOfAnimations();
@@ -82,10 +85,10 @@ namespace StrategyGoo
 		void SetFrames( FRAMES_TYPE frames_ );
 		void SetAnimations( std::vector< ANIMATION_TYPE > animations_ );
 		void SetCurrentFrame( size_t currentFrame_ );
-		void SetCurrentAnimation( size_t currentAnimation_ );
 		void SetActive( bool active_ );
 		void SetJSONData( std::string jsonData_ );
 		void SetPlaceInSpriteSheet( sf::IntRect placeInSpriteSheet_ );
+		void SetAnimationActive( bool animationActive_ );
 
 		std::string GetSpriteName();
 		sf::Sprite GetSprite();
@@ -97,6 +100,7 @@ namespace StrategyGoo
 		bool GetActive();
 		std::string GetJSONData();
 		sf::IntRect GetPlaceInSpriteSheet();
+		bool GetAnimationActive();
 
 		static sf::IntRect LoadSpriteImage( std::string spriteName, sf::Texture* buffer = nullptr, 
 				sf::Image* spriteBuffer = nullptr, std::vector< LOADED_SPRITE_DATA_TYPE >* loadedSprites = nullptr );
@@ -117,6 +121,7 @@ namespace StrategyGoo
 		ANIMATION_TYPE& RefrenceAnimation( size_t animation );
 
 		protected:
+			void SetCurrentAnimation( size_t currentAnimation_ );
 			std::string spriteName = DEFAULT_SPRITE_NAME_CONSTANT;
 			sf::Sprite sprite;
 			FRAMES_TYPE frames;
@@ -126,7 +131,10 @@ namespace StrategyGoo
 			sf::IntRect placeInSpriteSheet;
 			std::vector< ANIMATION_TYPE > animations;
 			bool active = true;
+			bool animationActive = true;
 			std::string jsonData = DEFAULT_JSON_DATA_CONSTANT;
+			void Animate();
+			void ConstructDefaultAnimation();
 	};
 }
 #endif

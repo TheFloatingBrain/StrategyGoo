@@ -1,5 +1,6 @@
-#include <SFML/Graphics.hpp>
 #include <iostream>
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include "Sprite.hpp"
 
 void PrintRect( sf::IntRect rect )
@@ -12,7 +13,10 @@ int main( int argc, char** args )
 {
 	sf::RenderWindow window( sf::VideoMode( 1024, 768 ), "sf::RenderWindow" );
 
-	PrintRect( StrategyGoo::Sprite::LoadSpriteImage( "Squaddie" ) );
+	StrategyGoo::Sprite test{ "Squaddie" };
+
+	( *test ).setPosition( 100, 100 );
+	int directions = 0;
 	while( window.isOpen() )
 	{
 		sf::Event event;
@@ -20,9 +24,12 @@ int main( int argc, char** args )
 			if( event.type == sf::Event::Closed )
 				window.close();
 		}
-		window.draw( sf::Sprite( *StrategyGoo::Detail::masterTexture ) );
-		window.clear();
+		test.Draw( window );
+		sf::sleep( sf::Time( sf::seconds( 1 ) ) );
+		test.SetCurrentDirection( ( StrategyGoo::Direction ) 
+			( directions++ % StrategyGoo::AMOUNT_OF_DIRECTIONS_CONSTANT ) );
 		window.display();
+		window.clear();
 	}
 
 	return 0;
