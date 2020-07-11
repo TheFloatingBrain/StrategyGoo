@@ -1,88 +1,76 @@
 #ifndef GAMEPLAY_MANAGER_HEADER_HPP
 #define GAMEPLAY_MANAGER_HEADER_HPP
 #include "GameBoard.hpp"
-#include <queue>
+#include <math.h>
 namespace StrategyGoo
 {
+	template< typename SCALER_TYPE = float >
+	constexpr double Magnitude( sf::Vector2< SCALER_TYPE > of ) {
+		return sqrt( ( of.x * of.x ) + ( of.y * of.y ) );
+	}
+
+	bool ComparePosition( sf::Vector2f first, sf::Vector2f second );
+
+	template< typename SCALER_TYPE = float >
+	struct ToUnitVector
+	{
+		sf::Vector2< SCALER_TYPE > result;
+		ToUnitVector( sf::Vector2< SCALER_TYPE > vector ) {
+			const double MAGNITUDE_CONSTANT = Magnitude( vector );
+			result = sf::Vector2< SCALER_TYPE >( 
+					vector.x / MAGNITUDE_CONSTANT, vector.y / MAGNITUDE_CONSTANT );
+		}
+		operator sf::Vector2< SCALER_TYPE >() {
+			return result;
+		}
+	};
 
 	struct Updator
 	{
 		using UpdatorRefrence = std::reference_wrapper< Updator >;
 		virtual void Update() = 0;
-		virtual void Render() {}
+		virtual void UpdateGraphics() {};
 	};
 
-	struct PlayerUnit;
-	
-	struct PlayerOrder {
-		virtual void Execute( PlayerUnit* player ) = 0;
-	};
-
-	struct PlayerUnit : public WorldPosition
+	struct Squaddie : public Updator, public WorldPosition
 	{
-		using PlayerUnitRefrence = std::reference_wrapper< PlayerUnit >;
-		std::queue< PlayerOrder* > orders;
-		template< typename ORDER_TYPE, typename... ARGUMENT_TYPES >
-		void AddOrder( ARGUMENT_TYPES... arguments ) {
-			orders.push( new OREDER_TYPE( std::forward< ARGUMENT_TYPES > arguments )... );
-		}
-		void RemoveOrder() {
-			delete orders.front();
-;			orders.pop();
-		}
-		bool Done() {
-			return orders.empty();
-		}
+		using SquaddieRefrence = std::reference_wrapper< Squaddie >;
+		Squaddie( entt::registry& registry_, BoardPosition start, GameBoard* board_, 
+				size_t tileWidth, size_t tileHeight );
 
-		sf::Vector2f ToWorldPosition() override {
-			return ( *board )[ position->x ][ position->y ].ToWorldPosition();
-		}
-
-		bool CheckSelect( sf::Vector2f cursorPosition, sf::Vector2f cameraPosition )
-		{
-			sf::IntRect box = sprite->ObtainCurrentAnimationFrameBounds( 
-					sprite->GetCurrentDirection(), sprite->GetCurrentFrame() );
-			auto worldPosition = ToWorldPosition();
-			sf::FloatRect checkMouse = sf::FloatRect{ worldPosition.x,
-					worldPosition.y, ( float ) box.width, ( float ) box.height };
-			if( checkMouse.contains( ( cursorPosition + cameraPosition ) ) )
-				selected = true;
-			return selected;
-		}
-		//Plays order animations.//
-		virtual bool TickOrder() = 0;
+		sf::Vector2f ToWorldPosition() override;
+		//Anything that needs to be regularly updated.//
+		void Update() override;
+		//For animations between orders.//
+		void TickOrder();
+		bool CheckSelect( sf::Vector2f cursorPosition, sf::Vector2f cameraPosition );
+		
 		BoardPosition* position;
 		Sprite* sprite;
 		GameBoard* board;
-		bool selected = false;
-	};
-
-
-	struct TestEntity : public Updator, public PlayerUnit
-	{
-		using TestEntityRefrence = std::reference_wrapper< TestEntity >;
-		TestEntity( entt::registry& registry_, BoardPosition start, size_t tileWidth, size_t tileHeight ) : 
-				registry( registry_ ), ENTITY_TILE_WIDTH_CONSTANT( tileWidth ), ENTITY_TILE_HEIGHT_CONSTANT( tileHeight )
-		{
-			id = registry.create();
-			position = &registry.emplace< BoardPosition >( id, start.x, start.y );
-			sprite = &registry.emplace< Sprite >( id, "Squaddie" );
-			registry.emplace< TestEntityRefrence >( id, *this );
-			registry.emplace< Updator::UpdatorRefrence >( id, *this );
-			registry.emplace< PlayerUnit::PlayerUnitRefrence >( id, *this );
-		}
-		//Anything that needs to be regularly updated.//
-		void Update() override {
-		}
-		//For animations between orders.//
-		void TickOrder() override {
-			
-		}
 		const size_t ENTITY_TILE_WIDTH_CONSTANT;
 		const size_t ENTITY_TILE_HEIGHT_CONSTANT;
 		entt::entity id;
 		entt::registry& registry;
+
+		static std::optional< entt::entity > SelectSquaddie( entt::registry& registry, sf::View& camera );
+		static bool AddOrders( entt::registry& registry, entt::entity& id, sf::View& camera );
+		static bool ExecuteOrders( entt::registry& registry );
+
 	};
+
+	struct PlayerOrder {
+		virtual bool Tick( Squaddie& squaddie ) = 0;
+	};
+
+	struct MoveOrder : public PlayerOrder
+	{
+		BoardPosition from, to;
+		MoveOrder( BoardPosition from_, BoardPosition to_ );
+		bool Move( Squaddie& squaddie );
+		bool Tick( Squaddie& squaddie ) override;
+	};
+
 
 	struct GameplayManager
 	{
@@ -90,6 +78,7 @@ namespace StrategyGoo
 		void Update();
 		void Render();
 		protected: 
+			void UpdatePlayer();
 			GameBoard gameBoard;
 			entt::registry registry;
 	};

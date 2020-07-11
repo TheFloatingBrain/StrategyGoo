@@ -16,6 +16,25 @@ namespace StrategyGoo
 		return sf::Vector2f( ( float ) x * TILE_WIDTH_CONSTANT, 
 				( float ) y * TILE_HEIGHT_CONSTANT );
 	}
+
+	BoardPosition Tile::ObtainBoardPosition() {
+		return BoardPosition{ x, y };
+	}
+
+	size_t Tile::GetX() {
+		return x;
+	}
+	size_t Tile::GetX() {
+		return y;
+	}
+	const size_t Tile::GetTileWidthConstant() {
+		return WIDTH_CONSTANT;
+	}
+	const size_t Tile::GetTileHeightConstant() {
+		return HEIGHT_CONSTANT;
+	}
+
+
 	GameBoard::GameBoard( entt::registry& registry_, size_t width_, size_t height_, 
 				size_t tileWidth, size_t tileHeight ) :
 			registry( registry_ ), width( width_ ), height( height_ ), 
@@ -39,6 +58,21 @@ namespace StrategyGoo
 			}
 		}
 	}
+
+	size_t GameBoard::GetWidth() {
+		return width;
+	}
+	size_t GameBoard::GetHeight() {
+		return height;
+	}
+
+	const size_t GameBoard::GetTileWidthConstant() {
+		return BOARD_TILE_WIDTH_CONSTANT;
+	}
+	const size_t GameBoard::GetTileHeightConstant() {
+		return BOARD_TILE_HEIGHT_CONSTANT;
+	}
+
 
 	GameBoard::Row::Row( std::vector< Tile >* tiles_, size_t width, size_t row ) : 
 		ROW_CONSTANT( row ), WIDTH_CONSTANT( width ), tiles( tiles_ ) {}

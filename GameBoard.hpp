@@ -22,6 +22,13 @@ namespace StrategyGoo
 
 		sf::Vector2f ToWorldPosition() override;
 
+		BoardPosition ObtainBoardPosition();
+
+		size_t GetX();
+		size_t GetX();
+		const size_t GetTileWidthConstant();
+		const size_t GetTileHeightConstant();
+
 		protected: 
 			
 			size_t x, y;
@@ -47,6 +54,11 @@ namespace StrategyGoo
 				const size_t WIDTH_CONSTANT;
 				std::vector< Tile >* tiles;
 		};
+
+		size_t GetWidth();
+		size_t GetHeight();
+		const size_t GetTileWidthConstant();
+		const size_t GetTileHeightConstant();
 
 		Row operator[]( size_t index );
 		Row At( size_t index );
