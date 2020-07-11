@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
 	"Squaddie/sizeAbove/Squaddie_Above_E": {
 		"frame": {
 			"x": 122,
@@ -18,13 +17,6 @@
 			"x": 122,
 			"y": 60,
 			"width": 54,
-=======
-	"./Squaddie_Above_E": {
-		"frame": {
-			"x": 56,
-			"y": 58,
-			"width": 56,
->>>>>>> d6b7f92f347abd5a37850e2a730ec56666050618
 			"height": 54
 		},
 		"sourceSize": {
@@ -33,7 +25,6 @@
 		},
 		"rotated": false
 	},
-<<<<<<< HEAD
 	"Squaddie/sizeAbove/Squaddie_Above_NE": {
 		"frame": {
 			"x": 0,
@@ -66,14 +57,6 @@
 			"y": 123,
 			"width": 54,
 			"height": 52
-=======
-	"./Squaddie_Above_N": {
-		"frame": {
-			"x": 0,
-			"y": 62,
-			"width": 54,
-			"height": 58
->>>>>>> d6b7f92f347abd5a37850e2a730ec56666050618
 		},
 		"sourceSize": {
 			"width": 98,
@@ -81,7 +64,6 @@
 		},
 		"rotated": false
 	},
-<<<<<<< HEAD
 	"Squaddie/sizeAbove/Squaddie_Above_SE": {
 		"frame": {
 			"x": 62,
@@ -114,27 +96,6 @@
 			"y": 0,
 			"width": 52,
 			"height": 58
-=======
-	"./Squaddie_Above_S": {
-		"frame": {
-			"x": 0,
-			"y": 0,
-			"width": 54,
-			"height": 60
-		},
-		"sourceSize": {
-			"width": 98,
-			"height": 162
-		},
-		"rotated": false
-	},
-	"./Squaddie_Above_W": {
-		"frame": {
-			"x": 56,
-			"y": 0,
-			"width": 56,
-			"height": 56
->>>>>>> d6b7f92f347abd5a37850e2a730ec56666050618
 		},
 		"sourceSize": {
 			"width": 98,
