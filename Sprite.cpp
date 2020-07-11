@@ -16,14 +16,17 @@ namespace StrategyGoo
 		bool masterTextureInitialized = false;
 		std::vector< LOADED_SPRITE_DATA_TYPE > spritesLoaded;
 	}
-	Sprite::Sprite( std::string spriteName_, Direction currentDirection_ ) : currentDirection( currentDirection_ )
+
+	template< int LAYER_CONSTANT >
+	Sprite< LAYER_CONSTANT >::Sprite( std::string spriteName_, Direction currentDirection_ ) : currentDirection( currentDirection_ )
 	{
 		InitializeSprite( spriteName_ );
 		ConstructDefaultAnimation();
 		sprite = sf::Sprite( *Detail::masterTexture, frames[ ( unsigned short ) currentDirection ][ 0 ] );
 	}
 
-	void Sprite::ConstructDefaultAnimation()
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::ConstructDefaultAnimation()
 	{
 		ANIMATION_TYPE newAnimation;
 		for( size_t i = 0; i < frames.size(); ++i )
@@ -35,45 +38,64 @@ namespace StrategyGoo
 		animations.push_back( newAnimation );
 	}
 
-	void Sprite::Animate()
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::Animate()
 	{
 		if( animationActive == true )
 		{
-			sprite.setTextureRect(
-				ObtainCurrentAnimationFrameBounds( currentDirection, 
-				( currentFrame++ % ObtainFramesForCurrentAnimation() ) ) );
+			auto relativeFrame = ObtainCurrentAnimationFrameBounds( currentDirection,
+					( currentFrame++ % ObtainFramesForCurrentAnimation() ) );
+			relativeFrame.left += placeInSpriteSheet.left;
+			relativeFrame.top += placeInSpriteSheet.top;
+			sprite.setTextureRect( relativeFrame );
 		}
 	}
-	void Sprite::Draw( sf::RenderWindow& toRenderTo ) {
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::Draw( sf::RenderWindow& toRenderTo ) {
 		toRenderTo.draw( sprite );
 		Animate();
 	}
 
-	void Sprite::ChangeAnimation( size_t to ) {
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::ChangeAnimation( size_t to ) {
 		currentAnimation = to;
 		currentFrame = 0;
 	}
 
-	std::vector< sf::IntRect > Sprite::ObtainFramesForDirection( Direction spriteDirection ) {
+	template< int LAYER_CONSTANT >
+	std::vector< sf::IntRect > Sprite< LAYER_CONSTANT >::ObtainFramesForDirection( Direction spriteDirection ) {
 		return frames[ ( unsigned short ) spriteDirection ];
 	}
-	std::vector< size_t > Sprite::ObtainAnimationFramesForDirection( Direction spriteDirection ) {
+
+	template< int LAYER_CONSTANT >
+	std::vector< size_t > Sprite< LAYER_CONSTANT >::ObtainAnimationFramesForDirection( Direction spriteDirection ) {
 		return animations[ currentAnimation ][ ( unsigned short ) spriteDirection ];
 	}
-	sf::IntRect Sprite::ObtainAnimationFrameBounds( size_t animation, Direction spriteDirection, size_t frame ) {
+
+	template< int LAYER_CONSTANT >
+	sf::IntRect Sprite< LAYER_CONSTANT >::ObtainAnimationFrameBounds( size_t animation, Direction spriteDirection, size_t frame ) {
 		return frames[ ( unsigned short ) spriteDirection ][
 			animations[ animation ][ ( unsigned short ) spriteDirection ][ frame ] ];
 	}
-	sf::IntRect Sprite::ObtainCurrentAnimationFrameBounds( Direction spriteDirection, size_t frame ) {
+
+	template< int LAYER_CONSTANT >
+	sf::IntRect Sprite< LAYER_CONSTANT >::ObtainCurrentAnimationFrameBounds( Direction spriteDirection, size_t frame ) {
 		return ObtainAnimationFrameBounds( currentAnimation, spriteDirection, frame );
 	}
-	size_t Sprite::ObtainFramesForAnimation( Direction spriteDirection, size_t animation ) {
+
+	template< int LAYER_CONSTANT >
+	size_t Sprite< LAYER_CONSTANT >::ObtainFramesForAnimation( Direction spriteDirection, size_t animation ) {
 		return animations[ animation ][ ( unsigned short ) spriteDirection ].size();
 	}
-	size_t Sprite::ObtainFramesForCurrentAnimation() {
+
+	template< int LAYER_CONSTANT >
+	size_t Sprite< LAYER_CONSTANT >::ObtainFramesForCurrentAnimation() {
 		return ObtainFramesForAnimation( currentDirection, currentAnimation );
 	}
-	std::vector< sf::IntRect > Sprite::ObtainIntRectAnimationFramesForDirection( size_t animation, Direction spriteDirection )
+
+	template< int LAYER_CONSTANT >
+	std::vector< sf::IntRect > Sprite< LAYER_CONSTANT >::ObtainIntRectAnimationFramesForDirection( size_t animation, Direction spriteDirection )
 	{
 		std::vector< sf::IntRect > framesForAnimation;
 		const size_t AMOUNT_OF_FRAMES_CONSTANT = animations[ currentAnimation ][ 
@@ -83,100 +105,158 @@ namespace StrategyGoo
 		}
 		return framesForAnimation;
 	}
-	std::vector< sf::IntRect > Sprite::ObtainIntRectCurrentAnimationFramesForDirection( Direction spriteDirection ) {
+
+	template< int LAYER_CONSTANT >
+	std::vector< sf::IntRect > Sprite< LAYER_CONSTANT >::ObtainIntRectCurrentAnimationFramesForDirection( Direction spriteDirection ) {
 		return ObtainIntRectAnimationFramesForDirection( currentAnimation, spriteDirection );
 	}
 
-	sf::IntRect Sprite::ObtainFrameBounds( Direction spriteDirection, size_t frame ) {
+	template< int LAYER_CONSTANT >
+	sf::IntRect Sprite< LAYER_CONSTANT >::ObtainFrameBounds( Direction spriteDirection, size_t frame ) {
 		return frames[ ( unsigned short ) spriteDirection ][ frame ];
 	}
 
-	bool Sprite::IsDirectionAvailible( Direction spriteDirection ) {
+	template< int LAYER_CONSTANT >
+	bool Sprite< LAYER_CONSTANT >::IsDirectionAvailible( Direction spriteDirection ) {
 		return frames[ ( unsigned short ) spriteDirection ].size() == 0;
 	}
-	void Sprite::ModifyTexture( const sf::Texture& texture ) {
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::ModifyTexture( const sf::Texture& texture ) {
 		sprite.setTexture( texture );
 	}
-	void Sprite::AddAnimation( ANIMATION_TYPE toAdd ) {
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::AddAnimation( ANIMATION_TYPE toAdd ) {
 		animations.push_back( toAdd );
 	}
-	size_t Sprite::ObtainAmountOfAnimations() {
+
+	template< int LAYER_CONSTANT >
+	size_t Sprite< LAYER_CONSTANT >::ObtainAmountOfAnimations() {
 		return animations.size();
 	}
-	ANIMATION_TYPE Sprite::ObtainAnimation( size_t animation ) {
+
+	template< int LAYER_CONSTANT >
+	ANIMATION_TYPE Sprite< LAYER_CONSTANT >::ObtainAnimation( size_t animation ) {
 		return animations[ animation ];
 	}
 
-	void Sprite::SetSprite( sf::Sprite sprite_ ) {
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::SetSprite( sf::Sprite sprite_ ) {
 		sprite = sprite_;
 	}
-	void Sprite::SetCurrentDirection( Direction currentDirection_ ) {
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::SetCurrentDirection( Direction currentDirection_ ) {
 		currentDirection = currentDirection_;
 	}
-	void Sprite::SetFrames( FRAMES_TYPE frames_ ) {
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::SetFrames( FRAMES_TYPE frames_ ) {
 		frames = frames_;
 	}
-	void Sprite::SetAnimations( std::vector< ANIMATION_TYPE > animations_ ) {
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::SetAnimations( std::vector< ANIMATION_TYPE > animations_ ) {
 		animations = animations_;
 	}
-	void Sprite::SetCurrentFrame( size_t currentFrame_ ) {
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::SetCurrentFrame( size_t currentFrame_ ) {
 		currentFrame = currentFrame_;
 	}
-	void Sprite::SetCurrentAnimation( size_t currentAnimation_ ) {
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::SetCurrentAnimation( size_t currentAnimation_ ) {
 		currentAnimation = currentAnimation_;
 	}
-	void Sprite::SetActive( bool active_ ) {
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::SetActive( bool active_ ) {
 		active = active_;
 	}
-	void Sprite::SetJSONData( std::string jsonData_ ) {
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::SetJSONData( std::string jsonData_ ) {
 		jsonData = jsonData_;
 	}
-	void Sprite::SetPlaceInSpriteSheet( sf::IntRect placeInSpriteSheet_ ) {
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::SetPlaceInSpriteSheet( sf::IntRect placeInSpriteSheet_ ) {
 		placeInSpriteSheet = placeInSpriteSheet_;
 	}
-	void Sprite::SetAnimationActive( bool animationActive_ ) {
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::SetAnimationActive( bool animationActive_ ) {
 		animationActive = animationActive_;
 	}
 
-	std::string Sprite::GetSpriteName() {
+	template< int LAYER_CONSTANT >
+	std::string Sprite< LAYER_CONSTANT >::GetSpriteName() {
 		return spriteName;
 	}
-	sf::Sprite Sprite::GetSprite() {
+
+	template< int LAYER_CONSTANT >
+	sf::Sprite Sprite< LAYER_CONSTANT >::GetSprite() {
 		return sprite;
 	}
-	FRAMES_TYPE Sprite::GetFrames() {
+
+	template< int LAYER_CONSTANT >
+	FRAMES_TYPE Sprite< LAYER_CONSTANT >::GetFrames() {
 		return frames;
 	}
-	std::vector< ANIMATION_TYPE > Sprite::GetAnimations() {
+
+	template< int LAYER_CONSTANT >
+	std::vector< ANIMATION_TYPE > Sprite< LAYER_CONSTANT >::GetAnimations() {
 		return animations;
 	}
-	Direction Sprite::GetCurrentDirection() {
+
+	template< int LAYER_CONSTANT >
+	Direction Sprite< LAYER_CONSTANT >::GetCurrentDirection() {
 		return currentDirection;
 	}
-	size_t Sprite::GetCurrentFrame() {
+
+	template< int LAYER_CONSTANT >
+	size_t Sprite< LAYER_CONSTANT >::GetCurrentFrame() {
 		return currentFrame;
 	}
-	size_t Sprite::GetCurrentAnimation() {
+
+	template< int LAYER_CONSTANT >
+	size_t Sprite< LAYER_CONSTANT >::GetCurrentAnimation() {
 		return currentAnimation;
 	}
-	bool Sprite::GetActive() {
+
+	template< int LAYER_CONSTANT >
+	bool Sprite< LAYER_CONSTANT >::GetActive() {
 		return active;
 	}
-	std::string Sprite::GetJSONData() {
+
+	template< int LAYER_CONSTANT >
+	std::string Sprite< LAYER_CONSTANT >::GetJSONData() {
 		return jsonData;
 	}
-	sf::IntRect Sprite::GetPlaceInSpriteSheet() {
+
+	template< int LAYER_CONSTANT >
+	sf::IntRect Sprite< LAYER_CONSTANT >::GetPlaceInSpriteSheet() {
 		return placeInSpriteSheet;
 	}
-	bool Sprite::GetAnimationActive() {
+
+	template< int LAYER_CONSTANT >
+	bool Sprite< LAYER_CONSTANT >::GetAnimationActive() {
 		return animationActive;
+	}
+
+	template< int LAYER_CONSTANT >
+	int Sprite< LAYER_CONSTANT >::GetLayerConstant() {
+		return LAYER_CONSTANT;
 	}
 
 	const std::string SPRITE_FILE_NAME_ROOT_CONSTANT = "sizeAbove";
 
 	const std::string ASSETS_FOLDER_CONSTANT = "Assets";
 
-	std::optional< int > Sprite::ObtainLoadedSpriteIndex( std::string spriteName, 
+	template< int LAYER_CONSTANT >
+	std::optional< int > Sprite< LAYER_CONSTANT >::ObtainLoadedSpriteIndex( std::string spriteName,
 			std::vector< LOADED_SPRITE_DATA_TYPE >* loadedSprites )
 	{
 		if( loadedSprites == nullptr )
@@ -189,7 +269,8 @@ namespace StrategyGoo
 		return std::nullopt;
 	}
 
-	sf::IntRect Sprite::LoadSpriteImage( std::string spriteName, sf::Texture* buffer, 
+	template< int LAYER_CONSTANT >
+	sf::IntRect Sprite< LAYER_CONSTANT >::LoadSpriteImage( std::string spriteName, sf::Texture* buffer,
 			sf::Image* spriteBuffer, std::vector< LOADED_SPRITE_DATA_TYPE >* loadedSprites )
 	{
 		if( buffer == nullptr )
@@ -211,7 +292,7 @@ namespace StrategyGoo
 		const size_t Y_AXIS_SIZE_CONSTANT = std::max( newImage.getSize().y, buffer->getSize().y );
 		if( buffer->getSize().y > 0 )
 		{
-			std::cout << "A.0\n";
+			std::cout << "A " << spriteName << "\n";
 			sf::Texture intermediateTexture;
 			spriteSourceBounds = sf::IntRect( buffer->getSize().x, 0, newImage.getSize().x, newImage.getSize().y );
 			intermediateTexture.create(
@@ -224,15 +305,17 @@ namespace StrategyGoo
 		}
 		else
 		{
-			std::cout << "B\n";
+			std::cout << "B" << spriteName << "\n";
 			buffer->create( newImage.getSize().x, Y_AXIS_SIZE_CONSTANT );
 			buffer->update( newImage );
-			spriteSourceBounds = sf::IntRect( buffer->getSize().x, 0, newImage.getSize().x, newImage.getSize().y );
+			*spriteBuffer = buffer->copyToImage();
+			spriteSourceBounds = sf::IntRect( 0, 0, newImage.getSize().x, newImage.getSize().y );
 		}
 		return spriteSourceBounds;
 	}
 
-	std::string Sprite::LoadJSONData( std::string spriteName )
+	template< int LAYER_CONSTANT >
+	std::string Sprite< LAYER_CONSTANT >::LoadJSONData( std::string spriteName )
 	{
 		const std::string JSON_FILE_NAME_CONSTANT = ( ( ASSETS_FOLDER_CONSTANT + "/" ) +
 			spriteName + ( "/" + ( SPRITE_FILE_NAME_ROOT_CONSTANT + ".json" ) ) );
@@ -246,13 +329,14 @@ namespace StrategyGoo
 			jsonFile.close();
 		}
 		else {
-			std::cerr << "StrategyGoo::Sprite::LoadJSONData( std::string ) : void::Error: failed to read file " <<
+			std::cerr << "StrategyGoo::Sprite< LAYER_CONSTANT >::LoadJSONData( std::string ) : void::Error: failed to read file " <<
 					JSON_FILE_NAME_CONSTANT << "\n";
 		}
 		return jsonDataStream.str();
 	}
 
-	LOADED_SPRITE_DATA_TYPE Sprite::LoadSprite( std::string spriteName, sf::Texture* buffer, 
+	template< int LAYER_CONSTANT >
+	LOADED_SPRITE_DATA_TYPE Sprite< LAYER_CONSTANT >::LoadSprite( std::string spriteName, sf::Texture* buffer,
 			sf::Image* spriteBuffer, std::vector< LOADED_SPRITE_DATA_TYPE >* loadedSprites )
 	{
 		const auto SPRITE_INDEX_CONSTANT = ObtainLoadedSpriteIndex( spriteName, loadedSprites );
@@ -274,7 +358,8 @@ namespace StrategyGoo
 		return loadedSprites->at( SPRITE_INDEX_CONSTANT.value() );
 	}
 	
-	void Sprite::InitializeSprite( std::string spriteName_ )
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::InitializeSprite( std::string spriteName_ )
 	{
 		spriteName = spriteName_;
 		auto data = LoadSprite( spriteName );
@@ -290,7 +375,8 @@ namespace StrategyGoo
 
 	const size_t SPRITE_SHEET_PACKER_MAX_POWER_OF_10_CONSTANT = 2;
 
-	FRAMES_TYPE Sprite::FrameDataFromJSONMetaData( std::string metaData, std::string spriteName )
+	template< int LAYER_CONSTANT >
+	FRAMES_TYPE Sprite< LAYER_CONSTANT >::FrameDataFromJSONMetaData( std::string metaData, std::string spriteName )
 	{
 		FRAMES_TYPE frames;
 		auto json = nlohmann::json::parse( metaData );
@@ -325,7 +411,7 @@ namespace StrategyGoo
 				frames[ i ].push_back( jsonDataToFrame( json[ DIRECTION_CONSTANT ] ) );
 			else
 			{
-				std::cerr << "StrategyGoo::Sprite::FrameDataFromJSONMetaData( std::string, std::string ) : "
+				std::cerr << "StrategyGoo::Sprite< LAYER_CONSTANT >::FrameDataFromJSONMetaData( std::string, std::string ) : "
 						"FRAMES_TYPE::Error: Failed to load frames for \"" <<
 						STRING_DIRECTIONS_ABBREVIATIONS_CONSTANT[ i ] << "\" direction.\n";
 			}
@@ -333,19 +419,31 @@ namespace StrategyGoo
 		return frames;
 	}
 
-	Sprite::operator sf::Sprite() {
+	template< int LAYER_CONSTANT >
+	Sprite< LAYER_CONSTANT >::operator sf::Sprite() {
 		return sprite;
 	}
-	sf::Sprite& Sprite::operator*() {
+	
+	template< int LAYER_CONSTANT >
+	sf::Sprite& Sprite< LAYER_CONSTANT >::operator*() {
 		return RefrenceSprite();
 	}
-	sf::Sprite& Sprite::RefrenceSprite() {
+	
+	template< int LAYER_CONSTANT >
+	sf::Sprite& Sprite< LAYER_CONSTANT >::RefrenceSprite() {
 		return sprite;
 	}
-	std::vector< ANIMATION_TYPE >& Sprite::RefrenceAnimations() {
+	
+	template< int LAYER_CONSTANT >
+	std::vector< ANIMATION_TYPE >& Sprite< LAYER_CONSTANT >::RefrenceAnimations() {
 		return animations;
 	}
-	ANIMATION_TYPE& Sprite::RefrenceAnimation( size_t animation ) {
+	
+	template< int LAYER_CONSTANT >
+	ANIMATION_TYPE& Sprite< LAYER_CONSTANT >::RefrenceAnimation( size_t animation ) {
 		return animations[ animation ];
 	}
+
+	template Sprite< 0 >;
+	template Sprite< 1 >;
 }

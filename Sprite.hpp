@@ -55,6 +55,8 @@ namespace StrategyGoo
 	const std::string DEFAULT_SPRITE_NAME_CONSTANT = "DEFAULT_SPRITE_NAME";
 	const std::string DEFAULT_JSON_DATA_CONSTANT = "DEFAULT_JSON_DATA_NAME";
 
+
+	template< int LAYER_CONSTANT = 0 >
 	struct Sprite
 	{
 		Sprite( std::string spriteName_, Direction currentDirection_ = DEFAULT_DIRECTION );
@@ -87,13 +89,7 @@ namespace StrategyGoo
 		void SetPlaceInSpriteSheet( sf::IntRect placeInSpriteSheet_ );
 		void SetAnimationActive( bool animationActive_ );
 
-		void SetLayer( int layer_ ) {
-			layer = layer_;
-		}
-
-		int GetLayer() {
-			return layer;
-		}
+		int GetLayerConstant();
 
 		std::string GetSpriteName();
 		sf::Sprite GetSprite();

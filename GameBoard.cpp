@@ -6,9 +6,8 @@ namespace StrategyGoo
 			registry( registry_ ), x( x_ ), y( y_ ), WIDTH_CONSTANT( width ), HEIGHT_CONSTANT( height )
 	{
 		id = registry.create();
-		sprite = &registry.emplace< Sprite >( id, "FloorTile0" );
+		sprite = &registry.emplace< Sprite< 1 > >( id, "FloorTile0" );
 		( **sprite ).setPosition( ( float ) x * TILE_WIDTH_CONSTANT, ( float ) y * HEIGHT_CONSTANT );
-		sprite->SetLayer( 1 );
 		registry.emplace< TileRefrence >( id, ( *this ) );
 	}
 

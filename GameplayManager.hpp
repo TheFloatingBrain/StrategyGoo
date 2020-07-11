@@ -30,6 +30,7 @@ namespace StrategyGoo
 		using UpdatorRefrence = std::reference_wrapper< Updator >;
 		virtual void Update() = 0;
 		virtual void UpdateGraphics() {};
+		entt::entity id;
 	};
 
 	struct Squaddie : public Updator, public WorldPosition
@@ -46,11 +47,10 @@ namespace StrategyGoo
 		bool CheckSelect( sf::Vector2f cursorPosition, sf::Vector2f cameraPosition );
 		
 		BoardPosition* position;
-		Sprite* sprite;
+		Sprite< 0 >* sprite;
 		GameBoard* board;
 		const size_t ENTITY_TILE_WIDTH_CONSTANT;
 		const size_t ENTITY_TILE_HEIGHT_CONSTANT;
-		entt::entity id;
 		entt::registry& registry;
 
 		static std::optional< entt::entity > SelectSquaddie( entt::registry& registry, sf::View& camera );
@@ -74,13 +74,15 @@ namespace StrategyGoo
 
 	struct GameplayManager
 	{
-		GameplayManager();
+		GameplayManager( entt::registry& registry_ );
 		void Update();
 		void Render( sf::RenderWindow& window );
-		protected: 
+		void CreateSquaddie( BoardPosition startingPosition );
+		protected:
 			void UpdatePlayer();
+			std::vector< Updator* > entities;
 			GameBoard gameBoard;
-			entt::registry registry;
+			entt::registry& registry;
 	};
 }
 #endif

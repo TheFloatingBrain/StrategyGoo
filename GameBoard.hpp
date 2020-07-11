@@ -36,7 +36,7 @@ namespace StrategyGoo
 			entt::registry& registry;
 			const size_t WIDTH_CONSTANT;
 			const size_t HEIGHT_CONSTANT;
-			Sprite* sprite;
+			Sprite< 1 >* sprite;
 	};
 
 	struct GameBoard

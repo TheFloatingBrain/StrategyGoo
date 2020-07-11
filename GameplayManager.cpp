@@ -13,7 +13,7 @@ namespace StrategyGoo
 	{
 		id = registry.create();
 		position = &registry.emplace< BoardPosition >( id, start.x, start.y );
-		sprite = &registry.emplace< Sprite >( id, "Squaddie" );
+		sprite = &registry.emplace< Sprite< 0 > >( id, "Squaddie" );
 		registry.emplace< SquaddieRefrence >( id, *this );
 		registry.emplace< Updator::UpdatorRefrence >( id, *this );
 	}
@@ -91,16 +91,29 @@ namespace StrategyGoo
 		return true;
 	}
 
-	GameplayManager::GameplayManager() : gameBoard( registry, 64, 64 ) {}
+	GameplayManager::GameplayManager( entt::registry& registry_ ) : 
+			registry( registry_ ), gameBoard( registry_, 64, 64 ) {}
+
+	void GameplayManager::CreateSquaddie( BoardPosition startingPosition )
+	{
+		entities.push_back( new Squaddie( registry, startingPosition, &gameBoard,
+				gameBoard.GetTileWidthConstant(), gameBoard.GetTileHeightConstant() ) );
+	}
 	void GameplayManager::Update()
 	{
 	}
 	void GameplayManager::Render( sf::RenderWindow& window )
 	{
-		registry.view< Tile::TileRefrence, Sprite >().each( [&]( auto& tile, auto& sprite ) {
+		window.clear();
+		registry.view< Sprite< 1 > >().each( [&]( auto& tile, auto& sprite ) {
 			sprite.Draw( window );
 			}
 		);
+		registry.view< Sprite< 0 > >().each( [ & ]( auto& tile, auto& sprite ) {
+				sprite.Draw( window );
+			}
+		);
+		window.display();
 	}
 
 	void GameplayManager::UpdatePlayer() {}
