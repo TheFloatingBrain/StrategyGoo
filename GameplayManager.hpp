@@ -71,8 +71,10 @@ namespace StrategyGoo
 			registry.emplace< Updator::UpdatorRefrence >( id, *this );
 			registry.emplace< PlayerUnit::PlayerUnitRefrence >( id, *this );
 		}
+		//Anything that needs to be regularly updated.//
 		void Update() override {
 		}
+		//For animations between orders.//
 		void TickOrder() override {
 			
 		}
