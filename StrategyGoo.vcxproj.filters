@@ -13,24 +13,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\nlohmann">
-      <UniqueIdentifier>{9b45d049-8aa0-4c25-9ad4-652c0fe72898}</UniqueIdentifier>
+    <Filter Include="External">
+      <UniqueIdentifier>{387d8180-a184-4571-ba4e-bc1d391f3730}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\entt">
+    <Filter Include="External\entt">
       <UniqueIdentifier>{fe681145-37a4-41ed-a4e9-19906520a346}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\nlohmann">
+      <UniqueIdentifier>{9b45d049-8aa0-4c25-9ad4-652c0fe72898}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\Include\nlohmann\json.hpp">
-      <Filter>Header Files\nlohmann</Filter>
+      <Filter>External\nlohmann</Filter>
     </ClInclude>
     <ClInclude Include="External\Include\entt\entt.hpp">
-      <Filter>Header Files\entt</Filter>
+      <Filter>External\entt</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

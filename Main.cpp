@@ -1,11 +1,18 @@
 #include <SFML/Graphics.hpp>
-#include <entt/entt.hpp>
-#include <nlohmann/json.hpp>
+#include <iostream>
+#include "Sprite.hpp"
+
+void PrintRect( sf::IntRect rect )
+{
+	std::cout << rect.left << ", " << rect.top << 
+			", " << rect.width << ", " << rect.height << "\n";
+}
 
 int main( int argc, char** args )
 {
-	sf::RenderWindow window( sf::VideoMode( 960, 540 ), "sf::RenderWindow" );
-	sf::RectangleShape rectangle( sf::Vector2f( 100.0f, 200.0f ) );
+	sf::RenderWindow window( sf::VideoMode( 1024, 768 ), "sf::RenderWindow" );
+
+	PrintRect( StrategyGoo::Sprite::LoadSpriteImage( "Squaddie" ) );
 	while( window.isOpen() )
 	{
 		sf::Event event;
@@ -13,8 +20,8 @@ int main( int argc, char** args )
 			if( event.type == sf::Event::Closed )
 				window.close();
 		}
+		window.draw( sf::Sprite( *StrategyGoo::Detail::masterTexture ) );
 		window.clear();
-		window.draw( rectangle );
 		window.display();
 	}
 
