@@ -1,7 +1,9 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
-#include "Sprite.hpp"
+#include "GameBoard.hpp"
+
+using namespace StrategyGoo;
 
 void PrintRect( sf::IntRect rect )
 {
@@ -13,10 +15,10 @@ int main( int argc, char** args )
 {
 	sf::RenderWindow window( sf::VideoMode( 1024, 768 ), "sf::RenderWindow" );
 
-	StrategyGoo::Sprite test{ "Squaddie" };
+	entt::registry registry;
 
-	( *test ).setPosition( 100, 100 );
-	int directions = 0;
+	GameBoard board{ registry, 64, 64 };
+
 	while( window.isOpen() )
 	{
 		sf::Event event;
@@ -24,10 +26,12 @@ int main( int argc, char** args )
 			if( event.type == sf::Event::Closed )
 				window.close();
 		}
-		test.Draw( window );
-		sf::sleep( sf::Time( sf::seconds( 1 ) ) );
-		test.SetCurrentDirection( ( StrategyGoo::Direction ) 
-			( directions++ % StrategyGoo::AMOUNT_OF_DIRECTIONS_CONSTANT ) );
+
+		registry.view< Tile::TileRefrence, Sprite >().each( [&]( auto& tile, auto& sprite ) {
+			sprite.Draw( window );
+			}
+		);
+
 		window.display();
 		window.clear();
 	}

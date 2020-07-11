@@ -30,6 +30,9 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameBoard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\Include\nlohmann\json.hpp">
@@ -39,6 +42,9 @@
       <Filter>External\entt</Filter>
     </ClInclude>
     <ClInclude Include="Sprite.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBoard.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

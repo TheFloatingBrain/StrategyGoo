@@ -58,11 +58,8 @@ namespace StrategyGoo
 	struct Sprite
 	{
 		Sprite( std::string spriteName_, Direction currentDirection_ = DEFAULT_DIRECTION );
-		Sprite( const sf::Texture& alternativeTexture, FRAMES_TYPE frames_ );
 
 		void Draw( sf::RenderWindow& toRenderTo );
-		Sprite Copy();
-
 
 		void ChangeAnimation( size_t to );
 		std::vector< sf::IntRect > ObtainFramesForDirection( Direction spriteDirection );
@@ -110,8 +107,6 @@ namespace StrategyGoo
 				std::vector< LOADED_SPRITE_DATA_TYPE >* loadedSprites = nullptr );
 		static std::string LoadJSONData( std::string spriteName );
 		void InitializeSprite( std::string spriteName_ );
-		void InitializeSprite( const sf::Texture& alternativeTexture, FRAMES_TYPE frames );
-		void InitializeSprite( const sf::Texture& alternativeTexture, std::string metaData );
 		static FRAMES_TYPE FrameDataFromJSONMetaData( std::string metaData, std::string spriteName );
 
 		operator sf::Sprite();

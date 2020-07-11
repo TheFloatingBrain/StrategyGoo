@@ -20,11 +20,7 @@ namespace StrategyGoo
 	{
 		InitializeSprite( spriteName_ );
 		ConstructDefaultAnimation();
-		//std::cout << frames.size() << "!\n";
 		sprite = sf::Sprite( *Detail::masterTexture, frames[ ( unsigned short ) currentDirection ][ 0 ] );
-	}
-	Sprite::Sprite( const sf::Texture& alternativeTexture, FRAMES_TYPE frames_ ) {
-		std::cerr << "STUB\n";
 	}
 
 	void Sprite::ConstructDefaultAnimation()
@@ -51,9 +47,6 @@ namespace StrategyGoo
 	void Sprite::Draw( sf::RenderWindow& toRenderTo ) {
 		toRenderTo.draw( sprite );
 		Animate();
-	}
-	Sprite Sprite::Copy() {
-		return Sprite{ "STUB" };
 	}
 
 	void Sprite::ChangeAnimation( size_t to ) {
@@ -284,12 +277,7 @@ namespace StrategyGoo
 		jsonData = std::get< LOADED_SPRITE_DATA_TYPE_SPRITE_JSON_DATA_CONSTANT >( data );
 		placeInSpriteSheet = std::get< LOADED_SPRITE_DATA_TYPE_SPRITE_INT_RECT_CONSTANT >( data );
 	}
-	void Sprite::InitializeSprite( const sf::Texture& alternativeTexture, FRAMES_TYPE frames ) {
-		std::cerr << "STUB\n";
-	}
-	void Sprite::InitializeSprite( const sf::Texture& alternativeTexture, std::string metaData ) {
-		std::cerr << "STUB\n";
-	}
+
 
 	const std::string SPRITE_FOLDER_CONSTANT = ( "/" + ( SPRITE_FILE_NAME_ROOT_CONSTANT + "/" ) );
 
@@ -316,13 +304,10 @@ namespace StrategyGoo
 			return sf::IntRect{ frameData[ "x" ], frameData[ "y" ],
 				frameData[ "width" ], frameData[ "height" ] };
 		};
-		//std::cout << json << "\n";
-		//std::cout << json[ "Squaddie/sizeAbove/Squaddie_Slope_E" ] << "\n";
 		for( size_t i = 0; i < AMOUNT_OF_DIRECTIONS_CONSTANT; ++i )
 		{
 			const std::string DIRECTION_CONSTANT = ( SPRITE_ROOT_NAME_CONSTANT + 
 					STRING_DIRECTIONS_ABBREVIATIONS_CONSTANT[ i ] );
-			//std::cout << DIRECTION_CONSTANT << "\n";
 			if( json.contains( DIRECTION_CONSTANT + makeFrameString( 0 ) ) == true )
 			{
 				std::vector< sf::IntRect > frameBuffer;
