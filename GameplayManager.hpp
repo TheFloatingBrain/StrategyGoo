@@ -18,7 +18,7 @@ namespace StrategyGoo
 		ToUnitVector( sf::Vector2< SCALER_TYPE > vector ) {
 			const double MAGNITUDE_CONSTANT = Magnitude( vector );
 			result = sf::Vector2< SCALER_TYPE >( 
-					vector.x / MAGNITUDE_CONSTANT, vector.y / MAGNITUDE_CONSTANT );
+					vector.x / ( SCALER_TYPE ) MAGNITUDE_CONSTANT, vector.y / ( SCALER_TYPE ) MAGNITUDE_CONSTANT );
 		}
 		operator sf::Vector2< SCALER_TYPE >() {
 			return result;

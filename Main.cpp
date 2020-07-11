@@ -38,6 +38,10 @@ int main( int argc, char** args )
 		}
 		//const auto temp = clock.getElapsedTime();
 		//std::cout << ( temp - time ).asMilliseconds() << "\n";
+
+		//window.draw( sf::Sprite{ *Detail::masterTexture } );
+		//window.display();
+		//window.clear();
 		Render( registry, window );
 	}
 
@@ -46,6 +50,9 @@ int main( int argc, char** args )
 
 void Render( entt::registry& registry, sf::RenderWindow& window )
 {
+	registry.sort< Sprite >( []( Sprite& first, Sprite& second ) {
+		return first.GetLayer() < second.GetLayer();
+	} );
 	window.clear();
 	registry.view< Sprite >().each( [&]( Sprite& sprite ) {
 		sprite.Draw( window );

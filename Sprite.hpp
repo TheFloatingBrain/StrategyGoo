@@ -87,6 +87,14 @@ namespace StrategyGoo
 		void SetPlaceInSpriteSheet( sf::IntRect placeInSpriteSheet_ );
 		void SetAnimationActive( bool animationActive_ );
 
+		void SetLayer( int layer_ ) {
+			layer = layer_;
+		}
+
+		int GetLayer() {
+			return layer;
+		}
+
 		std::string GetSpriteName();
 		sf::Sprite GetSprite();
 		FRAMES_TYPE GetFrames();
@@ -116,6 +124,7 @@ namespace StrategyGoo
 		ANIMATION_TYPE& RefrenceAnimation( size_t animation );
 
 		protected:
+			int layer = 0;
 			void SetCurrentAnimation( size_t currentAnimation_ );
 			std::string spriteName = DEFAULT_SPRITE_NAME_CONSTANT;
 			sf::Sprite sprite;
@@ -131,5 +140,6 @@ namespace StrategyGoo
 			void Animate();
 			void ConstructDefaultAnimation();
 	};
+
 }
 #endif
