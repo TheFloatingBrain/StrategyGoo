@@ -208,9 +208,10 @@ namespace StrategyGoo
 		sf::IntRect spriteSourceBounds;
 		newImage.loadFromFile( "Assets/" + spriteName + "/" + SPRITE_FILE_NAME_ROOT_CONSTANT + ".png" );
 		//std::cout << "Assets / " + spriteName + " / " + SPRITE_FILE_NAME_ROOT_CONSTANT + ".png" << "\n";
-		const size_t Y_AXIS_SIZE_CONSTANT = std::max( newImage.getSize().y, spriteBuffer->getSize().y );
-		if( spriteBuffer->getSize().y > 0 )
+		const size_t Y_AXIS_SIZE_CONSTANT = std::max( newImage.getSize().y, buffer->getSize().y );
+		if( buffer->getSize().y > 0 )
 		{
+			std::cout << "A.0\n";
 			sf::Texture intermediateTexture;
 			spriteSourceBounds = sf::IntRect( buffer->getSize().x, 0, newImage.getSize().x, newImage.getSize().y );
 			intermediateTexture.create(
@@ -223,6 +224,7 @@ namespace StrategyGoo
 		}
 		else
 		{
+			std::cout << "B\n";
 			buffer->create( newImage.getSize().x, Y_AXIS_SIZE_CONSTANT );
 			buffer->update( newImage );
 			spriteSourceBounds = sf::IntRect( buffer->getSize().x, 0, newImage.getSize().x, newImage.getSize().y );
@@ -254,6 +256,8 @@ namespace StrategyGoo
 			sf::Image* spriteBuffer, std::vector< LOADED_SPRITE_DATA_TYPE >* loadedSprites )
 	{
 		const auto SPRITE_INDEX_CONSTANT = ObtainLoadedSpriteIndex( spriteName, loadedSprites );
+		if( loadedSprites == nullptr )
+			loadedSprites = &Detail::spritesLoaded;
 		if( SPRITE_INDEX_CONSTANT.has_value() == false )
 		{
 			LOADED_SPRITE_DATA_TYPE data;
@@ -264,6 +268,7 @@ namespace StrategyGoo
 						data ) = FrameDataFromJSONMetaData( std::get< 2 >( data ), spriteName );
 			std::get< LOADED_SPRITE_DATA_TYPE_SPRITE_INT_RECT_CONSTANT >( 
 						data ) = LoadSpriteImage( spriteName, buffer, spriteBuffer, loadedSprites );
+			loadedSprites->push_back( data );
 			return data;
 		}
 		return loadedSprites->at( SPRITE_INDEX_CONSTANT.value() );
