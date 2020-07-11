@@ -1,0 +1,54 @@
+{
+	"./Squaddie_Above_E": {
+		"frame": {
+			"x": 56,
+			"y": 58,
+			"width": 56,
+			"height": 54
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"./Squaddie_Above_N": {
+		"frame": {
+			"x": 0,
+			"y": 62,
+			"width": 54,
+			"height": 58
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"./Squaddie_Above_S": {
+		"frame": {
+			"x": 0,
+			"y": 0,
+			"width": 54,
+			"height": 60
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"./Squaddie_Above_W": {
+		"frame": {
+			"x": 56,
+			"y": 0,
+			"width": 56,
+			"height": 56
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	}
+}
