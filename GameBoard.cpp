@@ -18,13 +18,13 @@ namespace StrategyGoo
 	}
 
 	BoardPosition Tile::ObtainBoardPosition() {
-		return BoardPosition{ x, y };
+		return BoardPosition{ ( int ) x, ( int ) y };
 	}
 
 	size_t Tile::GetX() {
 		return x;
 	}
-	size_t Tile::GetX() {
+	size_t Tile::GetY() {
 		return y;
 	}
 	const size_t Tile::GetTileWidthConstant() {

@@ -25,7 +25,7 @@ namespace StrategyGoo
 		BoardPosition ObtainBoardPosition();
 
 		size_t GetX();
-		size_t GetX();
+		size_t GetY();
 		const size_t GetTileWidthConstant();
 		const size_t GetTileHeightConstant();
 

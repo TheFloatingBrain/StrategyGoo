@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameBoard.cpp" />
+    <ClCompile Include="GameplayManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Sprite.cpp" />
   </ItemGroup>
@@ -152,6 +153,7 @@
     <ClInclude Include="External\Include\entt\entt.hpp" />
     <ClInclude Include="External\Include\nlohmann\json.hpp" />
     <ClInclude Include="GameBoard.hpp" />
+    <ClInclude Include="GameplayManager.hpp" />
     <ClInclude Include="Sprite.hpp" />
   </ItemGroup>
   <ItemGroup>

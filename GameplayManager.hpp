@@ -76,7 +76,7 @@ namespace StrategyGoo
 	{
 		GameplayManager();
 		void Update();
-		void Render();
+		void Render( sf::RenderWindow& window );
 		protected: 
 			void UpdatePlayer();
 			GameBoard gameBoard;
