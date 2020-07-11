@@ -5,17 +5,23 @@
 
 namespace StrategyGoo
 {
-
 	const size_t TILE_WIDTH_CONSTANT = 64;
 	const size_t TILE_HEIGHT_CONSTANT = 64;
 
-//	struct GameBoard;
+	using BoardPosition = sf::Vector2i;
 
-	struct Tile
+	struct WorldPosition {
+		virtual sf::Vector2f ToWorldPosition() = 0;
+	};
+
+	struct Tile : WorldPosition
 	{
 		using TileRefrence = std::reference_wrapper< Tile >;
 		explicit Tile( entt::registry& registry_, size_t x_, size_t y_, 
 				size_t width = TILE_WIDTH_CONSTANT, size_t height = TILE_HEIGHT_CONSTANT );
+
+		sf::Vector2f ToWorldPosition() override;
+
 		protected: 
 			
 			size_t x, y;

@@ -27,10 +27,6 @@ int main( int argc, char** args )
 				window.close();
 		}
 
-		registry.view< Tile::TileRefrence, Sprite >().each( [&]( auto& tile, auto& sprite ) {
-			sprite.Draw( window );
-			}
-		);
 
 		window.display();
 		window.clear();

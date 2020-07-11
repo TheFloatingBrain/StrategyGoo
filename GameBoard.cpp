@@ -11,6 +11,11 @@ namespace StrategyGoo
 		registry.emplace< TileRefrence >( id, ( *this ) );
 	}
 
+	sf::Vector2f Tile::ToWorldPosition()
+	{
+		return sf::Vector2f( ( float ) x * TILE_WIDTH_CONSTANT, 
+				( float ) y * TILE_HEIGHT_CONSTANT );
+	}
 	GameBoard::GameBoard( entt::registry& registry_, size_t width_, size_t height_, 
 				size_t tileWidth, size_t tileHeight ) :
 			registry( registry_ ), width( width_ ), height( height_ ), 
