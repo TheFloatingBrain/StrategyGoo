@@ -5,6 +5,8 @@
 #include <sstream>
 #include <iomanip>
 
+#include <string_view>
+
 namespace StrategyGoo
 {
 	namespace Detail
@@ -137,7 +139,7 @@ namespace StrategyGoo
 		return placeInSpriteSheet;
 	}
 
-	const std::string SPRITE_FILE_NAME_ROOT_CONSTANT = "sizeBaseSloped";
+	const std::string SPRITE_FILE_NAME_ROOT_CONSTANT = "sizeAbove";
 
 	const std::string ASSETS_FOLDER_CONSTANT = "Assets";
 
@@ -167,18 +169,33 @@ namespace StrategyGoo
 			spriteBuffer = Detail::masterSpriteBuffer;
 		}
 		sf::Image newImage, intermediateImage;
-		newImage.loadFromFile( spriteName + "/" + SPRITE_FILE_NAME_ROOT_CONSTANT + ".png" );
-		const size_t Y_AXIS_CONSTANT = std::max( spriteBuffer->getSize().y, newImage.getSize().y );
-		const size_t ORIGINAL_X_SIZE_CONSTANT = spriteBuffer->getSize().x;
-		//See https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Image.php#ad9562b126fc8d5efcf608166992865c7 //
-		intermediateImage.loadFromMemory( spriteBuffer->getPixelsPtr(),
-			( spriteBuffer->getSize().x + newImage.getSize().x ) * ( Y_AXIS_CONSTANT ) * 4 );
-		for( size_t x = 0; x < newImage.getSize().x; ++x ) {
-			for( size_t y = 0; y < Y_AXIS_CONSTANT; ++y )
-				intermediateImage.setPixel( x, y, newImage.getPixel( x, y ) );
+		sf::IntRect spriteSourceBounds;
+		newImage.loadFromFile( "Assets/" + spriteName + "/" + SPRITE_FILE_NAME_ROOT_CONSTANT + ".png" );
+		if( spriteBuffer->getSize().y > 0 )
+		{
+			const size_t Y_AXIS_CONSTANT = std::max( spriteBuffer->getSize().y, newImage.getSize().y );
+			const size_t ORIGINAL_X_SIZE_CONSTANT = spriteBuffer->getSize().x;
+			//See https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1Image.php#ad9562b126fc8d5efcf608166992865c7 //
+			intermediateImage.loadFromMemory( spriteBuffer->getPixelsPtr(),
+				( spriteBuffer->getSize().x + newImage.getSize().x ) * ( Y_AXIS_CONSTANT ) * 4 );
+			for( size_t x = 0; x < newImage.getSize().x; ++x ) {
+				for( size_t y = 0; y < Y_AXIS_CONSTANT; ++y )
+					intermediateImage.setPixel( x, y, newImage.getPixel( x, y ) );
+			}
+			spriteBuffer->loadFromMemory( intermediateImage.getPixelsPtr(), newImage.getSize().x * Y_AXIS_CONSTANT * 4 );
+			spriteSourceBounds = sf::IntRect{ ( int ) spriteBuffer->getSize().x, 0, ( int ) ORIGINAL_X_SIZE_CONSTANT, ( int ) Y_AXIS_CONSTANT };
 		}
-		spriteBuffer->loadFromMemory( intermediateImage.getPixelsPtr(), newImage.getSize().x * Y_AXIS_CONSTANT * 4 );
-		return sf::IntRect{ ( int ) spriteBuffer->getSize().x, 0, ( int ) ORIGINAL_X_SIZE_CONSTANT, ( int ) Y_AXIS_CONSTANT };
+		else {
+			std::cout << "HERE\n";
+			for( size_t x = 0; x < newImage.getSize().x; ++x ) {
+				for( size_t y = 0; y < newImage.getSize().y; ++y )
+					std::cout << newImage.getPixelsPtr() + ( 4 * x * y ) << ",";
+			}
+			spriteBuffer->loadFromMemory( newImage.getPixelsPtr(), newImage.getSize().x * newImage.getSize().y * 4 );
+			spriteSourceBounds = sf::IntRect{ 0, 0, ( int ) newImage.getSize().x, ( int ) newImage.getSize().y };
+		}
+		buffer->update( *spriteBuffer );
+		return spriteSourceBounds;
 	}
 
 	std::string Sprite::LoadJSONData( std::string spriteName )
@@ -239,7 +256,7 @@ namespace StrategyGoo
 	FRAMES_TYPE Sprite::FrameDataFromJSONMetaData( std::string metaData, std::string spriteName )
 	{
 		FRAMES_TYPE frames;
-		auto json = nlohmann::json{ metaData };
+		auto json = nlohmann::json::parse( metaData );
 		const std::string SPRITE_ROOT_NAME_CONSTANT = ( spriteName + ( SPRITE_FOLDER_CONSTANT + (
 				spriteName + SPRITE_PREFIX_FOR_DIRECTION ) ) );
 		std::stringstream frameStream;
@@ -255,7 +272,7 @@ namespace StrategyGoo
 			return sf::IntRect{ frameData[ "x" ], frameData[ "y" ],
 				frameData[ "width" ], frameData[ "height" ] };
 		};
-		std::cout << json[ "Squaddie/sizeBaseSloped/Squaddie_Slope_E" ] << "\n";
+		//std::cout << json[ "Squaddie/sizeBaseSloped/Squaddie_Slope_E" ] << "\n";
 		for( size_t i = 0; i < AMOUNT_OF_DIRECTIONS_CONSTANT; ++i )
 		{
 			const std::string DIRECTION_CONSTANT = ( SPRITE_ROOT_NAME_CONSTANT + 
@@ -265,9 +282,7 @@ namespace StrategyGoo
 				std::vector< sf::IntRect > frameBuffer;
 				for( size_t j = 0; json.contains( 
 						DIRECTION_CONSTANT + makeFrameString( j ) ) == true; ++j )
-				{
 					frameBuffer.push_back( jsonDataToFrame( json[ ( DIRECTION_CONSTANT + makeFrameString( j ) ) ] ) );
-				}
 				frames[ i ].insert( frames[ i ].end(), frameBuffer.begin(), frameBuffer.end() );
 			}
 			else if( json.contains( DIRECTION_CONSTANT ) == true )

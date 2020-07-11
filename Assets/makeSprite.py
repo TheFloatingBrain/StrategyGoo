@@ -4,7 +4,7 @@ import subprocess
 import shutil
 
 spriteName = sys.argv[ 1 ]
-specificDirectory = "sizeBaseSloped"
+specificDirectory = "sizeAbove"
 spriteBaseDirectory = "." + os.sep + spriteName + os.sep
 spriteSpecificDirectory = spriteBaseDirectory + specificDirectory
 subprocess.call( "isoVoxel " + spriteName + ".vox 64 64 64 1 outline=none " )

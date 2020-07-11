@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/windows,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=windows,visualstudiocode
 
@@ -46,5 +45,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+<<<<<<< HEAD
 # End of https://www.gitignore.io/api/windows,visualstudiocode
 Debug/StrategyGoo.vcxproj.CopyComplete
+=======
+# End of https://www.gitignore.io/api/windows,visualstudiocode
+>>>>>>> fdd9c9a48a502d5729cc1ead56cfcd004ce811fa
