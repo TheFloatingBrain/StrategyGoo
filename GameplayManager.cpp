@@ -1,5 +1,6 @@
 #include "GameplayManager.hpp"
 
+	#include <iostream>
 namespace StrategyGoo
 {
 	bool ComparePosition( sf::Vector2f first, sf::Vector2f second )
@@ -7,13 +8,18 @@ namespace StrategyGoo
 		return ( abs( first.x - second.x ) < FLT_EPSILON ) &&
 				( abs( first.y - second.y ) < FLT_EPSILON );
 	}
-
 	Squaddie::Squaddie( entt::registry& registry_, BoardPosition start, GameBoard* board_, size_t tileWidth, size_t tileHeight ) :
 		registry( registry_ ), board( board_ ), ENTITY_TILE_WIDTH_CONSTANT( tileWidth ), ENTITY_TILE_HEIGHT_CONSTANT( tileHeight )
 	{
 		id = registry.create();
 		position = &registry.emplace< BoardPosition >( id, start.x, start.y );
 		sprite = &registry.emplace< Sprite< 0 > >( id, "Squaddie" );
+//		std::cout << ( this->ToWorldPosition().x ) << ", " << ( this->ToWorldPosition().y ) << "\n";
+		if( sprite == nullptr )
+			std::cout << "DERP\n";
+		auto worldPosition = ToWorldPosition();
+		sprite->RefrenceSprite().setPosition( worldPosition.x, worldPosition.y );
+	//	std::cout << sprite->GetSprite().getPosition().x << ", " << sprite->GetSprite().getPosition().y << "\n";
 		registry.emplace< SquaddieRefrence >( id, *this );
 		registry.emplace< Updator::UpdatorRefrence >( id, *this );
 	}
@@ -81,10 +87,10 @@ namespace StrategyGoo
 
 	bool MoveOrder::Tick( Squaddie& squaddie )
 	{
-		const auto SPRITE_POSITION_CONSTANT = squaddie.sprite->GetSprite().getPosition();
+		const auto SPRITE_POSITION_CONSTANT = squaddie.sprite->RefrenceSprite().getPosition();
 		const auto SQUADDIE_WORLD_POSITION_CONSTANT = squaddie.ToWorldPosition();
 		if( ComparePosition( SPRITE_POSITION_CONSTANT, SQUADDIE_WORLD_POSITION_CONSTANT ) ) {
-			squaddie.sprite->GetSprite().move( ToUnitVector< float >(
+			squaddie.sprite->RefrenceSprite().move( ToUnitVector< float >(
 				SQUADDIE_WORLD_POSITION_CONSTANT - SPRITE_POSITION_CONSTANT ) );
 			return false;
 		}
@@ -94,10 +100,12 @@ namespace StrategyGoo
 	GameplayManager::GameplayManager( entt::registry& registry_ ) : 
 			registry( registry_ ), gameBoard( registry_, 64, 64 ) {}
 
-	void GameplayManager::CreateSquaddie( BoardPosition startingPosition )
+	Squaddie& GameplayManager::CreateSquaddie( BoardPosition startingPosition )
 	{
-		entities.push_back( new Squaddie( registry, startingPosition, &gameBoard,
-				gameBoard.GetTileWidthConstant(), gameBoard.GetTileHeightConstant() ) );
+		Squaddie* newSquaddie = new Squaddie( registry, startingPosition, &gameBoard,
+				gameBoard.GetTileWidthConstant(), gameBoard.GetTileHeightConstant() );
+		entities.push_back( newSquaddie );
+		return *newSquaddie;
 	}
 	void GameplayManager::Update()
 	{

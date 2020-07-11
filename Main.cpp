@@ -16,7 +16,9 @@ int main( int argc, char** args )
 	sf::RenderWindow window( sf::VideoMode( 1024, 768 ), "sf::RenderWindow" );
 	entt::registry registry;
 	GameplayManager manager{ registry };
-	manager.CreateSquaddie( BoardPosition( 10, 10 ) );
+	manager.CreateSquaddie( BoardPosition( 1, 1 ) ).sprite->SetCurrentDirection( Direction::SOUTH );
+	manager.CreateSquaddie( BoardPosition( 4, 1 ) ).sprite->SetCurrentDirection( Direction::NORTH );
+	manager.CreateSquaddie( BoardPosition( 1, 3 ) ).sprite->SetCurrentDirection( Direction::WEST );
 	while( window.isOpen() )
 	{
 		sf::Event event;

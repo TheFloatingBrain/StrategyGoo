@@ -77,7 +77,7 @@ namespace StrategyGoo
 		GameplayManager( entt::registry& registry_ );
 		void Update();
 		void Render( sf::RenderWindow& window );
-		void CreateSquaddie( BoardPosition startingPosition );
+		Squaddie& CreateSquaddie( BoardPosition startingPosition );
 		protected:
 			void UpdatePlayer();
 			std::vector< Updator* > entities;
