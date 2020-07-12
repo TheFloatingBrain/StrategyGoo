@@ -77,8 +77,8 @@ namespace StrategyGoo
 			return false;
 		}
 		else {
-			squaddie.RefrenceBoardPosition() = to;
 			MoveEntity< Squaddie::SquaddieRefrence >( registry, squaddie.ObtainThis(), to, squaddie.GetBoard() );
+			squaddie.RefrenceBoardPosition() = to;
 			return true;
 		}
 	}

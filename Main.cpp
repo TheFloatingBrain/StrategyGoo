@@ -27,6 +27,9 @@ int main( int argc, char** args )
 				window.close();
 		}
 		manager.Render( window );
+		size_t count = 0;
+		registry.view< Squaddie::SquaddieRefrence, Tile::TileRefrence >().each( [&]( Squaddie::SquaddieRefrence&, Tile::TileRefrence& ) { ++count; } );
+		std::cout << "Tiles with squaddies: " << count << "\n";
 	}
 
 	return 0;

@@ -19,7 +19,7 @@ namespace StrategyGoo
 	bool RemoveEntityFromTile( entt::registry& registry, BoardPosition tile, GameBoard* board )
 	{
 		auto tileID = ( *board )[ tile.x ][ tile.y ].GetID();
-		if( registry.has< REFRENCE_TYPE >( tileID ) == false ) {
+		if( registry.has< REFRENCE_TYPE >( tileID ) == true ) {
 			registry.remove< REFRENCE_TYPE >( tileID );
 			return true;
 		}
