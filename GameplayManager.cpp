@@ -108,7 +108,22 @@ namespace StrategyGoo
 		window.display();
 	}
 
-	void GameplayManager::SlimeMove( sf::RenderWindow& window ) {
+	void GameplayManager::SlimeMove( sf::RenderWindow& window )
+	{
+		auto view = registry.view< Squaddie::SquaddieRefrence >();
+		Goo* goo = nullptr;
+		for( auto* currentEntity : entities )
+		{
+			if( goo = dynamic_cast< Goo* >( currentEntity ) )
+			{
+				size_t squaddieToMoveToo = ( size_t ) RandomRange( 0, view.size() - 1 );
+				auto squaddie = registry.get< Squaddie::SquaddieRefrence >( view[ squaddieToMoveToo ] );
+				if( RandomRange( 0, 10 ) >= 5 )
+					goo->MoveToward( squaddie.get().RefrenceBoardPosition() );
+				else
+					goo->MoveToward( squaddie.get().RefrenceBoardPosition(), 1, true );
+			}
+		}
 		gameState = StagesOfPlay::PLAYER_DAMAGE_STAGE;
 	}
 
