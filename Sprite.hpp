@@ -23,10 +23,20 @@ namespace StrategyGoo
 
 	const size_t AMOUNT_OF_DIRECTIONS_CONSTANT = 8;
 
+	const std::array< const Direction, AMOUNT_OF_DIRECTIONS_CONSTANT > ALL_DIRECTIONS_CONSTANT {
+		Direction::NORTH, Direction::SOUTH, Direction::EAST, Direction::WEST,
+		Direction::NORTH_EAST, Direction::SOUTH_EAST, Direction::NORTH_WEST, Direction::SOUTH_WEST
+	};
+
 	const std::array< const std::string, 
 			AMOUNT_OF_DIRECTIONS_CONSTANT > STRING_DIRECTIONS_ABBREVIATIONS_CONSTANT {
 					"N", "S", "E", "W", "NE", "SE", "NW", "SW"
 			};
+
+	const std::array< sf::Vector2i, AMOUNT_OF_DIRECTIONS_CONSTANT > DIRECTION_VECTOR_FACINGS_CONSTANT{
+		sf::Vector2i{ 1, 0 }, sf::Vector2i{ -1, 0 }, sf::Vector2i{ 0, 1 }, sf::Vector2i{ 0, -1 }, 
+		sf::Vector2i{ 1, 1 }, sf::Vector2i{ -1, 1 }, sf::Vector2i{ 1, -1 }, sf::Vector2i{ -1, -1 }
+	};
 
 
 	const Direction DEFAULT_DIRECTION = Direction::NORTH;

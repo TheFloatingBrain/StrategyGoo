@@ -25,15 +25,18 @@ namespace StrategyGoo
 	struct ToUnitVector
 	{
 		sf::Vector2< SCALER_TYPE > result;
-		ToUnitVector( sf::Vector2< SCALER_TYPE > vector ) {
+		ToUnitVector( sf::Vector2< SCALER_TYPE > vector )
+		{
 			const double MAGNITUDE_CONSTANT = Magnitude( vector );
-			result = sf::Vector2< SCALER_TYPE >( 
+			result = sf::Vector2< SCALER_TYPE >(
 					vector.x / ( SCALER_TYPE ) MAGNITUDE_CONSTANT, vector.y / ( SCALER_TYPE ) MAGNITUDE_CONSTANT );
 		}
 		operator sf::Vector2< SCALER_TYPE >() {
 			return result;
 		}
 	};
+
+	size_t ClosestFacing( sf::Vector2i vector );
 
 	struct Updator
 	{
@@ -96,6 +99,7 @@ namespace StrategyGoo
 		Squaddie& CreateSquaddie( BoardPosition startingPosition );
 		entt::registry& RefrenceRegistry();
 		protected:
+			template< typename ORDER_TYPE >
 			void UpdatePlayer();
 			void PlayerGiveOrdersStage( sf::RenderWindow& window );
 			std::vector< Updator* > entities;

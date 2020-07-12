@@ -8,6 +8,16 @@ namespace StrategyGoo
 				( abs( first.y - second.y ) < 1 );
 	}
 
+	size_t ClosestFacing( sf::Vector2i vector )
+	{
+		sf::Vector2i unitVector = ToUnitVector< int >{ vector };
+		for( size_t i = 0; i < AMOUNT_OF_DIRECTIONS_CONSTANT; ++i ) {
+			if( DIRECTION_VECTOR_FACINGS_CONSTANT[ i ] == unitVector )
+				return i;
+		}
+		return 0;
+	}
+
 	Squaddie::Squaddie( entt::registry& registry_, BoardPosition start, GameBoard* board_, size_t tileWidth, size_t tileHeight ) :
 		registry( registry_ ), board( board_ ), ENTITY_TILE_WIDTH_CONSTANT( tileWidth ), ENTITY_TILE_HEIGHT_CONSTANT( tileHeight ) 
 	{
@@ -118,6 +128,10 @@ namespace StrategyGoo
 	{
 		const auto SPRITE_POSITION_CONSTANT = squaddie.RefrenceSprite().RefrenceSprite().getPosition();
 		const auto TO_WORLD_POSITION_CONSTANT = squaddie.GetBoard()->ToWorldCoordinates( to );
+		const auto DISPLACEMENT_VECTOR_CONSTANT = TO_WORLD_POSITION_CONSTANT - SPRITE_POSITION_CONSTANT;
+		squaddie.RefrenceSprite().SetCurrentDirection( 
+				ALL_DIRECTIONS_CONSTANT[ ClosestFacing( from - to ) ] );
+		PrintVect( ToUnitVector< int >( from - to ) );
 		if( ComparePosition( SPRITE_POSITION_CONSTANT, TO_WORLD_POSITION_CONSTANT ) == false ) {
 			squaddie.RefrenceSprite().RefrenceSprite().move( ToUnitVector< float >(
 					TO_WORLD_POSITION_CONSTANT - SPRITE_POSITION_CONSTANT ) );
@@ -145,7 +159,7 @@ namespace StrategyGoo
 	void GameplayManager::Render( sf::RenderWindow& window )
 	{
 		PlayerGiveOrdersStage( window );
-		UpdatePlayer();
+		UpdatePlayer< MoveOrder >();
 		window.clear();
 		registry.view< Sprite< 1 > >().each( [&]( auto& tile, auto& sprite ) {
 			sprite.Draw( window );
@@ -158,20 +172,18 @@ namespace StrategyGoo
 		window.display();
 	}
 
+	template< typename ORDER_TYPE >
 	void GameplayManager::UpdatePlayer()
 	{
 		std::list< entt::entity > doneMoving;
 		bool allDone = true;
-		int count = 0;
-		registry.view< Squaddie::SquaddieRefrence, MoveOrder >().each(
+		registry.view< Squaddie::SquaddieRefrence, ORDER_TYPE >().each(
 			[ & ]( Squaddie::SquaddieRefrence& squaddie, MoveOrder& order ) {
-				++count;
 				if( allDone = ( allDone && order.Tick( squaddie.get() ) ) )
 					doneMoving.push_back( squaddie.get().GetID() );
 			} );
-		std::cout << count << " move orders\n";
 		for( auto currentEntity : doneMoving )
-			registry.remove< MoveOrder >( currentEntity );
+			registry.remove< ORDER_TYPE >( currentEntity );
 	}
 
 	void GameplayManager::PlayerGiveOrdersStage( sf::RenderWindow& window )
