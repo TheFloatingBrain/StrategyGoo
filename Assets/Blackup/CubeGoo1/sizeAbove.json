@@ -1,0 +1,262 @@
+{
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_00": {
+		"frame": {
+			"x": 0,
+			"y": 0,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_01": {
+		"frame": {
+			"x": 66,
+			"y": 0,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_02": {
+		"frame": {
+			"x": 0,
+			"y": 66,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_03": {
+		"frame": {
+			"x": 66,
+			"y": 66,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_04": {
+		"frame": {
+			"x": 132,
+			"y": 0,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_00": {
+		"frame": {
+			"x": 0,
+			"y": 132,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_01": {
+		"frame": {
+			"x": 66,
+			"y": 132,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_02": {
+		"frame": {
+			"x": 132,
+			"y": 66,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_03": {
+		"frame": {
+			"x": 132,
+			"y": 132,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_04": {
+		"frame": {
+			"x": 0,
+			"y": 198,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_00": {
+		"frame": {
+			"x": 66,
+			"y": 198,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_01": {
+		"frame": {
+			"x": 132,
+			"y": 198,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_02": {
+		"frame": {
+			"x": 0,
+			"y": 264,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_03": {
+		"frame": {
+			"x": 66,
+			"y": 264,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_04": {
+		"frame": {
+			"x": 132,
+			"y": 264,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_00": {
+		"frame": {
+			"x": 0,
+			"y": 330,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_01": {
+		"frame": {
+			"x": 66,
+			"y": 330,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_02": {
+		"frame": {
+			"x": 132,
+			"y": 330,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_03": {
+		"frame": {
+			"x": 0,
+			"y": 396,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_04": {
+		"frame": {
+			"x": 66,
+			"y": 396,
+			"width": 64,
+			"height": 64
+		},
+		"sourceSize": {
+			"width": 64,
+			"height": 64
+		},
+		"rotated": false
+	}
+}

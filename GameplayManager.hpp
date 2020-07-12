@@ -14,6 +14,9 @@ namespace StrategyGoo
 		entt::registry& RefrenceRegistry();
 		GameBoard& RefrenceGameBoard();
 		protected:
+			Sprite< -1 > move, grenade, target, leftArrow, rightArrow, littleTarget, littleMove;
+			std::array< Sprite< -1 >*, 7 > uiElements;
+			void DrawGUI( sf::RenderWindow& window );
 			template< typename ORDER_TYPE >
 			bool UpdatePlayer();
 			void PlayerGiveOrdersStage( sf::RenderWindow& window );

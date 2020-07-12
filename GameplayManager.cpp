@@ -1,10 +1,20 @@
 #include "GameplayManager.hpp"
 #include <list>
-
+#include <iostream>
 namespace StrategyGoo
 {
 	GameplayManager::GameplayManager( entt::registry& registry_, size_t width, size_t height ) :
-			registry( registry_ ), gameBoard( registry_, width, height ) {}
+			registry( registry_ ), gameBoard( registry_, width, height ), move( "Move" ),
+			grenade( "Grenade" ), target( "Target" ), leftArrow( "Arrow" ), rightArrow( "Arrow" ),
+			littleTarget( "Target" ), littleMove( "Move" ), uiElements( { &move, &grenade, &target, &leftArrow,
+			&rightArrow, &littleTarget, &littleMove }  ) {
+		int count = 0;
+		for( Sprite< -1 >* element : uiElements ) {
+			element->RefrenceSprite().setPosition( 64 + ( 64 * count ), 128 );
+			++count;
+//			element.SetAnimationActive( false );
+		}
+	}
 
 	template< typename ENTITY_TYPE >
 	ENTITY_TYPE& GameplayManager::CreateEntity( BoardPosition startingPosition )
@@ -19,9 +29,8 @@ namespace StrategyGoo
 	}
 	void GameplayManager::Render( sf::RenderWindow& window )
 	{
-		PlayerGiveOrdersStage( window );
-		UpdatePlayer< MoveOrder >();
 		window.clear();
+		UpdatePlayer< MoveOrder >();
 		registry.view< Sprite< 1 > >().each( [&]( auto& tile, auto& sprite ) {
 			sprite.Draw( window );
 			}
@@ -30,6 +39,9 @@ namespace StrategyGoo
 				sprite.Draw( window );
 			}
 		);
+		DrawGUI( window );
+		window.draw( sf::Sprite( *Detail::masterTexture ) );
+		PlayerGiveOrdersStage( window );
 		window.display();
 	}
 
@@ -47,6 +59,12 @@ namespace StrategyGoo
 		for( auto currentEntity : doneMoving )
 			registry.remove< ORDER_TYPE >( currentEntity );
 		return allDone;
+	}
+	
+	void GameplayManager::DrawGUI( sf::RenderWindow& window )
+	{
+		for( Sprite< -1 >* uiElement : uiElements )
+			window.draw( uiElement->RefrenceSprite() );
 	}
 
 	void GameplayManager::PlayerGiveOrdersStage( sf::RenderWindow& window )

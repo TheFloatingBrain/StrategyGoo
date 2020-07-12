@@ -25,6 +25,8 @@ int main( int argc, char** args )
 	std::cout << goo.RefrenceSprite().ObtainFramesForDirection( Direction::NORTH ).size();
 	sf::Clock frameRateController;
 	float frameRate = 1.f / 60.f;
+	sf::View camera = window.getDefaultView();
+//	camera.move( )
 	while( window.isOpen() )
 	{
 		sf::Event event;
@@ -32,10 +34,6 @@ int main( int argc, char** args )
 			if( event.type == sf::Event::Closed )
 				window.close();
 		}
-		goo.MoveToward( BoardPosition( 1, 1 ), 1, true );
-		int count = 0;
-		//for( auto* g : goo.GetGoo() )
-		//	std::cout << count++ << ": " << g->RefrenceBoardPosition().x << ", " << g->RefrenceBoardPosition().y << "\n";
 		if( frameRateController.getElapsedTime().asSeconds() >= frameRate ) {
 			frameRateController.restart();
 			manager.Render( window );
