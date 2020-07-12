@@ -134,7 +134,7 @@ namespace StrategyGoo
 			sf::Sprite sprite;
 			FRAMES_TYPE frames;
 			Direction currentDirection;
-			size_t currentFrame = 0;
+			size_t currentFrame;// = 0;
 			size_t currentAnimation = 0;
 			sf::IntRect placeInSpriteSheet;
 			std::vector< ANIMATION_TYPE > animations;

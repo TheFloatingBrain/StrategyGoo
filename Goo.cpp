@@ -29,6 +29,20 @@ namespace StrategyGoo
 			size_t tileWidth, size_t tileHeight, Goo* parent_ ) : 
 			Updator( registry_, start, board_, tileWidth, tileHeight, "CubeGoo1" ), parent( parent_ ) {
 		InitilizeRefrences< Goo::GooComponentRefrence, Goo::GooComponent >( *this );
+		MakeGooAnimation();
+		RefrenceSprite().RefrenceSprite().scale( 1.f, 1.3f );
+		RefrenceSprite().RefrenceSprite().setOrigin( 0.f, 16.f );
+	}
+
+	void Goo::GooComponent::MakeGooAnimation()
+	{
+		ANIMATION_TYPE animation;
+		for( size_t i = 0; i < AMOUNT_OF_DIRECTIONS_CONSTANT; ++i )
+		{
+			const auto AMOUNT_OF_FRAMES_FOR_DIRECTION_CONSTANT = RefrenceSprite().ObtainFramesForDirection( ( Direction ) i ).size();
+			for( size_t j = 0; j < AMOUNT_OF_FRAMES_FOR_DIRECTION_CONSTANT; ++j )
+				RefrenceSprite().RefrenceAnimations()[ 0 ][ 0 ].push_back( RandomRange( 0, AMOUNT_OF_FRAMES_FOR_DIRECTION_CONSTANT - 1 ) );
+		}
 	}
 
 	Goo::GooComponent& Goo::AddGoo( BoardPosition location )

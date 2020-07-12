@@ -18,6 +18,7 @@ namespace StrategyGoo
 					GameBoard* board_, size_t tileWidth, size_t tileHeight, Goo* parent_ );
 			void Update() override {}
 			void UpdateGraphics() override {}
+			void MakeGooAnimation();
 		};
 		using GooComponentRefrence = std::reference_wrapper< GooComponent >;
 		void Update() override {}

@@ -23,6 +23,7 @@ namespace StrategyGoo
 		InitializeSprite( spriteName_ );
 		ConstructDefaultAnimation();
 		sprite = sf::Sprite( *Detail::masterTexture, frames[ ( unsigned short ) currentDirection ][ 0 ] );
+		sprite.setTextureRect( frames[ 0 ][ 0 ] );
 	}
 
 	template< int LAYER_CONSTANT >
@@ -43,7 +44,7 @@ namespace StrategyGoo
 	{
 		if( animationActive == true )
 		{
-			currentFrame = ( currentFrame++ % ObtainFramesForCurrentAnimation() );
+			currentFrame = ( ( currentFrame < ( ObtainFramesForCurrentAnimation() - 1 ) ) ? currentFrame + 1 : 0 );
 			auto relativeFrame = ObtainCurrentAnimationFrameBounds( currentDirection, currentFrame );
 			relativeFrame.left += placeInSpriteSheet.left;
 			relativeFrame.top += placeInSpriteSheet.top;
@@ -62,7 +63,7 @@ namespace StrategyGoo
 	template< int LAYER_CONSTANT >
 	void Sprite< LAYER_CONSTANT >::ChangeAnimation( size_t to ) {
 		currentAnimation = to;
-		currentFrame = 0;
+		//currentFrame = 0;
 	}
 
 	template< int LAYER_CONSTANT >

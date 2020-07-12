@@ -22,7 +22,7 @@ int main( int argc, char** args )
 	Goo& goo = manager.CreateEntity< Goo >( BoardPosition( 8, 8 ) );
 	Goo::GooComponent& splot = goo.AddGoo( BoardPosition( 8, 9 ) );
 	goo.AddGoo( BoardPosition( 8, 10 ) );
-
+	std::cout << goo.RefrenceSprite().ObtainFramesForDirection( Direction::NORTH ).size();
 	while( window.isOpen() )
 	{
 		sf::Event event;
@@ -30,7 +30,6 @@ int main( int argc, char** args )
 			if( event.type == sf::Event::Closed )
 				window.close();
 		}
-		sf::sleep( sf::seconds( 1.0f ) );
 		goo.MoveToward( BoardPosition( 1, 1 ), 1, true );
 		int count = 0;
 		//for( auto* g : goo.GetGoo() )
