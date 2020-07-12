@@ -30,8 +30,8 @@ int main( int argc, char** args )
 			if( event.type == sf::Event::Closed )
 				window.close();
 		}
-		sf::sleep( sf::seconds( .1f ) );
-		goo.MoveToward( BoardPosition( 1, 1 ) );
+		sf::sleep( sf::seconds( 1.0f ) );
+		goo.MoveToward( BoardPosition( 1, 1 ), 1, true );
 		int count = 0;
 		//for( auto* g : goo.GetGoo() )
 		//	std::cout << count++ << ": " << g->RefrenceBoardPosition().x << ", " << g->RefrenceBoardPosition().y << "\n";

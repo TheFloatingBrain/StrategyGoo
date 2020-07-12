@@ -38,7 +38,7 @@ namespace StrategyGoo
 		static EmptySquareLocalType FindEmptyAround( GooComponent& toLookAround, size_t spreadReach = 1 );
 		static EmptySquareType FindEmptySquares( Goo& goo, size_t spreadReach = 1 );
 
-		bool MoveToward( BoardPosition where, size_t spreadReach = 1, std::vector< GooComponent* > exclude = {} );
+		bool MoveToward( BoardPosition where, size_t spreadReach = 1, bool grow = false, std::vector< GooComponent* > exclude = {} );
 
 		GooComponent* ClosestToPoint( BoardPosition point, bool invert = false, std::vector< GooComponent* > exclude = {} );
 

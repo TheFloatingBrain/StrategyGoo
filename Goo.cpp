@@ -131,7 +131,7 @@ namespace StrategyGoo
 	}
 
 	// * TODO: Add wall avoidence later? Could be done throug exclude or by not allowing it in the rules of FindEmptySquares//
-	bool Goo::MoveToward( BoardPosition where, size_t spreadReach, std::vector< GooComponent* > exclude )
+	bool Goo::MoveToward( BoardPosition where, size_t spreadReach, bool grow, std::vector< GooComponent* > exclude )
 	{
 		if( spreadReach > 0 )
 		{
@@ -161,10 +161,12 @@ namespace StrategyGoo
 					if( nowhereToMove == true )
 						return false;
 					exclude.push_back( closest );
-					return MoveToward( where, spreadReach, exclude );
+					return MoveToward( where, spreadReach, grow, exclude );
 				}
 				BoardPosition newLocation = empty[ RandomRange( 0, AMOUNT_OF_EMPTY_TILES - 1 ) ];
-				if( MoveEntity< GooComponentRefrence >( registry, *furthest, newLocation, board ) == true )
+				if( grow == true )
+					AddGoo( newLocation );
+				else if( MoveEntity< GooComponentRefrence >( registry, *furthest, newLocation, board ) == true )
 				{
 					//std::cout << "Move made\n";
 					furthest->RefrenceBoardPosition() = newLocation;
@@ -175,7 +177,7 @@ namespace StrategyGoo
 					return false;
 				}
 				//std::cout << "Done A\n";
-				return MoveToward( where, spreadReach - 1, exclude );
+				return MoveToward( where, spreadReach - 1, grow, exclude );
 			}
 		}
 		//std::cout << "Done B!\n";
