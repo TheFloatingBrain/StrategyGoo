@@ -4,6 +4,8 @@
 
 namespace StrategyGoo
 {
+	size_t RandomRange( int min, int max );
+
 	struct Goo : public Updator
 	{
 		using GooRefrence = std::reference_wrapper< Goo >;
@@ -23,11 +25,22 @@ namespace StrategyGoo
 
 		GooComponent& AddGoo( BoardPosition location );
 
-		using EmptySquareLocalType = std::list< BoardPosition >;
+		bool RemoveGoo( GooRefrence& toRemove );
+		bool RemoveGoo( GooComponent& toRemove );
+		bool RemoveGoo( GooComponent* toRemove );
+		bool RemoveGoo( BoardPosition toRemove );
+		bool RemoveGoo( size_t toRemove );
+
+
+		using EmptySquareLocalType = std::vector< BoardPosition >;
 		using EmptySquareType = std::vector< std::pair< GooComponentRefrence, EmptySquareLocalType > >;
 
 		static EmptySquareLocalType FindEmptyAround( GooComponent& toLookAround, size_t spreadReach = 1 );
 		static EmptySquareType FindEmptySquares( Goo& goo, size_t spreadReach = 1 );
+
+		bool MoveToward( BoardPosition where, size_t spreadReach = 1, std::vector< GooComponent* > exclude = {} );
+
+		GooComponent* ClosestToPoint( BoardPosition point, bool invert = false, std::vector< GooComponent* > exclude = {} );
 
 		std::vector< GooComponent* >& GetGoo();
 		protected:

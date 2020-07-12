@@ -20,8 +20,9 @@ int main( int argc, char** args )
 	manager.CreateEntity< Squaddie >( BoardPosition( 4, 1 ) ).RefrenceSprite().SetCurrentDirection( Direction::NORTH );
 	manager.CreateEntity< Squaddie >( BoardPosition( 1, 3 ) ).RefrenceSprite().SetCurrentDirection( Direction::WEST );
 	Goo& goo = manager.CreateEntity< Goo >( BoardPosition( 8, 8 ) );
-	goo.AddGoo( BoardPosition( 8, 9 ) );
+	Goo::GooComponent& splot = goo.AddGoo( BoardPosition( 8, 9 ) );
 	goo.AddGoo( BoardPosition( 8, 10 ) );
+
 	while( window.isOpen() )
 	{
 		sf::Event event;
@@ -29,12 +30,12 @@ int main( int argc, char** args )
 			if( event.type == sf::Event::Closed )
 				window.close();
 		}
+		sf::sleep( sf::seconds( .1f ) );
+		goo.MoveToward( BoardPosition( 1, 1 ) );
+		int count = 0;
+		//for( auto* g : goo.GetGoo() )
+		//	std::cout << count++ << ": " << g->RefrenceBoardPosition().x << ", " << g->RefrenceBoardPosition().y << "\n";
 		manager.Render( window );
-	}
-	auto empty = Goo::FindEmptyAround( *goo.GetGoo()[ 0 ] );
-	for( auto& a : empty )
-	{
-		std::cout << "Empty: " << a.x << ", " << a.y << "\n";
 	}
 	return 0;
 }

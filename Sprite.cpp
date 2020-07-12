@@ -52,8 +52,10 @@ namespace StrategyGoo
 	}
 
 	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::Draw( sf::RenderWindow& toRenderTo ) {
-		toRenderTo.draw( sprite );
+	void Sprite< LAYER_CONSTANT >::Draw( sf::RenderWindow& toRenderTo )
+	{
+		if( active )
+			toRenderTo.draw( sprite );
 		Animate();
 	}
 
