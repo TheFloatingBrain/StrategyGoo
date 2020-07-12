@@ -4,6 +4,13 @@
 
 namespace StrategyGoo
 {
+
+	/*struct GooComponent
+	{
+		BoardPosition& RefrencePosition();
+		Sprite< 0 >& RefrenceSprite();
+	};*/
+
 	struct Goo : public Updator
 	{
 		using GooRefrence = std::reference_wrapper< Goo >;

@@ -31,6 +31,8 @@ namespace StrategyGoo
 
 		Sprite< 1 >& RefrenceSprite();
 
+		entt::entity GetID();
+
 		protected: 
 			
 			size_t x, y;

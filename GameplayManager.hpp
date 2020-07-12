@@ -9,7 +9,8 @@ namespace StrategyGoo
 		GameplayManager( entt::registry& registry_ );
 		void Update();
 		void Render( sf::RenderWindow& window );
-		Squaddie& CreateSquaddie( BoardPosition startingPosition );
+		template< typename ENTITY_TYPE >
+		ENTITY_TYPE& CreateEntity( BoardPosition startingPosition );
 		entt::registry& RefrenceRegistry();
 		protected:
 			template< typename ORDER_TYPE >

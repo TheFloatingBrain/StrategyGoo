@@ -45,6 +45,9 @@
     <ClCompile Include="Goo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Updator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\Include\nlohmann\json.hpp">
@@ -69,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Goo.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Updator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

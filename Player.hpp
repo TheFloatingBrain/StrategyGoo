@@ -1,5 +1,7 @@
 #include "Updator.hpp"
+
 #ifndef PLAYER_HEADER_HPP
+#define PLAYER_HEADER_HPP
 namespace StrategyGoo
 {
 	struct Squaddie : public Updator

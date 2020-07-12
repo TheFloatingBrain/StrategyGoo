@@ -11,6 +11,11 @@ namespace StrategyGoo
 		registry.emplace< TileRefrence >( id, ( *this ) );
 	}
 
+	entt::entity Tile::GetID() {
+		return id;
+	}
+
+
 	sf::Vector2f Tile::ToWorldPosition()
 	{
 		return sf::Vector2f( ( float ) x * TILE_WIDTH_CONSTANT, 

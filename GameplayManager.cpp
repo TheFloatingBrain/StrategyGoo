@@ -6,12 +6,13 @@ namespace StrategyGoo
 	GameplayManager::GameplayManager( entt::registry& registry_ ) : 
 			registry( registry_ ), gameBoard( registry_, 64, 64 ) {}
 
-	Squaddie& GameplayManager::CreateSquaddie( BoardPosition startingPosition )
+	template< typename ENTITY_TYPE >
+	ENTITY_TYPE& GameplayManager::CreateEntity( BoardPosition startingPosition )
 	{
-		Squaddie* newSquaddie = new Squaddie( registry, startingPosition, &gameBoard,
+		ENTITY_TYPE* newEntity = new ENTITY_TYPE( registry, startingPosition, &gameBoard,
 				gameBoard.GetTileWidthConstant(), gameBoard.GetTileHeightConstant() );
-		entities.push_back( newSquaddie );
-		return *newSquaddie;
+		entities.push_back( newEntity );
+		return *newEntity;
 	}
 	void GameplayManager::Update()
 	{
@@ -66,4 +67,7 @@ namespace StrategyGoo
 	entt::registry& GameplayManager::RefrenceRegistry() {
 		return registry;
 	}
+
+	template Squaddie& GameplayManager::CreateEntity< Squaddie >( BoardPosition );
+	template Goo& GameplayManager::CreateEntity< Goo >( BoardPosition );
 }
