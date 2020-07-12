@@ -34,17 +34,18 @@ namespace StrategyGoo
 	}
 
 	template< typename ORDER_TYPE >
-	void GameplayManager::UpdatePlayer()
+	bool GameplayManager::UpdatePlayer()
 	{
 		std::list< entt::entity > doneMoving;
 		bool allDone = true;
 		registry.view< Squaddie::SquaddieRefrence, ORDER_TYPE >().each(
 			[ & ]( Squaddie::SquaddieRefrence& squaddie, MoveOrder& order ) {
-				if( allDone = ( allDone && order.Tick( squaddie.get() ) ) )
+				if( allDone = ( allDone && order.Tick( squaddie.get(), registry ) ) )
 					doneMoving.push_back( squaddie.get().GetID() );
 			} );
 		for( auto currentEntity : doneMoving )
 			registry.remove< ORDER_TYPE >( currentEntity );
+		return allDone;
 	}
 
 	void GameplayManager::PlayerGiveOrdersStage( sf::RenderWindow& window )

@@ -18,22 +18,24 @@ namespace StrategyGoo
 		static bool AddOrders( entt::registry& registry, entt::entity& id, sf::View& camera );
 		static bool ExecuteOrders( entt::registry& registry );
 		
+		Squaddie& ObtainThis();
+
 		protected:
 			float speed = 1.f / 5.f;
 
 	};
 
 	struct PlayerOrder {
-		virtual bool Execute( Squaddie& squaddie ) = 0;
-		virtual bool Tick( Squaddie& squaddie ) = 0;
+		virtual bool Execute( Squaddie& squaddie, entt::registry& registry ) = 0;
+		virtual bool Tick( Squaddie& squaddie, entt::registry& registry ) = 0;
 	};
 
 	struct MoveOrder : public PlayerOrder
 	{
 		BoardPosition from, to;
 		MoveOrder( BoardPosition from_, BoardPosition to_ );
-		bool Execute( Squaddie& squaddie );
-		bool Tick( Squaddie& squaddie ) override;
+		bool Execute( Squaddie& squaddie, entt::registry& registry );
+		bool Tick( Squaddie& squaddie, entt::registry& registry ) override;
 	};
 }
 #endif

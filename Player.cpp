@@ -1,16 +1,13 @@
 #include "Player.hpp"
 namespace StrategyGoo
 {
-	Squaddie::Squaddie( entt::registry& registry_, BoardPosition start, GameBoard* board_, size_t tileWidth, size_t tileHeight ) : 
-		Updator( registry_, board_, tileWidth, tileHeight )
-	{
-		id = registry.create();
-		registry.emplace< BoardPosition >( id, start.x, start.y );
-		registry.emplace< Sprite< 0 > >( id, "Squaddie" );
-		RefrenceSprite().RefrenceSprite().setPosition( ToWorldPosition() );
-		registry.emplace< SquaddieRefrence >( id, *this );
-		registry.emplace< Updator::UpdatorRefrence >( id, *this );
-		AddEntityToTile< SquaddieRefrence >( registry, *this, start, board );
+	Squaddie::Squaddie( entt::registry& registry_, BoardPosition start, GameBoard* board_, size_t tileWidth, size_t tileHeight ) :
+			Updator( registry_, start, board_, tileWidth, tileHeight, "Squaddie" ) {
+		InitilizeRefrences< SquaddieRefrence, Squaddie >( *this );
+	}
+
+	Squaddie& Squaddie::ObtainThis() {
+		return *this;
 	}
 
 	//Anything that needs to be regularly updated.//
@@ -58,7 +55,7 @@ namespace StrategyGoo
 	MoveOrder::MoveOrder( BoardPosition from_, BoardPosition to_ ) :
 		from( from_ ), to( to_ ) {}
 
-	bool MoveOrder::Execute( Squaddie& squaddie )
+	bool MoveOrder::Execute( Squaddie& squaddie, entt::registry& registry )
 	{
 		auto position = squaddie.RefrenceBoardPosition();
 		const sf::Vector2i MOVEMENT_CONSTANT = ToUnitVector< int >( to - position );
@@ -66,7 +63,7 @@ namespace StrategyGoo
 		return position == to;
 	}
 
-	bool MoveOrder::Tick( Squaddie& squaddie )
+	bool MoveOrder::Tick( Squaddie& squaddie, entt::registry& registry )
 	{
 		const auto SPRITE_POSITION_CONSTANT = squaddie.RefrenceSprite().RefrenceSprite().getPosition();
 		const auto TO_WORLD_POSITION_CONSTANT = squaddie.GetBoard()->ToWorldCoordinates( to );
@@ -81,6 +78,7 @@ namespace StrategyGoo
 		}
 		else {
 			squaddie.RefrenceBoardPosition() = to;
+			MoveEntity< Squaddie::SquaddieRefrence >( registry, squaddie.ObtainThis(), to, squaddie.GetBoard() );
 			return true;
 		}
 	}

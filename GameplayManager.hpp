@@ -14,7 +14,7 @@ namespace StrategyGoo
 		entt::registry& RefrenceRegistry();
 		protected:
 			template< typename ORDER_TYPE >
-			void UpdatePlayer();
+			bool UpdatePlayer();
 			void PlayerGiveOrdersStage( sf::RenderWindow& window );
 			std::vector< Updator* > entities;
 			std::optional< entt::entity > idOfSelectedSquaddie;
