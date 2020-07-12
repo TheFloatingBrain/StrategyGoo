@@ -32,6 +32,7 @@ namespace StrategyGoo
 		MakeGooAnimation();
 		RefrenceSprite().RefrenceSprite().scale( 1.f, 1.3f );
 		RefrenceSprite().RefrenceSprite().setOrigin( 0.f, 16.f );
+		RefrenceSprite().SetAnimationRate( 1.f / 5.f );
 	}
 
 	void Goo::GooComponent::MakeGooAnimation()

@@ -3,8 +3,8 @@
 
 namespace StrategyGoo
 {
-	GameplayManager::GameplayManager( entt::registry& registry_ ) : 
-			registry( registry_ ), gameBoard( registry_, 64, 64 ) {}
+	GameplayManager::GameplayManager( entt::registry& registry_, size_t width, size_t height ) :
+			registry( registry_ ), gameBoard( registry_, width, height ) {}
 
 	template< typename ENTITY_TYPE >
 	ENTITY_TYPE& GameplayManager::CreateEntity( BoardPosition startingPosition )

@@ -6,7 +6,7 @@ namespace StrategyGoo
 {
 	struct GameplayManager
 	{
-		GameplayManager( entt::registry& registry_ );
+		GameplayManager( entt::registry& registry_, size_t width = 64, size_t height = 64 );
 		void Update();
 		void Render( sf::RenderWindow& window );
 		template< typename ENTITY_TYPE >

@@ -14,6 +14,9 @@ namespace StrategyGoo
 		void TickOrder();
 		bool CheckSelect( entt::registry& registry, sf::RenderWindow& window );
 
+		float GetSpeed();
+		void SetSpeed( float speed_ );
+
 		static std::pair< bool, std::optional< entt::entity > > SelectSquaddie( entt::registry& registry, sf::RenderWindow& window );
 		static bool AddOrders( entt::registry& registry, entt::entity& id, sf::View& camera );
 		static bool ExecuteOrders( entt::registry& registry );
@@ -21,7 +24,7 @@ namespace StrategyGoo
 		Squaddie& ObtainThis();
 
 		protected:
-			float speed = 1.f / 5.f;
+			float speed = 1.f;
 
 	};
 

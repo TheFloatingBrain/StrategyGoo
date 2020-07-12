@@ -42,7 +42,16 @@ namespace StrategyGoo
 	template< int LAYER_CONSTANT >
 	void Sprite< LAYER_CONSTANT >::Animate()
 	{
-		if( animationActive == true )
+		bool animate = animationActive;
+		if( animate == true && animationRate != 1.f )
+		{
+			animate = false;
+			if( animationRateClock.getElapsedTime().asSeconds() > animationRate ) {
+				animate = true;
+				animationRateClock.restart();
+			}
+		}
+		if( animate == true )
 		{
 			currentFrame = ( ( currentFrame < ( ObtainFramesForCurrentAnimation() - 1 ) ) ? currentFrame + 1 : 0 );
 			auto relativeFrame = ObtainCurrentAnimationFrameBounds( currentDirection, currentFrame );
@@ -74,6 +83,15 @@ namespace StrategyGoo
 	template< int LAYER_CONSTANT >
 	std::vector< size_t > Sprite< LAYER_CONSTANT >::ObtainAnimationFramesForDirection( Direction spriteDirection ) {
 		return animations[ currentAnimation ][ ( unsigned short ) spriteDirection ];
+	}
+
+	template< int LAYER_CONSTANT >
+	void Sprite< LAYER_CONSTANT >::SetAnimationRate( float animationRate_ ) {
+		animationRate = animationRate_;
+	}
+	template< int LAYER_CONSTANT >
+	int Sprite< LAYER_CONSTANT >::GetLayerConstant() {
+		return LAYER_CONSTANT;
 	}
 
 	template< int LAYER_CONSTANT >
@@ -252,11 +270,11 @@ namespace StrategyGoo
 	bool Sprite< LAYER_CONSTANT >::GetAnimationActive() {
 		return animationActive;
 	}
-
 	template< int LAYER_CONSTANT >
-	int Sprite< LAYER_CONSTANT >::GetLayerConstant() {
-		return LAYER_CONSTANT;
+	float Sprite< LAYER_CONSTANT >::GetAnimationRate() {
+		return animationRate;
 	}
+
 
 	const std::string SPRITE_FILE_NAME_ROOT_CONSTANT = "sizeAbove";
 

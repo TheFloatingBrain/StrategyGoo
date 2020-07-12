@@ -15,6 +15,13 @@ namespace StrategyGoo
 	//For animations between orders.//
 	void Squaddie::TickOrder() {}
 
+	float Squaddie::GetSpeed() {
+		return speed;
+	}
+	void Squaddie::SetSpeed( float speed_ ) {
+		speed = speed_;
+	}
+
 	bool Squaddie::CheckSelect( entt::registry& registry, sf::RenderWindow& window )
 	{
 		sf::IntRect box = RefrenceSprite().GetSprite().getTextureRect();
@@ -72,8 +79,8 @@ namespace StrategyGoo
 			ALL_DIRECTIONS_CONSTANT[ ClosestFacing( from - to ) ] );
 		PrintVect( ToUnitVector< int >( from - to ) );
 		if( ComparePosition( SPRITE_POSITION_CONSTANT, TO_WORLD_POSITION_CONSTANT ) == false ) {
-			squaddie.RefrenceSprite().RefrenceSprite().move( ToUnitVector< float >(
-				TO_WORLD_POSITION_CONSTANT - SPRITE_POSITION_CONSTANT ) );
+			auto unit = ToUnitVector< float >( TO_WORLD_POSITION_CONSTANT - SPRITE_POSITION_CONSTANT ).result;
+			squaddie.RefrenceSprite().RefrenceSprite().move( unit * squaddie.GetSpeed() );
 			return false;
 		}
 		else {

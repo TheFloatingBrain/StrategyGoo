@@ -97,9 +97,10 @@ namespace StrategyGoo
 		void SetJSONData( std::string jsonData_ );
 		void SetPlaceInSpriteSheet( sf::IntRect placeInSpriteSheet_ );
 		void SetAnimationActive( bool animationActive_ );
+		void SetAnimationRate( float animationRate_ );
+
 
 		int GetLayerConstant();
-
 		std::string GetSpriteName();
 		sf::Sprite GetSprite();
 		FRAMES_TYPE GetFrames();
@@ -111,6 +112,7 @@ namespace StrategyGoo
 		std::string GetJSONData();
 		sf::IntRect GetPlaceInSpriteSheet();
 		bool GetAnimationActive();
+		float GetAnimationRate();
 
 		static sf::IntRect LoadSpriteImage( std::string spriteName, sf::Texture* buffer = nullptr, 
 				sf::Image* spriteBuffer = nullptr, std::vector< LOADED_SPRITE_DATA_TYPE >* loadedSprites = nullptr );
@@ -121,6 +123,9 @@ namespace StrategyGoo
 		static std::string LoadJSONData( std::string spriteName );
 		void InitializeSprite( std::string spriteName_ );
 		static FRAMES_TYPE FrameDataFromJSONMetaData( std::string metaData, std::string spriteName );
+
+		
+
 
 		operator sf::Sprite();
 		sf::Sprite& operator*();
@@ -134,8 +139,10 @@ namespace StrategyGoo
 			sf::Sprite sprite;
 			FRAMES_TYPE frames;
 			Direction currentDirection;
-			size_t currentFrame;// = 0;
+			size_t currentFrame;
 			size_t currentAnimation = 0;
+			sf::Clock animationRateClock;
+			float animationRate = 1.f;
 			sf::IntRect placeInSpriteSheet;
 			std::vector< ANIMATION_TYPE > animations;
 			bool active = true;

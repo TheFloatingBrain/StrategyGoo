@@ -23,6 +23,8 @@ int main( int argc, char** args )
 	Goo::GooComponent& splot = goo.AddGoo( BoardPosition( 8, 9 ) );
 	goo.AddGoo( BoardPosition( 8, 10 ) );
 	std::cout << goo.RefrenceSprite().ObtainFramesForDirection( Direction::NORTH ).size();
+	sf::Clock frameRateController;
+	float frameRate = 1.f / 60.f;
 	while( window.isOpen() )
 	{
 		sf::Event event;
@@ -34,7 +36,10 @@ int main( int argc, char** args )
 		int count = 0;
 		//for( auto* g : goo.GetGoo() )
 		//	std::cout << count++ << ": " << g->RefrenceBoardPosition().x << ", " << g->RefrenceBoardPosition().y << "\n";
-		manager.Render( window );
+		if( frameRateController.getElapsedTime().asSeconds() >= frameRate ) {
+			frameRateController.restart();
+			manager.Render( window );
+		}
 	}
 	return 0;
 }
