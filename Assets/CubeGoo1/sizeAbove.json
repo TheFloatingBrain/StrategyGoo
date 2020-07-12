@@ -1,5 +1,5 @@
 {
-	"./cubeGoo1_Above_E_00": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_00": {
 		"frame": {
 			"x": 0,
 			"y": 0,
@@ -12,7 +12,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_E_01": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_01": {
 		"frame": {
 			"x": 66,
 			"y": 0,
@@ -25,7 +25,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_E_02": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_02": {
 		"frame": {
 			"x": 0,
 			"y": 66,
@@ -38,7 +38,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_E_03": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_03": {
 		"frame": {
 			"x": 66,
 			"y": 66,
@@ -51,7 +51,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_E_04": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_04": {
 		"frame": {
 			"x": 132,
 			"y": 0,
@@ -64,7 +64,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_N_00": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_00": {
 		"frame": {
 			"x": 0,
 			"y": 132,
@@ -77,7 +77,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_N_01": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_01": {
 		"frame": {
 			"x": 66,
 			"y": 132,
@@ -90,7 +90,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_N_02": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_02": {
 		"frame": {
 			"x": 132,
 			"y": 66,
@@ -103,7 +103,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_N_03": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_03": {
 		"frame": {
 			"x": 132,
 			"y": 132,
@@ -116,7 +116,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_N_04": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_04": {
 		"frame": {
 			"x": 0,
 			"y": 198,
@@ -129,7 +129,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_S_00": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_00": {
 		"frame": {
 			"x": 66,
 			"y": 198,
@@ -142,7 +142,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_S_01": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_01": {
 		"frame": {
 			"x": 132,
 			"y": 198,
@@ -155,7 +155,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_S_02": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_02": {
 		"frame": {
 			"x": 0,
 			"y": 264,
@@ -168,7 +168,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_S_03": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_03": {
 		"frame": {
 			"x": 66,
 			"y": 264,
@@ -181,7 +181,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_S_04": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_04": {
 		"frame": {
 			"x": 132,
 			"y": 264,
@@ -194,7 +194,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_W_00": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_00": {
 		"frame": {
 			"x": 0,
 			"y": 330,
@@ -207,7 +207,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_W_01": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_01": {
 		"frame": {
 			"x": 66,
 			"y": 330,
@@ -220,7 +220,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_W_02": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_02": {
 		"frame": {
 			"x": 132,
 			"y": 330,
@@ -233,7 +233,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_W_03": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_03": {
 		"frame": {
 			"x": 0,
 			"y": 396,
@@ -246,7 +246,7 @@
 		},
 		"rotated": false
 	},
-	"./cubeGoo1_Above_W_04": {
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_04": {
 		"frame": {
 			"x": 66,
 			"y": 396,

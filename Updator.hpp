@@ -13,15 +13,12 @@ namespace StrategyGoo
 			registry.emplace< REFRENCE_TYPE >( id, self );
 			AddEntityToTile< REFRENCE_TYPE >( registry, self, RefrenceBoardPosition(), board );
 		}
-
-
 		using UpdatorRefrence = std::reference_wrapper< Updator >;
-
-
 		virtual void Update() = 0;
 		virtual void UpdateGraphics() {};
 		BoardPosition& RefrenceBoardPosition();
 		Sprite< 0 >& RefrenceSprite();
+		entt::registry& RefrenceRegistry();
 		entt::entity GetID();
 		GameBoard* GetBoard();
 		sf::Vector2f ToWorldPosition() override;

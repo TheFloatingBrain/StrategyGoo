@@ -19,7 +19,9 @@ namespace StrategyGoo
 	Sprite< 0 >& Updator::RefrenceSprite() {
 		return registry.get< Sprite< 0 > >( id );
 	}
-
+	entt::registry& Updator::RefrenceRegistry() {
+		return registry;
+	}
 	GameBoard* Updator::GetBoard() {
 		return board;
 	}

@@ -12,6 +12,7 @@ namespace StrategyGoo
 		template< typename ENTITY_TYPE >
 		ENTITY_TYPE& CreateEntity( BoardPosition startingPosition );
 		entt::registry& RefrenceRegistry();
+		GameBoard& RefrenceGameBoard();
 		protected:
 			template< typename ORDER_TYPE >
 			bool UpdatePlayer();

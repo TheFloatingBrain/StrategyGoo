@@ -70,6 +70,11 @@ namespace StrategyGoo
 		return registry;
 	}
 
+	GameBoard& GameplayManager::RefrenceGameBoard() {
+		return gameBoard;
+	}
+
 	template Squaddie& GameplayManager::CreateEntity< Squaddie >( BoardPosition );
 	template Goo& GameplayManager::CreateEntity< Goo >( BoardPosition );
+
 }

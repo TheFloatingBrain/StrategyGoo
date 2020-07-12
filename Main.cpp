@@ -19,6 +19,9 @@ int main( int argc, char** args )
 	manager.CreateEntity< Squaddie >( BoardPosition( 1, 1 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );
 	manager.CreateEntity< Squaddie >( BoardPosition( 4, 1 ) ).RefrenceSprite().SetCurrentDirection( Direction::NORTH );
 	manager.CreateEntity< Squaddie >( BoardPosition( 1, 3 ) ).RefrenceSprite().SetCurrentDirection( Direction::WEST );
+	Goo& goo = manager.CreateEntity< Goo >( BoardPosition( 8, 8 ) );
+	goo.AddGoo( BoardPosition( 8, 9 ) );
+	goo.AddGoo( BoardPosition( 8, 10 ) );
 	while( window.isOpen() )
 	{
 		sf::Event event;
@@ -27,11 +30,12 @@ int main( int argc, char** args )
 				window.close();
 		}
 		manager.Render( window );
-		size_t count = 0;
-		registry.view< Squaddie::SquaddieRefrence, Tile::TileRefrence >().each( [&]( Squaddie::SquaddieRefrence&, Tile::TileRefrence& ) { ++count; } );
-		std::cout << "Tiles with squaddies: " << count << "\n";
 	}
-
+	auto empty = Goo::FindEmptyAround( *goo.GetGoo()[ 0 ] );
+	for( auto& a : empty )
+	{
+		std::cout << "Empty: " << a.x << ", " << a.y << "\n";
+	}
 	return 0;
 }
 
