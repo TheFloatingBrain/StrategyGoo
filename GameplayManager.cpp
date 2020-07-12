@@ -41,6 +41,7 @@ namespace StrategyGoo
 		defaultCursor.SetCurrentDirection( Direction::SOUTH );
 		defaultCursor.SetActive( false );
 		cursorSprite.SetCurrentDirection( defaultCursor.GetCurrentDirection() );
+		selectionSquare.SetActive( false );
 	}
 
 	template< typename ENTITY_TYPE >
@@ -51,13 +52,47 @@ namespace StrategyGoo
 		entities.push_back( newEntity );
 		return *newEntity;
 	}
-	void GameplayManager::Update()
+
+	GameplayManager::StagesOfPlay GameplayManager::GetGameState() {
+		return gameState;
+	}
+
+	void GameplayManager::Update( sf::RenderWindow& window )
 	{
+		//std::cout << "Game state: " << ( int ) gameState << "\n";
+		switch( gameState )
+		{
+			case StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE : {
+				PlayerGiveOrdersStage( window );
+				break;
+			}
+			case StagesOfPlay::PLAYER_EXECUTE_ORDERS_STAGE : 
+			{
+				selectionSquare.SetActive( false );
+				bool allOrderTypesComplete = true;
+				allOrderTypesComplete = ( 
+						allOrderTypesComplete && UpdatePlayer< MoveOrder >() );
+				std::cout << "Are all orders done? " << allOrderTypesComplete << "\n";
+				if( allOrderTypesComplete )
+					gameState = StagesOfPlay::SLIME_MOVE_STAGE;
+				break;
+			}
+			case StagesOfPlay::SLIME_MOVE_STAGE : {
+				SlimeMove( window );
+				break;
+			}
+			case StagesOfPlay::PLAYER_DAMAGE_STAGE : {
+				gameState = StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE;
+				break;
+			}
+			default : {
+				break;
+			}
+		}
 	}
 	void GameplayManager::Render( sf::RenderWindow& window )
 	{
 		window.clear();
-		UpdatePlayer< MoveOrder >();
 		registry.view< Sprite< 1 > >().each( [&]( auto& tile, auto& sprite ) {
 			sprite.Draw( window );
 			}
@@ -68,9 +103,11 @@ namespace StrategyGoo
 			}
 		);
 		DrawGUI( window );
-		///window.draw( sf::Sprite( *Detail::masterTexture ) );
-		PlayerGiveOrdersStage( window );
 		window.display();
+	}
+
+	void GameplayManager::SlimeMove( sf::RenderWindow& window ) {
+		gameState = StagesOfPlay::PLAYER_DAMAGE_STAGE;
 	}
 
 	template< typename ORDER_TYPE >
@@ -78,12 +115,17 @@ namespace StrategyGoo
 	{
 		std::list< entt::entity > doneMoving;
 		bool allDone = true;
+		int count = 0;
 		registry.view< Squaddie::SquaddieRefrence, ORDER_TYPE >().each(
 			[ & ]( Squaddie::SquaddieRefrence& squaddie, MoveOrder& order ) {
+				++count;
 				entt::entity id = squaddie.get().GetID();
-				if( allDone = ( allDone && order.Tick( squaddie.get(), registry ) ) )
+				bool thisOrder = order.Tick( squaddie.get(), registry );
+				if( thisOrder )
 					doneMoving.push_back( id );
+				allDone = thisOrder && allDone;
 			} );
+		std::cout << "There were " << count << " orders\n";
 		for( auto currentEntity : doneMoving )
 			registry.remove< ORDER_TYPE >( currentEntity );
 		return allDone;
@@ -111,6 +153,10 @@ namespace StrategyGoo
 					break;
 				}
 			}
+			if( currentAction == PlayerAction::END_TURN ) {
+				gameState = StagesOfPlay::PLAYER_EXECUTE_ORDERS_STAGE;
+				currentAction = PlayerAction::NONE;
+			}
 			auto* toBeCursor = actionBarSprites[ ( size_t ) currentAction ];
 			cursorSprite = Sprite< -1 >( toBeCursor->GetSpriteName() );
 			cursorSprite.SetCurrentDirection( toBeCursor->GetCurrentDirection() );
@@ -126,30 +172,37 @@ namespace StrategyGoo
 
 	void GameplayManager::PlayerGiveOrdersStage( sf::RenderWindow& window )
 	{
-		auto selectionData = Squaddie::SelectSquaddie( registry, window );
-		if( selectionData.first == true )
-			idOfSelectedSquaddie = selectionData.second;
-		else
-			selectionSquare.SetActive( false );
+		auto mousePosition = sf::Mouse::getPosition( window );
+		bool onActionBar = actionBar.contains( mousePosition );
+		if( onActionBar == false )
+		{
+			auto selectionData = Squaddie::SelectSquaddie( registry, window );
+			if( selectionData.first == true )
+				idOfSelectedSquaddie = selectionData.second;
+			else
+				selectionSquare.SetActive( false );
+		}
 
-		if( idOfSelectedSquaddie.has_value() == true )
+		if( idOfSelectedSquaddie.has_value() == true && onActionBar == false )
 		{
 			selectionSquare.SetActive( true );
 			selectionSquare.RefrenceSprite().setPosition(
 					registry.get< Sprite< 0 > >( idOfSelectedSquaddie.value() ).RefrenceSprite().getPosition() );
 			if( sf::Mouse::isButtonPressed( sf::Mouse::Button::Right ) == true )
 			{
-				auto mousePosition = sf::Mouse::getPosition( window );
-				if( actionBar.contains( mousePosition ) == false &&
-						RectangleFromVectors< float >( registry.get< Sprite< 0 > >( 
+				
+				if( RectangleFromVectors< float >( registry.get< Sprite< 0 > >( 
 							idOfSelectedSquaddie.value() ).RefrenceSprite().getPosition(), 
 							sf::Vector2f( 64.f, 64.f ) ).contains( 
 							ConvertVector< float, int >( mousePosition ) ) == false )
 				{
 					registry.remove_if_exists< MoveOrder >( idOfSelectedSquaddie.value() );
-					registry.emplace< MoveOrder >( idOfSelectedSquaddie.value(),
-							registry.get< BoardPosition >( idOfSelectedSquaddie.value() ),
-							gameBoard.ToBoardCoordinates( sf::Mouse::getPosition( window ) ) );
+					if( currentAction == PlayerAction::MOVE )
+					{
+						registry.emplace< MoveOrder >( idOfSelectedSquaddie.value(),
+								registry.get< BoardPosition >( idOfSelectedSquaddie.value() ),
+								gameBoard.ToBoardCoordinates( sf::Mouse::getPosition( window ) ) );
+					}
 				}
 			}
 		}

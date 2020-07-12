@@ -22,6 +22,7 @@ namespace StrategyGoo
 		speed = speed_;
 	}
 
+
 	bool Squaddie::CheckSelect( entt::registry& registry, sf::RenderWindow& window )
 	{
 		sf::IntRect box = RefrenceSprite().GetSprite().getTextureRect();
