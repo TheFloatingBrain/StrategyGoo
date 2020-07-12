@@ -75,8 +75,8 @@ namespace StrategyGoo
 						UpdatePlayer< ShootGrenadeOrder >() );
 				if( allOrderTypesComplete )
 					gameState = StagesOfPlay::SLIME_MOVE_STAGE;
-				if( allOrderTypesComplete )
-					std::cout << "DONE\n";
+				//if( allOrderTypesComplete )
+				//	std::cout << "DONE\n";
 				break;
 			}
 			case StagesOfPlay::SLIME_MOVE_STAGE : {

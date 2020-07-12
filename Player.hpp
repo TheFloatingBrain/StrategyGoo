@@ -47,7 +47,8 @@ namespace StrategyGoo
 		bool detonatedGrenade = false;
 		BoardPosition from, to;
 		size_t explosionTime = 0;
-		size_t maxExplosionTime = 6000;
+		size_t maxExplosionTime = 5;
+		bool killedGoo = false;
 		entt::entity grenadeID, explosionID;
 	};
 }
