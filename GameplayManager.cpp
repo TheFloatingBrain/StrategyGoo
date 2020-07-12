@@ -1,12 +1,11 @@
 #include "GameplayManager.hpp"
-
+#include <list>
 	#include <iostream>
 namespace StrategyGoo
 {
-	bool ComparePosition( sf::Vector2f first, sf::Vector2f second )
-	{
-		return ( abs( first.x - second.x ) < FLT_EPSILON ) &&
-				( abs( first.y - second.y ) < FLT_EPSILON );
+	bool ComparePosition( sf::Vector2f first, sf::Vector2f second ) {
+		return ( abs( first.x - second.x ) < 1 ) &&
+				( abs( first.y - second.y ) < 1 );
 	}
 
 	Squaddie::Squaddie( entt::registry& registry_, BoardPosition start, GameBoard* board_, size_t tileWidth, size_t tileHeight ) :
@@ -16,7 +15,6 @@ namespace StrategyGoo
 		registry.emplace< BoardPosition >( id, start.x, start.y );
 		registry.emplace< Sprite< 0 > >( id, "Squaddie" );
 		RefrenceSprite().RefrenceSprite().setPosition( ToWorldPosition() );
-		std::cout << "Squaddie Constructor " << ToWorldPosition().x << ", " << ToWorldPosition().y << "\n";
 		registry.emplace< SquaddieRefrence >( id, *this );
 		registry.emplace< Updator::UpdatorRefrence >( id, *this );
 	}
@@ -38,6 +36,12 @@ namespace StrategyGoo
 		return registry.get< Sprite< 0 > >( id );
 	}
 
+	GameBoard* Squaddie::GetBoard() {
+		return board;
+	}
+	entt::entity Squaddie::GetID() {
+		return id;
+	}
 
 
 	void PrintRect( sf::FloatRect rect )
@@ -55,6 +59,10 @@ namespace StrategyGoo
 	{
 		std::cout << v.x << ", " << v.y << "\n";
 	}
+	void PrintVect( sf::Vector2i v )
+	{
+		std::cout << v.x << ", " << v.y << "\n";
+	}
 
 	bool Squaddie::CheckSelect( entt::registry& registry, sf::RenderWindow& window )
 	{
@@ -66,7 +74,7 @@ namespace StrategyGoo
 				ConvertVector< int, float >( RectanglePosition( window.getView().getViewport() ) ) ) );
 	}
 
-	std::optional< entt::entity > Squaddie::SelectSquaddie( entt::registry& registry, sf::RenderWindow& window )
+	std::pair< bool, std::optional< entt::entity > > Squaddie::SelectSquaddie( entt::registry& registry, sf::RenderWindow& window )
 	{
 		if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) )
 		{
@@ -79,10 +87,10 @@ namespace StrategyGoo
 						selectedID = squaddie.get().id;
 					}
 				} );
-			if( didSelect == true )
-				return std::optional< entt::entity >( selectedID );
+			return std::pair< bool, std::optional< entt::entity > >( true,
+					( didSelect ? std::optional< entt::entity >( selectedID ) : std::nullopt ) );
 		}
-		return std::nullopt;
+		return std::pair< bool, std::optional< entt::entity > >( false, std::nullopt );
 	}
 
 	bool Squaddie::AddOrders( entt::registry& registry, entt::entity& id, sf::View& camera ) {
@@ -98,7 +106,7 @@ namespace StrategyGoo
 	MoveOrder::MoveOrder( BoardPosition from_, BoardPosition to_ ) : 
 			from( from_ ), to( to_ ) {}
 
-	bool MoveOrder::Move( Squaddie& squaddie )
+	bool MoveOrder::Execute( Squaddie& squaddie )
 	{
 		auto position = squaddie.RefrenceBoardPosition();
 		const sf::Vector2i MOVEMENT_CONSTANT = ToUnitVector< int >( to - position );
@@ -109,13 +117,16 @@ namespace StrategyGoo
 	bool MoveOrder::Tick( Squaddie& squaddie )
 	{
 		const auto SPRITE_POSITION_CONSTANT = squaddie.RefrenceSprite().RefrenceSprite().getPosition();
-		const auto SQUADDIE_WORLD_POSITION_CONSTANT = squaddie.ToWorldPosition();
-		if( ComparePosition( SPRITE_POSITION_CONSTANT, SQUADDIE_WORLD_POSITION_CONSTANT ) ) {
+		const auto TO_WORLD_POSITION_CONSTANT = squaddie.GetBoard()->ToWorldCoordinates( to );
+		if( ComparePosition( SPRITE_POSITION_CONSTANT, TO_WORLD_POSITION_CONSTANT ) == false ) {
 			squaddie.RefrenceSprite().RefrenceSprite().move( ToUnitVector< float >(
-				SQUADDIE_WORLD_POSITION_CONSTANT - SPRITE_POSITION_CONSTANT ) );
+					TO_WORLD_POSITION_CONSTANT - SPRITE_POSITION_CONSTANT ) );
 			return false;
 		}
-		return true;
+		else {
+			squaddie.RefrenceBoardPosition() = to;
+			return true;
+		}
 	}
 
 	GameplayManager::GameplayManager( entt::registry& registry_ ) : 
@@ -133,6 +144,8 @@ namespace StrategyGoo
 	}
 	void GameplayManager::Render( sf::RenderWindow& window )
 	{
+		PlayerGiveOrdersStage( window );
+		UpdatePlayer();
 		window.clear();
 		registry.view< Sprite< 1 > >().each( [&]( auto& tile, auto& sprite ) {
 			sprite.Draw( window );
@@ -145,7 +158,37 @@ namespace StrategyGoo
 		window.display();
 	}
 
-	void GameplayManager::UpdatePlayer() {
+	void GameplayManager::UpdatePlayer()
+	{
+		std::list< entt::entity > doneMoving;
+		bool allDone = true;
+		int count = 0;
+		registry.view< Squaddie::SquaddieRefrence, MoveOrder >().each(
+			[ & ]( Squaddie::SquaddieRefrence& squaddie, MoveOrder& order ) {
+				++count;
+				if( allDone = ( allDone && order.Tick( squaddie.get() ) ) )
+					doneMoving.push_back( squaddie.get().GetID() );
+			} );
+		std::cout << count << " move orders\n";
+		for( auto currentEntity : doneMoving )
+			registry.remove< MoveOrder >( currentEntity );
+	}
+
+	void GameplayManager::PlayerGiveOrdersStage( sf::RenderWindow& window )
+	{
+		auto selectionData = Squaddie::SelectSquaddie( registry, window );
+		if( selectionData.first == true )
+			idOfSelectedSquaddie = selectionData.second;
+		if( idOfSelectedSquaddie.has_value() == true )
+		{
+			if( sf::Mouse::isButtonPressed( sf::Mouse::Button::Right ) == true )
+			{
+				registry.remove_if_exists< MoveOrder >( idOfSelectedSquaddie.value() );
+				registry.emplace< MoveOrder >( idOfSelectedSquaddie.value(),
+						registry.get< BoardPosition >( idOfSelectedSquaddie.value() ), 
+						gameBoard.ToBoardCoordinates( sf::Mouse::getPosition( window ) ) );
+			}
+		}
 	}
 
 	entt::registry& GameplayManager::RefrenceRegistry() {

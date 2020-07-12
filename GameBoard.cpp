@@ -89,4 +89,20 @@ namespace StrategyGoo
 	Tile& GameBoard::Row::operator[]( size_t index ) {
 		return At( index );
 	}
+
+	BoardPosition GameBoard::ToBoardCoordinates( sf::Vector2f worldCoordinate ) {
+		return BoardPosition{ ( int ) ( worldCoordinate.x / ( ( float ) BOARD_TILE_WIDTH_CONSTANT ) ),
+				( int ) ( worldCoordinate.y / ( ( float ) BOARD_TILE_HEIGHT_CONSTANT ) ) };
+	}
+
+	BoardPosition GameBoard::ToBoardCoordinates( sf::Vector2i worldCoordinate ) {
+		return BoardPosition{ ( int ) ( worldCoordinate.x / BOARD_TILE_WIDTH_CONSTANT ),
+				( int ) ( worldCoordinate.y / BOARD_TILE_HEIGHT_CONSTANT ) };
+	}
+
+	sf::Vector2f GameBoard::ToWorldCoordinates( BoardPosition position ) {
+		return sf::Vector2f{ ( float ) position.x * BOARD_TILE_WIDTH_CONSTANT, 
+				( float ) position.y * BOARD_TILE_WIDTH_CONSTANT };
+	}
+
 }

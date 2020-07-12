@@ -27,11 +27,6 @@ int main( int argc, char** args )
 				window.close();
 		}
 		manager.Render( window );
-		
-		auto result = Squaddie::SelectSquaddie( manager.RefrenceRegistry(), window );
-
-		if( result.has_value() )
-			std::cout << "Squaddie " << ( entt::id_type ) result.value() << " selected.\n";
 	}
 
 	return 0;

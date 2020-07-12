@@ -55,20 +55,27 @@ namespace StrategyGoo
 		//For animations between orders.//
 		void TickOrder();
 		bool CheckSelect( entt::registry& registry, sf::RenderWindow& window );
-		
+
+		GameBoard* GetBoard();
+		entt::entity GetID();
+
 		BoardPosition& RefrenceBoardPosition();
 		Sprite< 0 >& RefrenceSprite();
-		GameBoard* board;
-		const size_t ENTITY_TILE_WIDTH_CONSTANT;
-		const size_t ENTITY_TILE_HEIGHT_CONSTANT;
-		entt::registry& registry;
-
-		static std::optional< entt::entity > SelectSquaddie( entt::registry& registry, sf::RenderWindow& window );
+			
+		static std::pair< bool, std::optional< entt::entity > > SelectSquaddie( entt::registry& registry, sf::RenderWindow& window );
 		static bool AddOrders( entt::registry& registry, entt::entity& id, sf::View& camera );
 		static bool ExecuteOrders( entt::registry& registry );
+
+		protected: 
+			float speed = 1.f / 5.f;
+			GameBoard* board;
+			const size_t ENTITY_TILE_WIDTH_CONSTANT;
+			const size_t ENTITY_TILE_HEIGHT_CONSTANT;
+			entt::registry& registry;
 	};
 
 	struct PlayerOrder {
+		virtual bool Execute( Squaddie& squaddie ) = 0;
 		virtual bool Tick( Squaddie& squaddie ) = 0;
 	};
 
@@ -76,7 +83,7 @@ namespace StrategyGoo
 	{
 		BoardPosition from, to;
 		MoveOrder( BoardPosition from_, BoardPosition to_ );
-		bool Move( Squaddie& squaddie );
+		bool Execute( Squaddie& squaddie );
 		bool Tick( Squaddie& squaddie ) override;
 	};
 
@@ -90,7 +97,9 @@ namespace StrategyGoo
 		entt::registry& RefrenceRegistry();
 		protected:
 			void UpdatePlayer();
+			void PlayerGiveOrdersStage( sf::RenderWindow& window );
 			std::vector< Updator* > entities;
+			std::optional< entt::entity > idOfSelectedSquaddie;
 			GameBoard gameBoard;
 			entt::registry& registry;
 	};

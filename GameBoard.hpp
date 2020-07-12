@@ -64,6 +64,11 @@ namespace StrategyGoo
 		Row operator[]( size_t index );
 		Row At( size_t index );
 
+		BoardPosition ToBoardCoordinates( sf::Vector2f worldCoordinate );
+		BoardPosition ToBoardCoordinates( sf::Vector2i worldCoordinate );
+		
+		sf::Vector2f ToWorldCoordinates( BoardPosition position );
+
 		protected: 
 			void InitializeTiles();
 			std::vector< Tile > tiles;
