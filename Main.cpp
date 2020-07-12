@@ -18,7 +18,7 @@ int main( int argc, char** args )
 	GameplayManager manager{ registry };
 	manager.CreateSquaddie( BoardPosition( 1, 1 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );
 	manager.CreateSquaddie( BoardPosition( 4, 1 ) ).RefrenceSprite().SetCurrentDirection( Direction::NORTH );
-	//manager.CreateSquaddie( BoardPosition( 1, 3 ) ).sprite->SetCurrentDirection( Direction::WEST );
+	manager.CreateSquaddie( BoardPosition( 1, 3 ) ).RefrenceSprite().SetCurrentDirection( Direction::WEST );
 	while( window.isOpen() )
 	{
 		sf::Event event;
@@ -28,7 +28,7 @@ int main( int argc, char** args )
 		}
 		manager.Render( window );
 		
-		auto result = Squaddie::SelectSquaddie( manager.RefrenceRegistry(), ( sf::View& ) window.getView() );
+		auto result = Squaddie::SelectSquaddie( manager.RefrenceRegistry(), window );
 
 		if( result.has_value() )
 			std::cout << "Squaddie " << ( entt::id_type ) result.value() << " selected.\n";

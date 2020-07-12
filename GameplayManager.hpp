@@ -14,6 +14,11 @@ namespace StrategyGoo
 		return sf::Vector2< SCALER_0_TYPE >{ ( SCALER_0_TYPE ) vector.x, ( SCALER_0_TYPE ) vector.y };
 	}
 
+	template< typename SCALER_TYPE >
+	constexpr sf::Vector2< SCALER_TYPE > RectanglePosition( sf::Rect< SCALER_TYPE > from ) {
+		return sf::Vector2< SCALER_TYPE >( from.left, from.top );
+	}
+
 	bool ComparePosition( sf::Vector2f first, sf::Vector2f second );
 
 	template< typename SCALER_TYPE = float >
@@ -49,7 +54,7 @@ namespace StrategyGoo
 		void Update() override;
 		//For animations between orders.//
 		void TickOrder();
-		bool CheckSelect( entt::registry& registry, sf::Vector2f cursorPosition, sf::Vector2f cameraPosition );
+		bool CheckSelect( entt::registry& registry, sf::RenderWindow& window );
 		
 		BoardPosition& RefrenceBoardPosition();
 		Sprite< 0 >& RefrenceSprite();
@@ -58,7 +63,7 @@ namespace StrategyGoo
 		const size_t ENTITY_TILE_HEIGHT_CONSTANT;
 		entt::registry& registry;
 
-		static std::optional< entt::entity > SelectSquaddie( entt::registry& registry, sf::View& camera );
+		static std::optional< entt::entity > SelectSquaddie( entt::registry& registry, sf::RenderWindow& window );
 		static bool AddOrders( entt::registry& registry, entt::entity& id, sf::View& camera );
 		static bool ExecuteOrders( entt::registry& registry );
 	};

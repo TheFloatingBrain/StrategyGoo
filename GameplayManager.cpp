@@ -45,36 +45,36 @@ namespace StrategyGoo
 		std::cout << rect.left << ", " << rect.top <<
 			", " << rect.width << ", " << rect.height << "\n";
 	}
+	void PrintRect( sf::IntRect rect )
+	{
+		std::cout << rect.left << ", " << rect.top <<
+			", " << rect.width << ", " << rect.height << "\n";
+	}
 
 	void PrintVect( sf::Vector2f v )
 	{
 		std::cout << v.x << ", " << v.y << "\n";
 	}
 
-	bool Squaddie::CheckSelect( entt::registry& registry, sf::Vector2f cursorPosition, sf::Vector2f cameraPosition )
+	bool Squaddie::CheckSelect( entt::registry& registry, sf::RenderWindow& window )
 	{
 		sf::IntRect box = RefrenceSprite().GetSprite().getTextureRect();
 		auto worldPosition = ToWorldPosition();
-		sf::FloatRect checkMouse = sf::FloatRect{ worldPosition.x,
-			worldPosition.y, ( float ) box.width, ( float ) box.height };
-		PrintRect( checkMouse );
-		PrintVect( cursorPosition );
-		return checkMouse.contains( ( cursorPosition + cameraPosition ) );
+		sf::IntRect checkMouse{ ( int ) worldPosition.x,
+			( int ) worldPosition.y, box.width, box.height };
+		return checkMouse.contains( ( sf::Mouse::getPosition( window ) + 
+				ConvertVector< int, float >( RectanglePosition( window.getView().getViewport() ) ) ) );
 	}
 
-	std::optional< entt::entity > Squaddie::SelectSquaddie( entt::registry& registry, sf::View& camera )
+	std::optional< entt::entity > Squaddie::SelectSquaddie( entt::registry& registry, sf::RenderWindow& window )
 	{
 		if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) )
 		{
-			const sf::Vector2f CURRENT_MOUSE_POSITION_CONSTANT =
-					sf::Vector2f( ( float ) sf::Mouse::getPosition().x, ( float ) sf::Mouse::getPosition().y );
-			const sf::Vector2f CURRENT_CAMERA_POSITION_CONSTANT =
-				sf::Vector2f( ( float ) camera.getViewport().left, ( float ) camera.getViewport().top );
+			sf::View& camera = ( sf::View& ) window.getView();
 			bool didSelect = false;
 			entt::entity selectedID;
 			registry.view< SquaddieRefrence >().each( [ & ]( SquaddieRefrence& squaddie ) {
-					if( didSelect = ( didSelect || squaddie.get().CheckSelect( registry, 
-						CURRENT_MOUSE_POSITION_CONSTANT, CURRENT_CAMERA_POSITION_CONSTANT ) ) ) {
+					if( squaddie.get().CheckSelect( registry, window ) == true && didSelect == false ) {
 						didSelect = true;
 						selectedID = squaddie.get().id;
 					}
