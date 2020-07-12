@@ -8,7 +8,7 @@ namespace StrategyGoo
 	bool AddEntityToTile( entt::registry& registry, REFRENCE_TYPE toRefrence, BoardPosition tile, GameBoard* board )
 	{
 		auto tileID = ( *board )[ tile.x ][ tile.y ].GetID();
-		if( regitry.has< REFRENCE_TYPE >( tileID ) == false ) {
+		if( registry.has< REFRENCE_TYPE >( tileID ) == false ) {
 			registry.emplace< REFRENCE_TYPE >( tileID, toRefrence );
 			return true;
 		}
@@ -19,7 +19,7 @@ namespace StrategyGoo
 	bool RemoveEntityFromTile( entt::registry& registry, BoardPosition tile, GameBoard* board )
 	{
 		auto tileID = ( *board )[ tile.x ][ tile.y ].GetID();
-		if( regitry.has< REFRENCE_TYPE >( tileID ) == false ) {
+		if( registry.has< REFRENCE_TYPE >( tileID ) == false ) {
 			registry.remove< REFRENCE_TYPE >( tileID );
 			return true;
 		}
@@ -28,7 +28,8 @@ namespace StrategyGoo
 
 	template< typename REFRENCE_TYPE >
 	bool MoveEntity( entt::registry& registry, REFRENCE_TYPE toRefrence, BoardPosition tile, GameBoard* board ) {
-		return ( AddEntityToTile( registry, toRefrence, tile, board ) && RemoveEntityFromTile( registry, tile, board ) );
+		return ( AddEntityToTile( registry, toRefrence, tile, board ) && 
+				RemoveEntityFromTile< REFRENCE_TYPE >( registry, tile, board ) );
 	}
 }
 #endif

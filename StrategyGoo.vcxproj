@@ -165,6 +165,7 @@
     <ClInclude Include="Goo.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="Sprite.hpp" />
+    <ClInclude Include="TileTagging.hpp" />
     <ClInclude Include="Updator.hpp" />
     <ClInclude Include="VectorUtility.hpp" />
   </ItemGroup>

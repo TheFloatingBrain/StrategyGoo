@@ -10,6 +10,7 @@ namespace StrategyGoo
 		RefrenceSprite().RefrenceSprite().setPosition( ToWorldPosition() );
 		registry.emplace< SquaddieRefrence >( id, *this );
 		registry.emplace< Updator::UpdatorRefrence >( id, *this );
+		AddEntityToTile< SquaddieRefrence >( registry, *this, start, board );
 	}
 
 	//Anything that needs to be regularly updated.//
