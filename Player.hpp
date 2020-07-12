@@ -29,7 +29,6 @@ namespace StrategyGoo
 	};
 
 	struct PlayerOrder {
-		virtual bool Execute( Squaddie& squaddie, entt::registry& registry ) = 0;
 		virtual bool Tick( Squaddie& squaddie, entt::registry& registry ) = 0;
 	};
 
@@ -37,8 +36,19 @@ namespace StrategyGoo
 	{
 		BoardPosition from, to;
 		MoveOrder( BoardPosition from_, BoardPosition to_ );
-		bool Execute( Squaddie& squaddie, entt::registry& registry );
 		bool Tick( Squaddie& squaddie, entt::registry& registry ) override;
+	};
+
+	struct ShootGrenadeOrder : public PlayerOrder
+	{
+		ShootGrenadeOrder( BoardPosition from_, BoardPosition to_ );
+		bool Tick( Squaddie& squaddie, entt::registry& registry ) override;
+		bool createdGrenade = false;
+		bool detonatedGrenade = false;
+		BoardPosition from, to;
+		size_t explosionTime = 0;
+		size_t maxExplosionTime = 6000;
+		entt::entity grenadeID, explosionID;
 	};
 }
 #endif

@@ -1,4 +1,5 @@
 #include "Player.hpp"
+#include <iostream>
 namespace StrategyGoo
 {
 	Squaddie::Squaddie( entt::registry& registry_, BoardPosition start, GameBoard* board_, size_t tileWidth, size_t tileHeight ) :
@@ -63,13 +64,6 @@ namespace StrategyGoo
 	MoveOrder::MoveOrder( BoardPosition from_, BoardPosition to_ ) :
 		from( from_ ), to( to_ ) {}
 
-	bool MoveOrder::Execute( Squaddie& squaddie, entt::registry& registry )
-	{
-		auto position = squaddie.RefrenceBoardPosition();
-		const sf::Vector2i MOVEMENT_CONSTANT = ToUnitVector< int >( to - position );
-		position += MOVEMENT_CONSTANT;
-		return position == to;
-	}
 
 	bool MoveOrder::Tick( Squaddie& squaddie, entt::registry& registry )
 	{
@@ -89,5 +83,65 @@ namespace StrategyGoo
 			squaddie.RefrenceBoardPosition() = to;
 			return true;
 		}
+	}
+	ShootGrenadeOrder::ShootGrenadeOrder( BoardPosition from_, BoardPosition to_ ) : 
+			from( from_ ), to( to_ ) {}
+
+	bool ShootGrenadeOrder::Tick( Squaddie& squaddie, entt::registry& registry )
+	{
+		bool status = false;
+		auto getSpriteComponent = [&]( entt::entity id ) -> Sprite< 0 >& {
+			return registry.get< Sprite< 0 > >( id );
+		};
+		auto getBoardPositionComponent = [&]( entt::entity id ) -> BoardPosition& {
+			return registry.get< BoardPosition >( id );
+		};
+		auto updateSprite = [&]( entt::entity id, BoardPosition whereTo ) {
+			getSpriteComponent( id ).RefrenceSprite().setPosition(
+				squaddie.GetBoard()->ToWorldCoordinates( whereTo ) );
+		};
+		auto moveSprite = [&]( entt::entity id, sf::Vector2f displacement ) {
+			getSpriteComponent( id ).RefrenceSprite().move( ( float ) displacement.x, ( float ) displacement.y );
+			getBoardPositionComponent( id ) = squaddie.GetBoard()->ToBoardCoordinates( 
+					getSpriteComponent( id ).RefrenceSprite().getPosition() );
+		};
+		if( createdGrenade == false )
+		{
+			std::cout << "A\n";
+			grenadeID = registry.create();
+			registry.emplace< Sprite< 0 > >( grenadeID, "Grenade" );
+			registry.emplace< BoardPosition >( grenadeID, from );
+			updateSprite( grenadeID, from );
+			createdGrenade = true;
+		}
+		else if( createdGrenade == true && detonatedGrenade == false )
+		{
+			std::cout << "B\n";
+			auto boardPosition = getBoardPositionComponent( grenadeID );
+			PrintVect( boardPosition );
+			BoardPosition displacement = to - boardPosition;
+			if( displacement == BoardPosition( 0, 0 ) )
+			{
+				registry.remove_all( grenadeID );
+				registry.destroy( grenadeID );
+				explosionID = registry.create();
+				registry.emplace< Sprite< 0 > >( explosionID, "CubeExplosion1" );
+				registry.emplace< BoardPosition >( explosionID, to );
+				updateSprite( explosionID, to );
+				detonatedGrenade = true;
+			}
+			else {
+				squaddie.RefrenceSprite().SetCurrentDirection( ALL_DIRECTIONS_CONSTANT[ ClosestFacing( -displacement ) ] );
+				moveSprite( grenadeID, ToUnitVector( ConvertVector< float, int >( displacement ) ).result * 5.f );
+			}
+		}
+		else if( explosionTime++ >= maxExplosionTime )
+		{
+			std::cout << "C\n";
+			registry.remove_all( explosionID );
+			registry.destroy( explosionID );
+			status = true;
+		}
+		return status;
 	}
 }

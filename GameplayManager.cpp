@@ -71,10 +71,12 @@ namespace StrategyGoo
 				selectionSquare.SetActive( false );
 				bool allOrderTypesComplete = true;
 				allOrderTypesComplete = ( 
-						allOrderTypesComplete && UpdatePlayer< MoveOrder >() );
-				std::cout << "Are all orders done? " << allOrderTypesComplete << "\n";
+						allOrderTypesComplete && UpdatePlayer< MoveOrder >() && 
+						UpdatePlayer< ShootGrenadeOrder >() );
 				if( allOrderTypesComplete )
 					gameState = StagesOfPlay::SLIME_MOVE_STAGE;
+				if( allOrderTypesComplete )
+					std::cout << "DONE\n";
 				break;
 			}
 			case StagesOfPlay::SLIME_MOVE_STAGE : {
@@ -115,17 +117,14 @@ namespace StrategyGoo
 	{
 		std::list< entt::entity > doneMoving;
 		bool allDone = true;
-		int count = 0;
 		registry.view< Squaddie::SquaddieRefrence, ORDER_TYPE >().each(
-			[ & ]( Squaddie::SquaddieRefrence& squaddie, MoveOrder& order ) {
-				++count;
+			[ & ]( Squaddie::SquaddieRefrence& squaddie, ORDER_TYPE& order ) {
 				entt::entity id = squaddie.get().GetID();
 				bool thisOrder = order.Tick( squaddie.get(), registry );
 				if( thisOrder )
 					doneMoving.push_back( id );
 				allDone = thisOrder && allDone;
 			} );
-		std::cout << "There were " << count << " orders\n";
 		for( auto currentEntity : doneMoving )
 			registry.remove< ORDER_TYPE >( currentEntity );
 		return allDone;
@@ -197,9 +196,16 @@ namespace StrategyGoo
 							ConvertVector< float, int >( mousePosition ) ) == false )
 				{
 					registry.remove_if_exists< MoveOrder >( idOfSelectedSquaddie.value() );
+					registry.remove_if_exists< ShootGrenadeOrder >( idOfSelectedSquaddie.value() );
 					if( currentAction == PlayerAction::MOVE )
 					{
 						registry.emplace< MoveOrder >( idOfSelectedSquaddie.value(),
+								registry.get< BoardPosition >( idOfSelectedSquaddie.value() ),
+								gameBoard.ToBoardCoordinates( sf::Mouse::getPosition( window ) ) );
+					}
+					if( currentAction == PlayerAction::GRENADE )
+					{
+						registry.emplace< ShootGrenadeOrder >( idOfSelectedSquaddie.value(),
 								registry.get< BoardPosition >( idOfSelectedSquaddie.value() ),
 								gameBoard.ToBoardCoordinates( sf::Mouse::getPosition( window ) ) );
 					}
