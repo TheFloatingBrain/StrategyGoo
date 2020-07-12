@@ -14,8 +14,11 @@ namespace StrategyGoo
 		entt::registry& RefrenceRegistry();
 		GameBoard& RefrenceGameBoard();
 		protected:
-			Sprite< -1 > move, grenade, target, leftArrow, rightArrow, littleTarget, littleMove;
-			std::array< Sprite< -1 >*, 7 > uiElements;
+			Sprite< -1 > move, grenade, flameThrower, check, hand, leftArrow, rightArrow, littleTarget, littleMove, throwGrenade;
+			sf::IntRect actionBar;
+			std::array< Sprite< -1 >*, 9 > uiElements;
+			std::array< Sprite< -1 >*, 5 > actionBarSprites;
+			int currentAction = 0;
 			void DrawGUI( sf::RenderWindow& window );
 			template< typename ORDER_TYPE >
 			bool UpdatePlayer();
@@ -24,6 +27,7 @@ namespace StrategyGoo
 			std::optional< entt::entity > idOfSelectedSquaddie;
 			GameBoard gameBoard;
 			entt::registry& registry;
+			void InitilizeUIComponents();
 	};
 }
 #endif

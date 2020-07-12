@@ -30,7 +30,7 @@ namespace StrategyGoo
 			Updator( registry_, start, board_, tileWidth, tileHeight, "CubeGoo1" ), parent( parent_ ) {
 		InitilizeRefrences< Goo::GooComponentRefrence, Goo::GooComponent >( *this );
 		MakeGooAnimation();
-		RefrenceSprite().RefrenceSprite().scale( 1.f, 1.3f );
+		RefrenceSprite().RefrenceSprite().scale( .63f, .5f );
 		RefrenceSprite().RefrenceSprite().setOrigin( 0.f, 16.f );
 		RefrenceSprite().SetAnimationRate( 1.f / 5.f );
 	}

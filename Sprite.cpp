@@ -209,6 +209,7 @@ namespace StrategyGoo
 	template< int LAYER_CONSTANT >
 	void Sprite< LAYER_CONSTANT >::SetPlaceInSpriteSheet( sf::IntRect placeInSpriteSheet_ ) {
 		placeInSpriteSheet = placeInSpriteSheet_;
+		sprite.setTextureRect( placeInSpriteSheet );
 	}
 
 	template< int LAYER_CONSTANT >
