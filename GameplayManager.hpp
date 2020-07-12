@@ -14,11 +14,22 @@ namespace StrategyGoo
 		entt::registry& RefrenceRegistry();
 		GameBoard& RefrenceGameBoard();
 		protected:
-			Sprite< -1 > move, grenade, flameThrower, check, hand, leftArrow, rightArrow, littleTarget, littleMove, throwGrenade;
+			Sprite< -1 > move, grenade, flameThrower, check, hand, leftArrow, 
+					rightArrow, littleTarget, littleMove, throwGrenade, defaultCursor, 
+					cursorSprite, selectionSquare;
 			sf::IntRect actionBar;
 			std::array< Sprite< -1 >*, 9 > uiElements;
-			std::array< Sprite< -1 >*, 5 > actionBarSprites;
-			int currentAction = 0;
+			std::array< Sprite< -1 >*, 6 > actionBarSprites;
+			enum class PlayerAction : size_t
+			{
+				GRENADE = 0,
+				FLAME_THROWER = 1,
+				MOVE = 2,
+				PICK_UP = 3,
+				END_TURN = 4, 
+				NONE = 5
+			};
+			PlayerAction currentAction = PlayerAction::NONE;
 			void DrawGUI( sf::RenderWindow& window );
 			template< typename ORDER_TYPE >
 			bool UpdatePlayer();

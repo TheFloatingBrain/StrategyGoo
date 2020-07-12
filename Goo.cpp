@@ -42,7 +42,7 @@ namespace StrategyGoo
 		{
 			const auto AMOUNT_OF_FRAMES_FOR_DIRECTION_CONSTANT = RefrenceSprite().ObtainFramesForDirection( ( Direction ) i ).size();
 			for( size_t j = 0; j < AMOUNT_OF_FRAMES_FOR_DIRECTION_CONSTANT; ++j )
-				RefrenceSprite().RefrenceAnimations()[ 0 ][ 0 ].push_back( RandomRange( 0, AMOUNT_OF_FRAMES_FOR_DIRECTION_CONSTANT - 1 ) );
+				RefrenceSprite().RefrenceAnimations()[ 0 ][ 0 ].push_back( ( size_t ) RandomRange( 0, ( int ) AMOUNT_OF_FRAMES_FOR_DIRECTION_CONSTANT - 1 ) );
 		}
 	}
 
@@ -71,7 +71,7 @@ namespace StrategyGoo
 			for( size_t x = ( ( ( size_t ) position.x >= spreadReach ) ? position.x - spreadReach : 0 );
 					x <= ( position.x + spreadReach ) && x < board.GetWidth(); ++x ) {
 				if( checkForGoo( board[ x ][ y ] ) == false )
-					emptySquares.push_back( BoardPosition( x, y ) );
+					emptySquares.push_back( BoardPosition( ( int ) x, ( int ) y ) );
 			}
 		}
 		return emptySquares;
@@ -178,7 +178,7 @@ namespace StrategyGoo
 					exclude.push_back( closest );
 					return MoveToward( where, spreadReach, grow, exclude );
 				}
-				BoardPosition newLocation = empty[ RandomRange( 0, AMOUNT_OF_EMPTY_TILES - 1 ) ];
+				BoardPosition newLocation = empty[ ( size_t ) RandomRange( 0, ( int ) AMOUNT_OF_EMPTY_TILES - 1 ) ];
 				if( grow == true )
 					AddGoo( newLocation );
 				else if( MoveEntity< GooComponentRefrence >( registry, *furthest, newLocation, board ) == true )

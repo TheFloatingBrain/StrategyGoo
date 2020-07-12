@@ -5,6 +5,19 @@
 #define VECTOR_UTILITY_HEADER_HPP
 namespace StrategyGoo
 {
+
+	template< typename SCALER_TYPE = int >
+	constexpr sf::Rect< SCALER_TYPE > RectangleFromVectors( 
+			sf::Vector2< SCALER_TYPE > position, sf::Vector2< SCALER_TYPE > dimentions ) {
+		return sf::Rect< SCALER_TYPE >( position.x, position.y, dimentions.x, dimentions.y );
+	}
+
+	template< typename SCALER_0_TYPE, typename SCALER_1_TYPE >
+	constexpr sf::Rect< SCALER_0_TYPE > ConvertRectangle( sf::Rect< SCALER_1_TYPE > rectangle ) {
+		return sf::Rect< SCALER_0_TYPE >{ ( SCALER_0_TYPE ) rectangle.left, ( SCALER_0_TYPE ) rectangle.right, 
+				( SCALER_0_TYPE ) rectangle.width, ( SCALER_0_TYPE ) rectangle.height };
+	}
+
 	template< typename SCALER_TYPE = float >
 	constexpr double Magnitude( sf::Vector2< SCALER_TYPE > of ) {
 		return sqrt( ( of.x * of.x ) + ( of.y * of.y ) );

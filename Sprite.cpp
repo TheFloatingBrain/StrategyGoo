@@ -209,7 +209,7 @@ namespace StrategyGoo
 	template< int LAYER_CONSTANT >
 	void Sprite< LAYER_CONSTANT >::SetPlaceInSpriteSheet( sf::IntRect placeInSpriteSheet_ ) {
 		placeInSpriteSheet = placeInSpriteSheet_;
-		sprite.setTextureRect( placeInSpriteSheet );
+
 	}
 
 	template< int LAYER_CONSTANT >
@@ -290,7 +290,7 @@ namespace StrategyGoo
 		const size_t LOADED_SPRITES_SIZE_CONSTANT = loadedSprites->size();
 		for( size_t i = 0; i < LOADED_SPRITES_SIZE_CONSTANT; ++i ) {
 			if( std::get< 0 >( loadedSprites->at( i ) ) == spriteName )
-				return i;
+				return ( int ) i;
 		}
 		return std::nullopt;
 	}
@@ -315,14 +315,15 @@ namespace StrategyGoo
 		sf::IntRect spriteSourceBounds;
 		newImage.loadFromFile( "Assets/" + spriteName + "/" + SPRITE_FILE_NAME_ROOT_CONSTANT + ".png" );
 		//std::cout << "Assets / " + spriteName + " / " + SPRITE_FILE_NAME_ROOT_CONSTANT + ".png" << "\n";
-		const size_t Y_AXIS_SIZE_CONSTANT = std::max( newImage.getSize().y, buffer->getSize().y );
+		const size_t Y_AXIS_SIZE_CONSTANT = ( size_t ) std::max( newImage.getSize().y, buffer->getSize().y );
 		if( buffer->getSize().y > 0 )
 		{
-			std::cout << "A " << spriteName << "\n";
+			//std::cout << "A " << spriteName << "\n";
 			sf::Texture intermediateTexture;
 			spriteSourceBounds = sf::IntRect( buffer->getSize().x, 0, newImage.getSize().x, newImage.getSize().y );
 			intermediateTexture.create(
-						buffer->getSize().x + newImage.getSize().x, Y_AXIS_SIZE_CONSTANT );
+						( unsigned int ) buffer->getSize().x + ( unsigned int ) newImage.getSize().x, 
+						( unsigned int ) Y_AXIS_SIZE_CONSTANT );
 			intermediateTexture.update( *buffer );
 			intermediateTexture.update( newImage, buffer->getSize().x, 0 );
 			*spriteBuffer = intermediateTexture.copyToImage();
@@ -331,8 +332,8 @@ namespace StrategyGoo
 		}
 		else
 		{
-			std::cout << "B" << spriteName << "\n";
-			buffer->create( newImage.getSize().x, Y_AXIS_SIZE_CONSTANT );
+			//std::cout << "B" << spriteName << "\n";
+			buffer->create( ( unsigned int ) newImage.getSize().x, ( unsigned int ) Y_AXIS_SIZE_CONSTANT );
 			buffer->update( newImage );
 			*spriteBuffer = buffer->copyToImage();
 			spriteSourceBounds = sf::IntRect( 0, 0, newImage.getSize().x, newImage.getSize().y );

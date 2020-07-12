@@ -1,0 +1,2 @@
+C:\Users\TheFl\source\repos\StrategyGoo\x64\Debug\StrategyGoo.exe
+C:\Users\TheFl\source\repos\StrategyGoo\x64\Debug\StrategyGoo.pdb

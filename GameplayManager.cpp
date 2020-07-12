@@ -7,11 +7,13 @@ namespace StrategyGoo
 			registry( registry_ ), gameBoard( registry_, width, height ), move( "Move" ),
 			grenade( "Grenade" ), flameThrower( "CubeExplosion1" ), check( "Check" ), hand( "Hand" ), 
 			leftArrow( "Arrow" ), rightArrow( "Arrow" ), littleTarget( "Target" ), littleMove( "Move" ), 
-			throwGrenade( "Grenade" ), uiElements( { &move, &grenade, &flameThrower, &hand, &check, &leftArrow,
-			&rightArrow, &littleTarget, &littleMove } ), actionBarSprites( { &grenade, &flameThrower, &move, &hand, &check } ) {
+			throwGrenade( "Grenade" ), defaultCursor( "Cursor" ), cursorSprite( "Cursor" ), selectionSquare( "SelectionSquare" ), 
+			uiElements( { &move, &grenade, &flameThrower, &hand, &check, &leftArrow,
+			&rightArrow, &littleTarget, &littleMove } ), actionBarSprites( { &grenade, &flameThrower, 
+			&move, &hand, &check, &defaultCursor } ) {
 		size_t count = 0;
 		for( Sprite< -1 >* element : uiElements ) {
-			element->RefrenceSprite().setPosition( 64 + ( 64 * count++ ), 128 );
+			element->RefrenceSprite().setPosition( ( float ) ( 64 + ( 64 * count++ ) ), 128.f );
 		}
 		InitilizeUIComponents();
 	}
@@ -23,19 +25,22 @@ namespace StrategyGoo
 		actionBar.width = 64 * 7;
 		actionBar.height = 64;
 		leftArrow.SetCurrentDirection( Direction::WEST );
-		( *leftArrow ).setPosition( actionBar.left, actionBar.top );
+		( *leftArrow ).setPosition( ( float ) actionBar.left, ( float ) actionBar.top );
 		rightArrow.SetCurrentDirection( Direction::EAST );
-		( *rightArrow ).setPosition( actionBar.left + ( 64 * 6 ), actionBar.top );
+		( *rightArrow ).setPosition( ( float ) actionBar.left + ( 64.f * 6.f ), ( float ) actionBar.top );
 		( *grenade ).scale( 1.0f, .8f );
-		( *grenade ).setPosition( actionBar.left + 64, actionBar.top );
-		( *flameThrower ).setPosition( actionBar.left + ( 64 * 2 ), actionBar.top );
-		( *move ).setPosition( actionBar.left + ( 64 * 3 ), actionBar.top );
-		( *hand ).setPosition( actionBar.left + ( 64 * 4 ), actionBar.top );
+		( *grenade ).setPosition( ( float ) actionBar.left + 64.f, ( float ) actionBar.top );
+		( *flameThrower ).setPosition( ( float ) actionBar.left + ( 64.f * 2.f ), ( float ) actionBar.top );
+		( *move ).setPosition( ( float ) actionBar.left + ( 64.f * 3.f ), ( float ) actionBar.top );
+		( *hand ).setPosition( ( float ) actionBar.left + ( 64.f * 4.f ), ( float ) actionBar.top );
 		hand.SetCurrentDirection( Direction::NORTH_EAST );
-		( *check ).setPosition( actionBar.left + ( 64 * 5 ), actionBar.top );
+		( *check ).setPosition( ( float ) actionBar.left + ( 64.f * 5.f ), ( float ) actionBar.top );
 		check.SetCurrentDirection( Direction::EAST );
 		( *littleMove ).scale( .5f, .5f );
 		( *littleTarget ).scale( .5f, .5f );
+		defaultCursor.SetCurrentDirection( Direction::SOUTH );
+		defaultCursor.SetActive( false );
+		cursorSprite.SetCurrentDirection( defaultCursor.GetCurrentDirection() );
 	}
 
 	template< typename ENTITY_TYPE >
@@ -57,6 +62,7 @@ namespace StrategyGoo
 			sprite.Draw( window );
 			}
 		);
+		selectionSquare.Draw( window );
 		registry.view< Sprite< 0 > >().each( [ & ]( auto& tile, auto& sprite ) {
 				sprite.Draw( window );
 			}
@@ -91,28 +97,31 @@ namespace StrategyGoo
 		actionPanelRender.setFillColor( sf::Color( 97, 90, 90, 255 ) );
 		actionPanelRender.setOutlineColor( sf::Color( 14, 32, 232, 255 ) );
 		actionPanelRender.setOutlineThickness( 2.0f );
-		for( size_t i = 0; i < actionBarSprites.size(); ++i )
+		if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) )
 		{
-			if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) )
+			currentAction = PlayerAction::NONE;
+			//-1 because the last sprite is the default cursor.//
+			for( size_t i = 0; i < actionBarSprites.size() - 1; ++i )
 			{
-				sf::IntRect actionBoundingBox;
-				auto textureRectangle = ( actionBarSprites[ 0 ]->RefrenceSprite().getTextureRect() );
-				actionBoundingBox.width = textureRectangle.width;
-				actionBoundingBox.height = textureRectangle.height;
-				actionBoundingBox.left = actionBarSprites[ 0 ]->RefrenceSprite().getPosition().x;
-				actionBoundingBox.top = actionBarSprites[ 0 ]->RefrenceSprite().getPosition().y;
+				sf::Sprite& actionSprite = actionBarSprites[ i ]->RefrenceSprite();
+				sf::IntRect actionBoundingBox{ ( int ) actionSprite.getPosition().x,
+						( int ) actionSprite.getPosition().y, 64, 64 };
 				if( actionBoundingBox.contains( sf::Mouse::getPosition( window ) ) == true ) {
-					currentAction = i;
+					currentAction = ( PlayerAction ) i;
 					break;
 				}
 			}
+			auto* toBeCursor = actionBarSprites[ ( size_t ) currentAction ];
+			cursorSprite = Sprite< -1 >( toBeCursor->GetSpriteName() );
+			cursorSprite.SetCurrentDirection( toBeCursor->GetCurrentDirection() );
 		}
+		cursorSprite.RefrenceSprite().setPosition( ConvertVector< float, int >( sf::Mouse::getPosition( window ) ) );
 		window.draw( actionPanelRender );
 		leftArrow.Draw( window );
 		rightArrow.Draw( window );
 		for( Sprite< -1 > * uiElement : actionBarSprites )
 			uiElement->Draw( window );
-
+		cursorSprite.Draw( window );
 	}
 
 	void GameplayManager::PlayerGiveOrdersStage( sf::RenderWindow& window )
@@ -120,11 +129,22 @@ namespace StrategyGoo
 		auto selectionData = Squaddie::SelectSquaddie( registry, window );
 		if( selectionData.first == true )
 			idOfSelectedSquaddie = selectionData.second;
+		else
+			selectionSquare.SetActive( false );
+
 		if( idOfSelectedSquaddie.has_value() == true )
 		{
+			selectionSquare.SetActive( true );
+			selectionSquare.RefrenceSprite().setPosition(
+					registry.get< Sprite< 0 > >( idOfSelectedSquaddie.value() ).RefrenceSprite().getPosition() );
 			if( sf::Mouse::isButtonPressed( sf::Mouse::Button::Right ) == true )
 			{
-				if( actionBar.contains( sf::Mouse::getPosition( window ) ) == false )
+				auto mousePosition = sf::Mouse::getPosition( window );
+				if( actionBar.contains( mousePosition ) == false &&
+						RectangleFromVectors< float >( registry.get< Sprite< 0 > >( 
+							idOfSelectedSquaddie.value() ).RefrenceSprite().getPosition(), 
+							sf::Vector2f( 64.f, 64.f ) ).contains( 
+							ConvertVector< float, int >( mousePosition ) ) == false )
 				{
 					registry.remove_if_exists< MoveOrder >( idOfSelectedSquaddie.value() );
 					registry.emplace< MoveOrder >( idOfSelectedSquaddie.value(),

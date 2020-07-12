@@ -22,7 +22,6 @@ int main( int argc, char** args )
 	Goo& goo = manager.CreateEntity< Goo >( BoardPosition( 8, 8 ) );
 	Goo::GooComponent& splot = goo.AddGoo( BoardPosition( 8, 9 ) );
 	goo.AddGoo( BoardPosition( 8, 10 ) );
-	std::cout << goo.RefrenceSprite().ObtainFramesForDirection( Direction::NORTH ).size();
 	sf::Clock frameRateController;
 	float frameRate = 1.f / 60.f;
 	sf::View camera = window.getDefaultView();
