@@ -40,8 +40,9 @@ namespace StrategyGoo
 		bool allDone = true;
 		registry.view< Squaddie::SquaddieRefrence, ORDER_TYPE >().each(
 			[ & ]( Squaddie::SquaddieRefrence& squaddie, MoveOrder& order ) {
+				entt::entity id = squaddie.get().GetID();
 				if( allDone = ( allDone && order.Tick( squaddie.get(), registry ) ) )
-					doneMoving.push_back( squaddie.get().GetID() );
+					doneMoving.push_back( id );
 			} );
 		for( auto currentEntity : doneMoving )
 			registry.remove< ORDER_TYPE >( currentEntity );
