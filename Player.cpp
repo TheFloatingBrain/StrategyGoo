@@ -42,7 +42,7 @@ namespace StrategyGoo
 			bool didSelect = false;
 			entt::entity selectedID;
 			registry.view< SquaddieRefrence >().each( [&]( SquaddieRefrence& squaddie ) {
-				if( squaddie.get().CheckSelect( registry, window ) == true && didSelect == false ) {
+				if( squaddie.get().CheckSelect( registry, window ) == true && didSelect == false && squaddie.get().active == true ) {
 					didSelect = true;
 					selectedID = squaddie.get().id;
 				}

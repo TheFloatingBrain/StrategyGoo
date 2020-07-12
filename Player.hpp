@@ -23,6 +23,7 @@ namespace StrategyGoo
 		
 		Squaddie& ObtainThis();
 
+		bool active = true;
 		protected:
 			float speed = 1.f;
 

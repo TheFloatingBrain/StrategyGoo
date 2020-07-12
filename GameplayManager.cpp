@@ -83,7 +83,34 @@ namespace StrategyGoo
 				SlimeMove( window );
 				break;
 			}
-			case StagesOfPlay::PLAYER_DAMAGE_STAGE : {
+			case StagesOfPlay::PLAYER_DAMAGE_STAGE :
+			{
+				std::vector< entt::entity > toDestroy;
+				registry.view< Goo::GooComponentRefrence >().each(
+					[&]( Goo::GooComponentRefrence& goo ) {
+						registry.view< Squaddie::SquaddieRefrence >().each(
+							[&]( Squaddie::SquaddieRefrence& squaddie ) {
+								if( squaddie.get().RefrenceBoardPosition() == goo.get().RefrenceBoardPosition() )
+									toDestroy.push_back( squaddie.get().GetID() );
+							}
+						);
+					} );
+				for( auto& id : toDestroy )
+				{
+					++deadSquaddieCount;
+					RemoveEntityFromTile< Squaddie::SquaddieRefrence >( registry, registry.get< BoardPosition >( id ), &gameBoard );
+					Squaddie& squaddie = registry.get< Squaddie::SquaddieRefrence >( id ).get();
+					squaddie.active = false;
+					squaddie.RefrenceSprite().SetActive( false );
+				}
+
+				bool allGooDead = true;
+				Goo* goo = nullptr;
+				for( auto* currentEntity : entities ) {
+					if( goo = dynamic_cast< Goo* >( currentEntity ) )
+						allGooDead = ( allGooDead && ( goo->GetGoo().size() <= 0 ) );
+				}
+				gameStatus = deadSquaddieCount >= 3 ? -1 : ( allGooDead ? 1 : 0 );
 				gameState = StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE;
 				break;
 			}

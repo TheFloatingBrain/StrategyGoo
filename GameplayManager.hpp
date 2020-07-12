@@ -32,7 +32,10 @@ namespace StrategyGoo
 		ENTITY_TYPE& CreateEntity( BoardPosition startingPosition );
 		entt::registry& RefrenceRegistry();
 		GameBoard& RefrenceGameBoard();
+
+		int gameStatus = 0;
 		protected:
+			size_t deadSquaddieCount = 0;
 			Sprite< -1 > move, grenade, flameThrower, check, hand, leftArrow, 
 					rightArrow, littleTarget, littleMove, throwGrenade, defaultCursor, 
 					cursorSprite, selectionSquare;

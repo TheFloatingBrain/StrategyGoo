@@ -33,9 +33,8 @@ int main( int argc, char** args )
 			if( event.type == sf::Event::Closed )
 				window.close();
 		}
-		if( frameRateController.getElapsedTime().asSeconds() >= frameRate )
-		{
-			manager.Update( window );
+		manager.Update( window );
+		if( frameRateController.getElapsedTime().asSeconds() >= frameRate ) {
 			frameRateController.restart();
 			manager.Render( window );
 		}
