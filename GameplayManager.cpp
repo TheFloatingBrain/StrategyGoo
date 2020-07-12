@@ -8,24 +8,22 @@ namespace StrategyGoo
 		return ( abs( first.x - second.x ) < FLT_EPSILON ) &&
 				( abs( first.y - second.y ) < FLT_EPSILON );
 	}
+
 	Squaddie::Squaddie( entt::registry& registry_, BoardPosition start, GameBoard* board_, size_t tileWidth, size_t tileHeight ) :
-		registry( registry_ ), board( board_ ), ENTITY_TILE_WIDTH_CONSTANT( tileWidth ), ENTITY_TILE_HEIGHT_CONSTANT( tileHeight )
+		registry( registry_ ), board( board_ ), ENTITY_TILE_WIDTH_CONSTANT( tileWidth ), ENTITY_TILE_HEIGHT_CONSTANT( tileHeight ) 
 	{
 		id = registry.create();
-		position = &registry.emplace< BoardPosition >( id, start.x, start.y );
-		sprite = &registry.emplace< Sprite< 0 > >( id, "Squaddie" );
-//		std::cout << ( this->ToWorldPosition().x ) << ", " << ( this->ToWorldPosition().y ) << "\n";
-		if( sprite == nullptr )
-			std::cout << "DERP\n";
-		auto worldPosition = ToWorldPosition();
-		sprite->RefrenceSprite().setPosition( worldPosition.x, worldPosition.y );
-	//	std::cout << sprite->GetSprite().getPosition().x << ", " << sprite->GetSprite().getPosition().y << "\n";
+		registry.emplace< BoardPosition >( id, start.x, start.y );
+		registry.emplace< Sprite< 0 > >( id, "Squaddie" );
+		RefrenceSprite().RefrenceSprite().setPosition( ToWorldPosition() );
+		std::cout << "Squaddie Constructor " << ToWorldPosition().x << ", " << ToWorldPosition().y << "\n";
 		registry.emplace< SquaddieRefrence >( id, *this );
 		registry.emplace< Updator::UpdatorRefrence >( id, *this );
 	}
 
 	sf::Vector2f Squaddie::ToWorldPosition() {
-		return ( *board )[ position->x ][ position->y ].ToWorldPosition();
+		auto position = RefrenceBoardPosition();
+		return sf::Vector2f( ( float ) position.x * ENTITY_TILE_WIDTH_CONSTANT, ( float ) position.y * ENTITY_TILE_WIDTH_CONSTANT );
 	}
 
 	//Anything that needs to be regularly updated.//
@@ -33,13 +31,34 @@ namespace StrategyGoo
 	//For animations between orders.//
 	void Squaddie::TickOrder() {}
 
-	bool Squaddie::CheckSelect( sf::Vector2f cursorPosition, sf::Vector2f cameraPosition )
+	BoardPosition& Squaddie::RefrenceBoardPosition() {
+		return registry.get< BoardPosition >( id );
+	}
+	Sprite< 0 >& Squaddie::RefrenceSprite() {
+		return registry.get< Sprite< 0 > >( id );
+	}
+
+
+
+	void PrintRect( sf::FloatRect rect )
 	{
-		sf::IntRect box = sprite->ObtainCurrentAnimationFrameBounds(
-			sprite->GetCurrentDirection(), sprite->GetCurrentFrame() );
+		std::cout << rect.left << ", " << rect.top <<
+			", " << rect.width << ", " << rect.height << "\n";
+	}
+
+	void PrintVect( sf::Vector2f v )
+	{
+		std::cout << v.x << ", " << v.y << "\n";
+	}
+
+	bool Squaddie::CheckSelect( entt::registry& registry, sf::Vector2f cursorPosition, sf::Vector2f cameraPosition )
+	{
+		sf::IntRect box = RefrenceSprite().GetSprite().getTextureRect();
 		auto worldPosition = ToWorldPosition();
 		sf::FloatRect checkMouse = sf::FloatRect{ worldPosition.x,
 			worldPosition.y, ( float ) box.width, ( float ) box.height };
+		PrintRect( checkMouse );
+		PrintVect( cursorPosition );
 		return checkMouse.contains( ( cursorPosition + cameraPosition ) );
 	}
 
@@ -54,11 +73,12 @@ namespace StrategyGoo
 			bool didSelect = false;
 			entt::entity selectedID;
 			registry.view< SquaddieRefrence >().each( [ & ]( SquaddieRefrence& squaddie ) {
-						if( didSelect = ( didSelect || squaddie.get().CheckSelect( 
-									CURRENT_MOUSE_POSITION_CONSTANT, CURRENT_CAMERA_POSITION_CONSTANT ) ) )
-							selectedID = squaddie.get().id;
+					if( didSelect = ( didSelect || squaddie.get().CheckSelect( registry, 
+						CURRENT_MOUSE_POSITION_CONSTANT, CURRENT_CAMERA_POSITION_CONSTANT ) ) ) {
+						didSelect = true;
+						selectedID = squaddie.get().id;
 					}
-			);
+				} );
 			if( didSelect == true )
 				return std::optional< entt::entity >( selectedID );
 		}
@@ -80,17 +100,18 @@ namespace StrategyGoo
 
 	bool MoveOrder::Move( Squaddie& squaddie )
 	{
-		const sf::Vector2i MOVEMENT_CONSTANT = ToUnitVector< int >( to - *squaddie.position );
-		*squaddie.position += MOVEMENT_CONSTANT;
-		return *squaddie.position == to;
+		auto position = squaddie.RefrenceBoardPosition();
+		const sf::Vector2i MOVEMENT_CONSTANT = ToUnitVector< int >( to - position );
+		position += MOVEMENT_CONSTANT;
+		return position == to;
 	}
 
 	bool MoveOrder::Tick( Squaddie& squaddie )
 	{
-		const auto SPRITE_POSITION_CONSTANT = squaddie.sprite->RefrenceSprite().getPosition();
+		const auto SPRITE_POSITION_CONSTANT = squaddie.RefrenceSprite().RefrenceSprite().getPosition();
 		const auto SQUADDIE_WORLD_POSITION_CONSTANT = squaddie.ToWorldPosition();
 		if( ComparePosition( SPRITE_POSITION_CONSTANT, SQUADDIE_WORLD_POSITION_CONSTANT ) ) {
-			squaddie.sprite->RefrenceSprite().move( ToUnitVector< float >(
+			squaddie.RefrenceSprite().RefrenceSprite().move( ToUnitVector< float >(
 				SQUADDIE_WORLD_POSITION_CONSTANT - SPRITE_POSITION_CONSTANT ) );
 			return false;
 		}
@@ -124,5 +145,10 @@ namespace StrategyGoo
 		window.display();
 	}
 
-	void GameplayManager::UpdatePlayer() {}
+	void GameplayManager::UpdatePlayer() {
+	}
+
+	entt::registry& GameplayManager::RefrenceRegistry() {
+		return registry;
+	}
 }

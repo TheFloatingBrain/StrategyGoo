@@ -55,7 +55,6 @@ namespace StrategyGoo
 	const std::string DEFAULT_SPRITE_NAME_CONSTANT = "DEFAULT_SPRITE_NAME";
 	const std::string DEFAULT_JSON_DATA_CONSTANT = "DEFAULT_JSON_DATA_NAME";
 
-
 	template< int LAYER_CONSTANT = 0 >
 	struct Sprite
 	{
@@ -118,7 +117,6 @@ namespace StrategyGoo
 		sf::Sprite& RefrenceSprite();
 		std::vector< ANIMATION_TYPE >& RefrenceAnimations();
 		ANIMATION_TYPE& RefrenceAnimation( size_t animation );
-
 		protected:
 			int layer = 0;
 			void SetCurrentAnimation( size_t currentAnimation_ );

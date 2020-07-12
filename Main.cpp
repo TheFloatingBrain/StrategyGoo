@@ -16,9 +16,9 @@ int main( int argc, char** args )
 	sf::RenderWindow window( sf::VideoMode( 1024, 768 ), "sf::RenderWindow" );
 	entt::registry registry;
 	GameplayManager manager{ registry };
-	manager.CreateSquaddie( BoardPosition( 1, 1 ) ).sprite->SetCurrentDirection( Direction::SOUTH );
-	manager.CreateSquaddie( BoardPosition( 4, 1 ) ).sprite->SetCurrentDirection( Direction::NORTH );
-	manager.CreateSquaddie( BoardPosition( 1, 3 ) ).sprite->SetCurrentDirection( Direction::WEST );
+	manager.CreateSquaddie( BoardPosition( 1, 1 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );
+	manager.CreateSquaddie( BoardPosition( 4, 1 ) ).RefrenceSprite().SetCurrentDirection( Direction::NORTH );
+	//manager.CreateSquaddie( BoardPosition( 1, 3 ) ).sprite->SetCurrentDirection( Direction::WEST );
 	while( window.isOpen() )
 	{
 		sf::Event event;
@@ -27,6 +27,11 @@ int main( int argc, char** args )
 				window.close();
 		}
 		manager.Render( window );
+		
+		auto result = Squaddie::SelectSquaddie( manager.RefrenceRegistry(), ( sf::View& ) window.getView() );
+
+		if( result.has_value() )
+			std::cout << "Squaddie " << ( entt::id_type ) result.value() << " selected.\n";
 	}
 
 	return 0;

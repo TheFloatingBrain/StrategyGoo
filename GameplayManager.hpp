@@ -9,6 +9,11 @@ namespace StrategyGoo
 		return sqrt( ( of.x * of.x ) + ( of.y * of.y ) );
 	}
 
+	template< typename SCALER_0_TYPE, typename SCALER_1_TYPE >
+	constexpr sf::Vector2< SCALER_0_TYPE > ConvertVector( sf::Vector2< SCALER_1_TYPE > vector ) {
+		return sf::Vector2< SCALER_0_TYPE >{ ( SCALER_0_TYPE ) vector.x, ( SCALER_0_TYPE ) vector.y };
+	}
+
 	bool ComparePosition( sf::Vector2f first, sf::Vector2f second );
 
 	template< typename SCALER_TYPE = float >
@@ -44,10 +49,10 @@ namespace StrategyGoo
 		void Update() override;
 		//For animations between orders.//
 		void TickOrder();
-		bool CheckSelect( sf::Vector2f cursorPosition, sf::Vector2f cameraPosition );
+		bool CheckSelect( entt::registry& registry, sf::Vector2f cursorPosition, sf::Vector2f cameraPosition );
 		
-		BoardPosition* position;
-		Sprite< 0 >* sprite;
+		BoardPosition& RefrenceBoardPosition();
+		Sprite< 0 >& RefrenceSprite();
 		GameBoard* board;
 		const size_t ENTITY_TILE_WIDTH_CONSTANT;
 		const size_t ENTITY_TILE_HEIGHT_CONSTANT;
@@ -56,7 +61,6 @@ namespace StrategyGoo
 		static std::optional< entt::entity > SelectSquaddie( entt::registry& registry, sf::View& camera );
 		static bool AddOrders( entt::registry& registry, entt::entity& id, sf::View& camera );
 		static bool ExecuteOrders( entt::registry& registry );
-
 	};
 
 	struct PlayerOrder {
@@ -78,6 +82,7 @@ namespace StrategyGoo
 		void Update();
 		void Render( sf::RenderWindow& window );
 		Squaddie& CreateSquaddie( BoardPosition startingPosition );
+		entt::registry& RefrenceRegistry();
 		protected:
 			void UpdatePlayer();
 			std::vector< Updator* > entities;

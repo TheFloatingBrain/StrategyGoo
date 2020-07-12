@@ -29,6 +29,8 @@ namespace StrategyGoo
 		const size_t GetTileWidthConstant();
 		const size_t GetTileHeightConstant();
 
+		Sprite< 1 >& RefrenceSprite();
+
 		protected: 
 			
 			size_t x, y;
@@ -36,7 +38,6 @@ namespace StrategyGoo
 			entt::registry& registry;
 			const size_t WIDTH_CONSTANT;
 			const size_t HEIGHT_CONSTANT;
-			Sprite< 1 >* sprite;
 	};
 
 	struct GameBoard

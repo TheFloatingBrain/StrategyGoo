@@ -18,7 +18,7 @@ namespace StrategyGoo
 	}
 
 	template< int LAYER_CONSTANT >
-	Sprite< LAYER_CONSTANT >::Sprite( std::string spriteName_, Direction currentDirection_ ) : currentDirection( currentDirection_ )
+	Sprite< LAYER_CONSTANT >::Sprite( std::string spriteName_, Direction currentDirection_ ) : currentDirection( currentDirection_ ), currentFrame( 0 )
 	{
 		InitializeSprite( spriteName_ );
 		ConstructDefaultAnimation();
@@ -43,8 +43,8 @@ namespace StrategyGoo
 	{
 		if( animationActive == true )
 		{
-			auto relativeFrame = ObtainCurrentAnimationFrameBounds( currentDirection,
-					( currentFrame++ % ObtainFramesForCurrentAnimation() ) );
+			currentFrame = ( currentFrame++ % ObtainFramesForCurrentAnimation() );
+			auto relativeFrame = ObtainCurrentAnimationFrameBounds( currentDirection, currentFrame );
 			relativeFrame.left += placeInSpriteSheet.left;
 			relativeFrame.top += placeInSpriteSheet.top;
 			sprite.setTextureRect( relativeFrame );
@@ -75,8 +75,12 @@ namespace StrategyGoo
 
 	template< int LAYER_CONSTANT >
 	sf::IntRect Sprite< LAYER_CONSTANT >::ObtainAnimationFrameBounds( size_t animation, Direction spriteDirection, size_t frame ) {
-		return frames[ ( unsigned short ) spriteDirection ][
-			animations[ animation ][ ( unsigned short ) spriteDirection ][ frame ] ];
+		/*std::cerr << "-------\nSprite Direction " << ( unsigned int ) spriteDirection << " frame size " << frames.size() << "\n";
+		std::cerr << "Animation " << animation << " animations size " << animations.size() << "\n";
+		std::cerr << "Sprite Direction " << ( unsigned int ) spriteDirection << " animation size " << animations[ animation ].size() << "\n";
+		std::cerr << "Sprite Frame " << frame << " animation direction size " << animations[ animation ][ ( unsigned short ) spriteDirection ].size() << "+++++\n";
+		*/return frames[ ( unsigned short ) spriteDirection ][
+				animations[ animation ][ ( unsigned short ) spriteDirection ][ frame ] ];
 	}
 
 	template< int LAYER_CONSTANT >
