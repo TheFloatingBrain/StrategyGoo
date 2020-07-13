@@ -1,0 +1,106 @@
+{
+	"YouWin/sizeAbove/YouWin_Above_E": {
+		"frame": {
+			"x": 0,
+			"y": 146,
+			"width": 60,
+			"height": 57
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"YouWin/sizeAbove/YouWin_Above_N": {
+		"frame": {
+			"x": 146,
+			"y": 0,
+			"width": 56,
+			"height": 61
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"YouWin/sizeAbove/YouWin_Above_NE": {
+		"frame": {
+			"x": 0,
+			"y": 0,
+			"width": 76,
+			"height": 66
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"YouWin/sizeAbove/YouWin_Above_NW": {
+		"frame": {
+			"x": 0,
+			"y": 68,
+			"width": 66,
+			"height": 76
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"YouWin/sizeAbove/YouWin_Above_S": {
+		"frame": {
+			"x": 62,
+			"y": 146,
+			"width": 56,
+			"height": 61
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"YouWin/sizeAbove/YouWin_Above_SE": {
+		"frame": {
+			"x": 78,
+			"y": 0,
+			"width": 66,
+			"height": 76
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"YouWin/sizeAbove/YouWin_Above_SW": {
+		"frame": {
+			"x": 78,
+			"y": 78,
+			"width": 76,
+			"height": 66
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"YouWin/sizeAbove/YouWin_Above_W": {
+		"frame": {
+			"x": 120,
+			"y": 146,
+			"width": 60,
+			"height": 56
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	}
+}

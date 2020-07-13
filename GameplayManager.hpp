@@ -38,7 +38,7 @@ namespace StrategyGoo
 		protected:
 			Sprite< -1 > move, grenade, flameThrower, check, hand, leftArrow, 
 					rightArrow, littleTarget, littleMove, throwGrenade, defaultCursor, 
-					cursorSprite, selectionSquare;
+					cursorSprite, selectionSquare, winSprite, loseSprite, pressAnyKeySprite;
 			StagesOfPlay gameState = StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE;
 			std::vector< std::tuple< entt::entity, sf::Vector2i, bool > > orderCoordinates;
 			sf::IntRect actionBar;

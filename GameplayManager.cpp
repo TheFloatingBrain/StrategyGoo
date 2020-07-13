@@ -6,12 +6,13 @@ namespace StrategyGoo
 {
 	GameplayManager::GameplayManager( entt::registry& registry_, size_t width, size_t height ) :
 			registry( registry_ ), gameBoard( registry_, width, height ), move( "Move" ),
-			grenade( "Grenade" ), flameThrower( "CubeExplosion1" ), check( "Check" ), hand( "Hand" ), 
-			leftArrow( "Arrow" ), rightArrow( "Arrow" ), littleTarget( "Target" ), littleMove( "Move" ), 
-			throwGrenade( "Grenade" ), defaultCursor( "Cursor" ), cursorSprite( "Cursor" ), selectionSquare( "SelectionSquare" ), 
+			grenade( "Grenade" ), flameThrower( "CubeExplosion1" ), check( "Check" ), hand( "Hand" ),
+			leftArrow( "Arrow" ), rightArrow( "Arrow" ), littleTarget( "Target" ), littleMove( "Move" ),
+			throwGrenade( "Grenade" ), defaultCursor( "Cursor" ), cursorSprite( "Cursor" ), selectionSquare( "SelectionSquare" ),
 			uiElements( { &move, &grenade, &flameThrower, &hand, &check, &leftArrow,
-			&rightArrow, &littleTarget, &littleMove } ), actionBarSprites( { &grenade, &flameThrower, 
-			&move, &hand, &check, &defaultCursor } ) {
+			&rightArrow, &littleTarget, &littleMove } ), actionBarSprites( { &grenade, &flameThrower,
+			&move, &hand, &check, &defaultCursor } ), winSprite( "YouWin" ), loseSprite( "YouLose" ), pressAnyKeySprite( "PressAnyKey" )
+	{
 		size_t count = 0;
 		for( Sprite< -1 >* element : uiElements ) {
 			element->RefrenceSprite().setPosition( ( float ) ( 64 + ( 64 * count++ ) ), 128.f );
@@ -45,6 +46,15 @@ namespace StrategyGoo
 		defaultCursor.SetActive( false );
 		cursorSprite.SetCurrentDirection( defaultCursor.GetCurrentDirection() );
 		selectionSquare.SetActive( false );
+		( *winSprite ).setPosition( ( float ) actionBar.left, 128.0f );
+		( *winSprite ).scale( 6.f, 4.f );
+		winSprite.SetCurrentDirection( Direction::EAST );
+		( *loseSprite ).setPosition( ( float ) actionBar.left, 128.0f );
+		( *loseSprite ).scale( 6.f, 4.f );
+		loseSprite.SetCurrentDirection( Direction::EAST );
+		( *pressAnyKeySprite ).setPosition( ( float ) actionBar.left, 384 );
+		( *pressAnyKeySprite ).scale( 8.f, 4.f );
+		pressAnyKeySprite.SetCurrentDirection( Direction::EAST );
 	}
 
 	template< typename ENTITY_TYPE >
@@ -160,6 +170,16 @@ namespace StrategyGoo
 			}
 		);
 		DrawGUI( window );
+		if( gameState == StagesOfPlay::WIN )
+		{
+			winSprite.Draw( window );
+			pressAnyKeySprite.Draw( window );
+		}
+		else if( gameState == StagesOfPlay::LOOSE )
+		{
+			loseSprite.Draw( window );
+			pressAnyKeySprite.Draw( window );
+		}
 		window.display();
 	}
 
