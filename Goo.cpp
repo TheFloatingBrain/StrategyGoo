@@ -134,13 +134,15 @@ namespace StrategyGoo
 		bool status = false;
 		if( toRemove < goo.size() )
 		{
-			RemoveEntityFromTile< GooComponentRefrence >( 
+			std::cout << "Before delete" << registry.view< GooComponentRefrence >().size() << "\n";
+
+			status = RemoveEntityFromTile< GooComponentRefrence >( 
 					registry, goo[ toRemove ]->RefrenceBoardPosition(), board );
 			registry.remove_all( goo[ toRemove ]->GetID() );
 			registry.destroy( goo[ toRemove ]->GetID() );
 			delete goo[ toRemove ];
 			goo.erase( goo.begin() + toRemove );
-			status = true;
+			std::cout << "After delete " << registry.view< GooComponentRefrence >().size() << "\n";
 		}
 		return status;
 	}
@@ -152,46 +154,56 @@ namespace StrategyGoo
 		{
 			GooComponent* closest = ClosestToPoint( where, false, exclude );
 			GooComponent* furthest = ClosestToPoint( where, true, exclude );
-			if( where == closest->RefrenceBoardPosition() )
-				return true;
-			BoardPosition unit = ToUnitVector< int >( where - closest->RefrenceBoardPosition() );
-			if( goo.size() == 1 ) {
-				//std::cout << "Closest == Furthest!\n";
-				return MoveEntity< GooComponentRefrence >( registry, GooComponentRefrence( *closest ),
-					closest->RefrenceBoardPosition() += unit, board );
-			}
-			else
+			if( closest != nullptr )
 			{
-				//std::cout << "Moving!\n";
-				auto empty = FindEmptyAround( *closest );
-				const size_t AMOUNT_OF_EMPTY_TILES = empty.size();
-				if( AMOUNT_OF_EMPTY_TILES <= 0 )
+
+				auto& closestPosition = closest->RefrenceBoardPosition();
+				if( where == closestPosition )
+					return true;
+				if( furthest != nullptr )
 				{
-					//std::cout << "NO EMPTY TILES!!\n";
-					bool nowhereToMove = true;
-					for( auto* excluded : exclude ) {
-						for( auto* currentGoo : goo )
-							nowhereToMove = ( nowhereToMove && ( currentGoo == excluded ) );
+					BoardPosition unit = ToUnitVector< int >( where - closest->RefrenceBoardPosition() );
+					if( goo.size() == 1 )
+					{
+						//std::cout << "Closest == Furthest!\n";
+						return MoveEntity< GooComponentRefrence >( registry, GooComponentRefrence( *closest ),
+								closestPosition, closestPosition += unit, board );
 					}
-					if( nowhereToMove == true )
-						return false;
-					exclude.push_back( closest );
-					return MoveToward( where, spreadReach, grow, exclude );
+					else
+					{
+						//std::cout << "Moving!\n";
+						auto empty = FindEmptyAround( *closest );
+						const size_t AMOUNT_OF_EMPTY_TILES = empty.size();
+						if( AMOUNT_OF_EMPTY_TILES <= 0 )
+						{
+							//std::cout << "NO EMPTY TILES!!\n";
+							bool nowhereToMove = true;
+							for( auto* excluded : exclude ) {
+								for( auto* currentGoo : goo )
+									nowhereToMove = ( nowhereToMove && ( currentGoo == excluded ) );
+							}
+							if( nowhereToMove == true )
+								return false;
+							exclude.push_back( closest );
+							return MoveToward( where, spreadReach, grow, exclude );
+						}
+						BoardPosition newLocation = empty[ ( size_t ) RandomRange( 0, ( int ) AMOUNT_OF_EMPTY_TILES - 1 ) ];
+						auto& furthestPosition = furthest->RefrenceBoardPosition();
+						if( grow == true )
+							AddGoo( newLocation );
+						else if( MoveEntity< GooComponentRefrence >( registry, *furthest, furthestPosition, newLocation, board ) == true )
+						{
+							//std::cout << "Move made\n";
+							furthestPosition = newLocation;
+							furthest->RefrenceSprite().RefrenceSprite().setPosition( furthest->ToWorldPosition() );
+						}
+						else {
+							std::cout << "MOVE FAILURE\n";
+							return false;
+						}
+						//std::cout << "Done A\n";
+					}
 				}
-				BoardPosition newLocation = empty[ ( size_t ) RandomRange( 0, ( int ) AMOUNT_OF_EMPTY_TILES - 1 ) ];
-				if( grow == true )
-					AddGoo( newLocation );
-				else if( MoveEntity< GooComponentRefrence >( registry, *furthest, newLocation, board ) == true )
-				{
-					//std::cout << "Move made\n";
-					furthest->RefrenceBoardPosition() = newLocation;
-					furthest->RefrenceSprite().RefrenceSprite().setPosition( furthest->ToWorldPosition() );
-				}
-				else {
-					//std::cout << "MOVE FAILURE\n";
-					return false;
-				}
-				//std::cout << "Done A\n";
 				return MoveToward( where, spreadReach - 1, grow, exclude );
 			}
 		}
@@ -294,7 +306,13 @@ namespace StrategyGoo
 					}
 				);
 				if( gooParent != nullptr )
-					gooParent->RemoveGoo( to );
+				{
+					if( gooParent->RemoveGoo( to ) == false ) {
+						std::cerr << "ShootGrenadeOrder::Tick( Squaddie& squaddie, "
+							"entt::registry& registry ) : bool::Error: Failed to delete goo!\n";
+					}
+				}
+					
 				killedGoo = true;
 			}
 			if( explosionTime++ >= maxExplosionTime )

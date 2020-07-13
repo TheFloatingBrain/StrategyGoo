@@ -48,7 +48,7 @@ namespace StrategyGoo
 			template< typename ORDER_TYPE >
 			bool UpdatePlayer();
 			void PlayerGiveOrdersStage( sf::RenderWindow& window );
-			void SlimeMove( sf::RenderWindow& window );
+			void GooMove( sf::RenderWindow& window );
 			std::vector< Updator* > entities;
 			std::optional< entt::entity > idOfSelectedSquaddie;
 			GameBoard gameBoard;

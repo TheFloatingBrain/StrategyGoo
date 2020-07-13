@@ -27,9 +27,10 @@ namespace StrategyGoo
 	}
 
 	template< typename REFRENCE_TYPE >
-	bool MoveEntity( entt::registry& registry, REFRENCE_TYPE toRefrence, BoardPosition tile, GameBoard* board ) {
-		return ( AddEntityToTile( registry, toRefrence, tile, board ) && 
-				RemoveEntityFromTile< REFRENCE_TYPE >( registry, tile, board ) );
+	bool MoveEntity( entt::registry& registry, REFRENCE_TYPE toRefrence, 
+			BoardPosition from, BoardPosition to, GameBoard* board ) {
+		return ( AddEntityToTile( registry, toRefrence, to, board ) && 
+				RemoveEntityFromTile< REFRENCE_TYPE >( registry, from, board ) );
 	}
 }
 #endif
