@@ -25,7 +25,6 @@ int main( int argc, char** args )
 	sf::Clock frameRateController;
 	float frameRate = 1.f / 60.f;
 	sf::View camera = window.getDefaultView();
-//	camera.move( )
 	while( window.isOpen() )
 	{
 		sf::Event event;

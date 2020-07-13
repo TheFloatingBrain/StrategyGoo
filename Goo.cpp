@@ -20,7 +20,6 @@ namespace StrategyGoo
 	Goo::Goo( entt::registry& registry_, BoardPosition start, GameBoard* board_, size_t tileWidth, size_t tileHeight ) :
 			Updator( registry_, start, board_, tileWidth, tileHeight, "CubeGoo1" ) {
 		InitilizeRefrences< GooRefrence, Goo >( *this );
-		//TODO after debugging.//
 		RefrenceSprite().SetActive( false );
 		AddGoo( start );
 	}
@@ -134,15 +133,12 @@ namespace StrategyGoo
 		bool status = false;
 		if( toRemove < goo.size() )
 		{
-			std::cout << "Before delete" << registry.view< GooComponentRefrence >().size() << "\n";
-
 			status = RemoveEntityFromTile< GooComponentRefrence >( 
 					registry, goo[ toRemove ]->RefrenceBoardPosition(), board );
 			registry.remove_all( goo[ toRemove ]->GetID() );
 			registry.destroy( goo[ toRemove ]->GetID() );
 			delete goo[ toRemove ];
 			goo.erase( goo.begin() + toRemove );
-			std::cout << "After delete " << registry.view< GooComponentRefrence >().size() << "\n";
 		}
 		return status;
 	}

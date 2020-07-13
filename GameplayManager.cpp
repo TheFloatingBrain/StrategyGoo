@@ -77,8 +77,11 @@ namespace StrategyGoo
 					gameState = StagesOfPlay::SLIME_MOVE_STAGE;
 				break;
 			}
-			case StagesOfPlay::SLIME_MOVE_STAGE : {
+			case StagesOfPlay::SLIME_MOVE_STAGE : 
+			{
 				GooMove( window );
+				gameState = ( ( registry.size< Goo::GooComponentRefrence >() > 0 ) ? 
+						StagesOfPlay::PLAYER_DAMAGE_STAGE : StagesOfPlay::WIN );
 				break;
 			}
 			case StagesOfPlay::PLAYER_DAMAGE_STAGE :
@@ -89,22 +92,17 @@ namespace StrategyGoo
 						toDelete.push_back( squaddie );
 					} );
 				for( auto squaddie : toDelete )
-				{
-					RemoveEntityFromTile< Squaddie::SquaddieRefrence >( registry, 
-							squaddie.get().RefrenceBoardPosition(), squaddie.get().GetBoard() );
-					for( size_t i = 0; i < entities.size(); ++i )
-					{
-						if( entities[ i ]->GetID() == squaddie.get().GetID() )
-						{
-							delete entities[ i ];
-							entities.erase( entities.begin() + i );
-							break;
-						}
-					}
-					registry.remove_all( squaddie.get().GetID() );
-					registry.destroy( squaddie.get().GetID() );
-				}
-				gameState = StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE;
+					RemoveSquaddie( squaddie );
+				gameState = ( ( registry.size< Squaddie::SquaddieRefrence >() > 0 ) ? 
+						StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE : StagesOfPlay::LOOSE );
+				break;
+			}
+			case StagesOfPlay::LOOSE : {
+				gameState = StagesOfPlay::LOOSE;
+				break;
+			}
+			case StagesOfPlay::WIN: {
+				gameState = StagesOfPlay::WIN;
 				break;
 			}
 			default : {
@@ -112,6 +110,28 @@ namespace StrategyGoo
 			}
 		}
 	}
+
+	void GameplayManager::RemoveSquaddie( Squaddie::SquaddieRefrence toRemove )
+	{
+		if( idOfSelectedSquaddie.has_value() ) {
+			if( idOfSelectedSquaddie.value() == toRemove.get().GetID() )
+				idOfSelectedSquaddie = std::nullopt;
+		}
+		RemoveEntityFromTile< Squaddie::SquaddieRefrence >( registry,
+			toRemove.get().RefrenceBoardPosition(), toRemove.get().GetBoard() );
+		for( size_t i = 0; i < entities.size(); ++i )
+		{
+			if( entities[ i ]->GetID() == toRemove.get().GetID() )
+			{
+				delete entities[ i ];
+				entities.erase( entities.begin() + i );
+				break;
+			}
+		}
+		registry.remove_all( toRemove.get().GetID() );
+		registry.destroy( toRemove.get().GetID() );
+	}
+
 	void GameplayManager::Render( sf::RenderWindow& window )
 	{
 		window.clear();
@@ -132,19 +152,21 @@ namespace StrategyGoo
 	{
 		auto view = registry.view< Squaddie::SquaddieRefrence >();
 		Goo* goo = nullptr;
-		for( auto* currentEntity : entities )
+		if( view.size() > 0 )
 		{
-			if( goo = dynamic_cast< Goo* >( currentEntity ) )
+			for( auto* currentEntity : entities )
 			{
-				size_t squaddieToMoveToo = ( size_t ) RandomRange( 0, ( size_t ) view.size() - 1 );
-				auto squaddie = registry.get< Squaddie::SquaddieRefrence >( view[ squaddieToMoveToo ] );
-				if( RandomRange( 0, 10 ) >= 5 )
-					goo->MoveToward( squaddie.get().RefrenceBoardPosition() );
-				else
-					goo->MoveToward( squaddie.get().RefrenceBoardPosition(), 1, true );
+				if( goo = dynamic_cast< Goo* >( currentEntity ) )
+				{
+					size_t squaddieToMoveToo = ( size_t ) RandomRange( 0, ( size_t ) view.size() - 1 );
+					auto squaddie = registry.get< Squaddie::SquaddieRefrence >( view[ squaddieToMoveToo ] );
+					if( RandomRange( 0, 10 ) >= 5 )
+						goo->MoveToward( squaddie.get().RefrenceBoardPosition() );
+					else
+						goo->MoveToward( squaddie.get().RefrenceBoardPosition(), 1, true );
+				}
 			}
 		}
-		gameState = StagesOfPlay::PLAYER_DAMAGE_STAGE;
 	}
 
 	template< typename ORDER_TYPE >

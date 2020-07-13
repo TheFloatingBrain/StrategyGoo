@@ -48,7 +48,7 @@ namespace StrategyGoo
 	GameBoard::GameBoard( entt::registry& registry_, size_t width_, size_t height_, 
 				size_t tileWidth, size_t tileHeight ) :
 			registry( registry_ ), width( width_ ), height( height_ ), 
-			BOARD_TILE_WIDTH_CONSTANT( width ), BOARD_TILE_HEIGHT_CONSTANT( height ) {
+			BOARD_TILE_WIDTH_CONSTANT( tileWidth ), BOARD_TILE_HEIGHT_CONSTANT( tileHeight ) {
 		InitializeTiles();
 	}
 	GameBoard::Row GameBoard::operator[]( size_t index ) {

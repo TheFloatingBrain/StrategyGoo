@@ -6,7 +6,7 @@ namespace StrategyGoo
 {
 	struct GameplayManager
 	{
-		GameplayManager( entt::registry& registry_, size_t width = 64, size_t height = 64 );
+		GameplayManager( entt::registry& registry_, size_t width = 16, size_t height = 12 );
 
 		enum class PlayerAction : size_t
 		{
@@ -23,7 +23,9 @@ namespace StrategyGoo
 			PLAYER_GIVE_ORDERS_STAGE = 0, 
 			PLAYER_EXECUTE_ORDERS_STAGE = 1, 
 			SLIME_MOVE_STAGE = 2, 
-			PLAYER_DAMAGE_STAGE = 3
+			PLAYER_DAMAGE_STAGE = 3,
+			LOOSE = 4, 
+			WIN = 5
 		};
 		StagesOfPlay GetGameState();
 		void Update( sf::RenderWindow& window );
@@ -32,10 +34,8 @@ namespace StrategyGoo
 		ENTITY_TYPE& CreateEntity( BoardPosition startingPosition );
 		entt::registry& RefrenceRegistry();
 		GameBoard& RefrenceGameBoard();
-
-		int gameStatus = 0;
+		void RemoveSquaddie( Squaddie::SquaddieRefrence toRemove );
 		protected:
-			size_t deadSquaddieCount = 0;
 			Sprite< -1 > move, grenade, flameThrower, check, hand, leftArrow, 
 					rightArrow, littleTarget, littleMove, throwGrenade, defaultCursor, 
 					cursorSprite, selectionSquare;
@@ -55,5 +55,6 @@ namespace StrategyGoo
 			entt::registry& registry;
 			void InitilizeUIComponents();
 	};
+	//void CreateNewLevel();
 }
 #endif
