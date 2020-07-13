@@ -40,6 +40,7 @@ namespace StrategyGoo
 					rightArrow, littleTarget, littleMove, throwGrenade, defaultCursor, 
 					cursorSprite, selectionSquare;
 			StagesOfPlay gameState = StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE;
+			std::vector< std::tuple< entt::entity, sf::Vector2i, bool > > orderCoordinates;
 			sf::IntRect actionBar;
 			std::array< Sprite< -1 >*, 9 > uiElements;
 			std::array< Sprite< -1 >*, 6 > actionBarSprites;

@@ -1,0 +1,522 @@
+{
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_00": {
+		"frame": {
+			"x": 846,
+			"y": 315,
+			"width": 96,
+			"height": 147
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_01": {
+		"frame": {
+			"x": 618,
+			"y": 505,
+			"width": 96,
+			"height": 154
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_02": {
+		"frame": {
+			"x": 814,
+			"y": 505,
+			"width": 96,
+			"height": 146
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_03": {
+		"frame": {
+			"x": 846,
+			"y": 161,
+			"width": 96,
+			"height": 152
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_E_04": {
+		"frame": {
+			"x": 520,
+			"y": 505,
+			"width": 96,
+			"height": 160
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_NE_00": {
+		"frame": {
+			"x": 520,
+			"y": 339,
+			"width": 128,
+			"height": 164
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_NE_01": {
+		"frame": {
+			"x": 130,
+			"y": 185,
+			"width": 128,
+			"height": 178
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_NE_02": {
+		"frame": {
+			"x": 130,
+			"y": 365,
+			"width": 128,
+			"height": 170
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_NE_03": {
+		"frame": {
+			"x": 130,
+			"y": 0,
+			"width": 128,
+			"height": 183
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_NE_04": {
+		"frame": {
+			"x": 0,
+			"y": 0,
+			"width": 128,
+			"height": 184
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_NW_00": {
+		"frame": {
+			"x": 260,
+			"y": 521,
+			"width": 128,
+			"height": 165
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_NW_01": {
+		"frame": {
+			"x": 260,
+			"y": 351,
+			"width": 128,
+			"height": 168
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_NW_02": {
+		"frame": {
+			"x": 390,
+			"y": 342,
+			"width": 128,
+			"height": 168
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_NW_03": {
+		"frame": {
+			"x": 520,
+			"y": 0,
+			"width": 128,
+			"height": 168
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_NW_04": {
+		"frame": {
+			"x": 260,
+			"y": 176,
+			"width": 128,
+			"height": 173
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_00": {
+		"frame": {
+			"x": 652,
+			"y": 688,
+			"width": 96,
+			"height": 146
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_01": {
+		"frame": {
+			"x": 554,
+			"y": 688,
+			"width": 96,
+			"height": 148
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_02": {
+		"frame": {
+			"x": 130,
+			"y": 705,
+			"width": 96,
+			"height": 147
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_03": {
+		"frame": {
+			"x": 456,
+			"y": 688,
+			"width": 96,
+			"height": 154
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_N_04": {
+		"frame": {
+			"x": 358,
+			"y": 688,
+			"width": 96,
+			"height": 155
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_SE_00": {
+		"frame": {
+			"x": 0,
+			"y": 543,
+			"width": 128,
+			"height": 167
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_SE_01": {
+		"frame": {
+			"x": 0,
+			"y": 186,
+			"width": 128,
+			"height": 181
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_SE_02": {
+		"frame": {
+			"x": 390,
+			"y": 512,
+			"width": 128,
+			"height": 162
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_SE_03": {
+		"frame": {
+			"x": 260,
+			"y": 0,
+			"width": 128,
+			"height": 174
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_SE_04": {
+		"frame": {
+			"x": 0,
+			"y": 369,
+			"width": 128,
+			"height": 172
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_SW_00": {
+		"frame": {
+			"x": 650,
+			"y": 0,
+			"width": 128,
+			"height": 159
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_SW_01": {
+		"frame": {
+			"x": 390,
+			"y": 0,
+			"width": 128,
+			"height": 169
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_SW_02": {
+		"frame": {
+			"x": 130,
+			"y": 537,
+			"width": 128,
+			"height": 166
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_SW_03": {
+		"frame": {
+			"x": 520,
+			"y": 170,
+			"width": 128,
+			"height": 167
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_SW_04": {
+		"frame": {
+			"x": 390,
+			"y": 171,
+			"width": 128,
+			"height": 169
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_00": {
+		"frame": {
+			"x": 750,
+			"y": 688,
+			"width": 96,
+			"height": 143
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_01": {
+		"frame": {
+			"x": 780,
+			"y": 0,
+			"width": 96,
+			"height": 155
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_02": {
+		"frame": {
+			"x": 716,
+			"y": 505,
+			"width": 96,
+			"height": 151
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_03": {
+		"frame": {
+			"x": 748,
+			"y": 321,
+			"width": 96,
+			"height": 154
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_S_04": {
+		"frame": {
+			"x": 650,
+			"y": 323,
+			"width": 96,
+			"height": 160
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_00": {
+		"frame": {
+			"x": 848,
+			"y": 688,
+			"width": 96,
+			"height": 143
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_01": {
+		"frame": {
+			"x": 748,
+			"y": 161,
+			"width": 96,
+			"height": 158
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_02": {
+		"frame": {
+			"x": 260,
+			"y": 688,
+			"width": 96,
+			"height": 160
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_03": {
+		"frame": {
+			"x": 0,
+			"y": 712,
+			"width": 96,
+			"height": 140
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"CubeGoo1/sizeAbove/CubeGoo1_Above_W_04": {
+		"frame": {
+			"x": 650,
+			"y": 161,
+			"width": 96,
+			"height": 160
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	}
+}

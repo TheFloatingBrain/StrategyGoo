@@ -1,0 +1,106 @@
+{
+	"Squaddie/sizeAbove/Squaddie_Above_E": {
+		"frame": {
+			"x": 122,
+			"y": 116,
+			"width": 52,
+			"height": 56
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"Squaddie/sizeAbove/Squaddie_Above_N": {
+		"frame": {
+			"x": 122,
+			"y": 60,
+			"width": 54,
+			"height": 54
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"Squaddie/sizeAbove/Squaddie_Above_NE": {
+		"frame": {
+			"x": 0,
+			"y": 62,
+			"width": 60,
+			"height": 59
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"Squaddie/sizeAbove/Squaddie_Above_NW": {
+		"frame": {
+			"x": 62,
+			"y": 0,
+			"width": 58,
+			"height": 62
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"Squaddie/sizeAbove/Squaddie_Above_S": {
+		"frame": {
+			"x": 0,
+			"y": 123,
+			"width": 54,
+			"height": 52
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"Squaddie/sizeAbove/Squaddie_Above_SE": {
+		"frame": {
+			"x": 62,
+			"y": 64,
+			"width": 58,
+			"height": 60
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"Squaddie/sizeAbove/Squaddie_Above_SW": {
+		"frame": {
+			"x": 0,
+			"y": 0,
+			"width": 60,
+			"height": 60
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"Squaddie/sizeAbove/Squaddie_Above_W": {
+		"frame": {
+			"x": 122,
+			"y": 0,
+			"width": 52,
+			"height": 58
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	}
+}

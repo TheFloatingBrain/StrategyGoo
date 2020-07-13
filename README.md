@@ -1,3 +1,11 @@
+# How to play
+
+ - Left click on one of the members of your squad "Squaddie" or "the little blue and gray guys"
+ - Select a command from the bottom, only the first and third one work (grenade and move)
+ - Right click somewhere on the board for your squaddie to execute the command, You can reassign commands as many times as you would like and assign commands to all our squaddies
+ - Press the green checkmark to execute the commands, then the goo will take its turn
+ - Have fun, when your squaddies are all eliminated or the goo is all elimanated you win/loose, this state is represented internally.
+
 # Basic Info:
 
 - Turn Based Strategy

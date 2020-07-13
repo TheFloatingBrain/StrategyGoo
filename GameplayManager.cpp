@@ -1,6 +1,7 @@
 #include "GameplayManager.hpp"
 #include <list>
 #include <iostream>
+#include <typeindex>
 namespace StrategyGoo
 {
 	GameplayManager::GameplayManager( entt::registry& registry_, size_t width, size_t height ) :
@@ -38,6 +39,8 @@ namespace StrategyGoo
 		check.SetCurrentDirection( Direction::EAST );
 		( *littleMove ).scale( .5f, .5f );
 		( *littleTarget ).scale( .5f, .5f );
+		littleMove.SetActive( false );
+		littleTarget.SetActive( false );
 		defaultCursor.SetCurrentDirection( Direction::SOUTH );
 		defaultCursor.SetActive( false );
 		cursorSprite.SetCurrentDirection( defaultCursor.GetCurrentDirection() );
@@ -79,6 +82,7 @@ namespace StrategyGoo
 			}
 			case StagesOfPlay::SLIME_MOVE_STAGE : 
 			{
+				orderCoordinates.clear();
 				GooMove( window );
 				gameState = ( ( registry.size< Goo::GooComponentRefrence >() > 0 ) ? 
 						StagesOfPlay::PLAYER_DAMAGE_STAGE : StagesOfPlay::WIN );
@@ -135,12 +139,23 @@ namespace StrategyGoo
 	void GameplayManager::Render( sf::RenderWindow& window )
 	{
 		window.clear();
-		registry.view< Sprite< 1 > >().each( [&]( auto& tile, auto& sprite ) {
+		registry.view< Sprite< 1 > >().each( [&]( auto& sprite ) {
 			sprite.Draw( window );
 			}
 		);
-		selectionSquare.Draw( window );
-		registry.view< Sprite< 0 > >().each( [ & ]( auto& tile, auto& sprite ) {
+		registry.view< Sprite< 0 >, Goo::GooComponentRefrence >().each( [ & ]( 
+			Sprite< 0 >& sprite, Goo::GooComponentRefrence& goo ) {
+				sprite.Draw( window );
+			}
+		);
+		if( gameState == StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE )
+		{
+			selectionSquare.Draw( window );
+			littleMove.Draw( window );
+			littleTarget.Draw( window );
+		}
+		registry.view< Sprite< 0 > >( entt::exclude< Goo::GooComponentRefrence > ).each( [&](
+			Sprite< 0 >& sprite ) {
 				sprite.Draw( window );
 			}
 		);
@@ -158,7 +173,7 @@ namespace StrategyGoo
 			{
 				if( goo = dynamic_cast< Goo* >( currentEntity ) )
 				{
-					size_t squaddieToMoveToo = ( size_t ) RandomRange( 0, ( size_t ) view.size() - 1 );
+					size_t squaddieToMoveToo = ( size_t ) RandomRange( 0, ( int ) view.size() - 1 );
 					auto squaddie = registry.get< Squaddie::SquaddieRefrence >( view[ squaddieToMoveToo ] );
 					if( RandomRange( 0, 10 ) >= 5 )
 						goo->MoveToward( squaddie.get().RefrenceBoardPosition() );
@@ -238,36 +253,69 @@ namespace StrategyGoo
 			else
 				selectionSquare.SetActive( false );
 		}
-
+		bool renderOrders = false;
 		if( idOfSelectedSquaddie.has_value() == true && onActionBar == false )
 		{
+			std::optional< std::reference_wrapper< std::tuple< entt::entity, sf::Vector2i, bool > > > orderData;
+			for( auto& coordinate : orderCoordinates )
+			{
+				if( std::get< 0 >( coordinate ) == idOfSelectedSquaddie.value() ) {
+					orderData = coordinate;
+					break;
+				}
+			}
 			selectionSquare.SetActive( true );
 			selectionSquare.RefrenceSprite().setPosition(
 					registry.get< Sprite< 0 > >( idOfSelectedSquaddie.value() ).RefrenceSprite().getPosition() );
 			if( sf::Mouse::isButtonPressed( sf::Mouse::Button::Right ) == true )
 			{
 				
-				if( RectangleFromVectors< float >( registry.get< Sprite< 0 > >( 
+				if( orderData.has_value() == false )
+				{
+					orderCoordinates.push_back( std::tuple< entt::entity, sf::Vector2i, bool >(
+						idOfSelectedSquaddie.value(), gameBoard.ToBoardCoordinates( mousePosition ), false ) );
+					orderData = *( --orderCoordinates.end() );
+				}
+				if( RectangleFromVectors< float >( registry.get< Sprite< 0 > >(
 							idOfSelectedSquaddie.value() ).RefrenceSprite().getPosition(), 
 							sf::Vector2f( 64.f, 64.f ) ).contains( 
 							ConvertVector< float, int >( mousePosition ) ) == false )
 				{
 					registry.remove_if_exists< MoveOrder >( idOfSelectedSquaddie.value() );
 					registry.remove_if_exists< ShootGrenadeOrder >( idOfSelectedSquaddie.value() );
+					auto boardCoordinates = gameBoard.ToBoardCoordinates( mousePosition );
 					if( currentAction == PlayerAction::MOVE )
 					{
 						registry.emplace< MoveOrder >( idOfSelectedSquaddie.value(),
 								registry.get< BoardPosition >( idOfSelectedSquaddie.value() ),
-								gameBoard.ToBoardCoordinates( sf::Mouse::getPosition( window ) ) );
+								boardCoordinates );
+						std::get< 1 >( orderData.value().get() ) = boardCoordinates;
+						std::get< 2 >( orderData.value().get() ) = false;
 					}
 					if( currentAction == PlayerAction::GRENADE )
 					{
 						registry.emplace< ShootGrenadeOrder >( idOfSelectedSquaddie.value(),
 								registry.get< BoardPosition >( idOfSelectedSquaddie.value() ),
-								gameBoard.ToBoardCoordinates( sf::Mouse::getPosition( window ) ) );
+								boardCoordinates );
+						std::get< 1 >( orderData.value().get() ) = boardCoordinates;
+						std::get< 2 >( orderData.value().get() ) = true;
 					}
 				}
 			}
+			if( orderData.has_value() == true )
+			{
+				renderOrders = true;
+				littleMove.SetActive( !std::get< 2 >( orderData.value().get() ) );
+				littleTarget.SetActive( std::get< 2 >( orderData.value().get() ) );
+				( *littleMove ).setPosition( gameBoard.ToWorldCoordinates(
+						std::get< 1 >( orderData.value().get() ) ) );
+				( *littleTarget ).setPosition( gameBoard.ToWorldCoordinates(
+						std::get< 1 >( orderData.value().get() ) ) );
+			}
+		}
+		if( renderOrders == false ) {
+			littleMove.SetActive( false );
+			littleTarget.SetActive( false );
 		}
 	}
 

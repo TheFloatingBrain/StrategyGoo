@@ -474,4 +474,5 @@ namespace StrategyGoo
 	template Sprite< -1 >;
 	template Sprite< 0 >;
 	template Sprite< 1 >;
+	template Sprite< 2 >;
 }
