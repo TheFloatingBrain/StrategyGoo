@@ -18,6 +18,17 @@ namespace StrategyGoo
 			element->RefrenceSprite().setPosition( ( float ) ( 64 + ( 64 * count++ ) ), 128.f );
 		}
 		InitilizeUIComponents();
+		InitializeLevel();
+	}
+
+	void GameplayManager::InitializeLevel()
+	{
+		CreateEntity< Squaddie >( BoardPosition( 1, 1 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );
+		CreateEntity< Squaddie >( BoardPosition( 4, 1 ) ).RefrenceSprite().SetCurrentDirection( Direction::NORTH );
+		CreateEntity< Squaddie >( BoardPosition( 1, 3 ) ).RefrenceSprite().SetCurrentDirection( Direction::WEST );
+		Goo& goo = CreateEntity< Goo >( BoardPosition( 8, 8 ) );
+		Goo::GooComponent& splot = goo.AddGoo( BoardPosition( 8, 9 ) );
+		goo.AddGoo( BoardPosition( 8, 10 ) );
 	}
 
 	void GameplayManager::InitilizeUIComponents()

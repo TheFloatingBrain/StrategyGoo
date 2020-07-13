@@ -36,6 +36,7 @@ namespace StrategyGoo
 		GameBoard& RefrenceGameBoard();
 		void RemoveSquaddie( Squaddie::SquaddieRefrence toRemove );
 		protected:
+			void InitializeLevel();
 			Sprite< -1 > move, grenade, flameThrower, check, hand, leftArrow, 
 					rightArrow, littleTarget, littleMove, throwGrenade, defaultCursor, 
 					cursorSprite, selectionSquare, winSprite, loseSprite, pressAnyKeySprite;
