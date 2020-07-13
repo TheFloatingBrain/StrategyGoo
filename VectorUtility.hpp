@@ -23,6 +23,15 @@ namespace StrategyGoo
 		return sqrt( ( of.x * of.x ) + ( of.y * of.y ) );
 	}
 
+	template< typename SCALER_TYPE = int >
+	constexpr double ConditionalMagnitude( sf::Vector2< SCALER_TYPE > of )
+	{
+		const auto ZERO_VECTOR = sf::Vector2< SCALER_TYPE >( ( SCALER_TYPE ) 0.0, ( SCALER_TYPE ) 0.0 );
+		if( of != sf::Vector2< SCALER_TYPE >( ( SCALER_TYPE ) 0.0, ( SCALER_TYPE ) 0.0 ) )
+			return Magnitude< SCALER_TYPE >( of );
+		return 0.0;
+	}
+
 	template< typename SCALER_0_TYPE, typename SCALER_1_TYPE >
 	constexpr sf::Vector2< SCALER_0_TYPE > ConvertVector( sf::Vector2< SCALER_1_TYPE > vector ) {
 		return sf::Vector2< SCALER_0_TYPE >{ ( SCALER_0_TYPE ) vector.x, ( SCALER_0_TYPE ) vector.y };

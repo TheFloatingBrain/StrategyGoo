@@ -269,36 +269,45 @@ namespace StrategyGoo
 					registry.get< Sprite< 0 > >( idOfSelectedSquaddie.value() ).RefrenceSprite().getPosition() );
 			if( sf::Mouse::isButtonPressed( sf::Mouse::Button::Right ) == true )
 			{
-				
-				if( orderData.has_value() == false )
-				{
-					orderCoordinates.push_back( std::tuple< entt::entity, sf::Vector2i, bool >(
-						idOfSelectedSquaddie.value(), gameBoard.ToBoardCoordinates( mousePosition ), false ) );
-					orderData = *( --orderCoordinates.end() );
-				}
 				if( RectangleFromVectors< float >( registry.get< Sprite< 0 > >(
-							idOfSelectedSquaddie.value() ).RefrenceSprite().getPosition(), 
-							sf::Vector2f( 64.f, 64.f ) ).contains( 
-							ConvertVector< float, int >( mousePosition ) ) == false )
+					idOfSelectedSquaddie.value() ).RefrenceSprite().getPosition(),
+					sf::Vector2f( 64.f, 64.f ) ).contains(
+					ConvertVector< float, int >( mousePosition ) ) == false )
 				{
+					bool orderGiven = false;
+					bool targetOrder = false;
 					registry.remove_if_exists< MoveOrder >( idOfSelectedSquaddie.value() );
 					registry.remove_if_exists< ShootGrenadeOrder >( idOfSelectedSquaddie.value() );
+					const auto PLAYER_COORDINATES_CONSTANT = registry.get< BoardPosition >( idOfSelectedSquaddie.value() );
 					auto boardCoordinates = gameBoard.ToBoardCoordinates( mousePosition );
-					if( currentAction == PlayerAction::MOVE )
+					PrintVect( boardCoordinates );
+					const auto ORDER_DISPLACEMENT_CONSTANT = ConditionalMagnitude< int >( boardCoordinates - PLAYER_COORDINATES_CONSTANT );
+					if( currentAction == PlayerAction::MOVE &&
+						ORDER_DISPLACEMENT_CONSTANT <= PlayerOrderMaxDistance< MoveOrder >::MAX_DISTANCE_CONSTANT )
 					{
 						registry.emplace< MoveOrder >( idOfSelectedSquaddie.value(),
-								registry.get< BoardPosition >( idOfSelectedSquaddie.value() ),
-								boardCoordinates );
-						std::get< 1 >( orderData.value().get() ) = boardCoordinates;
-						std::get< 2 >( orderData.value().get() ) = false;
+							registry.get< BoardPosition >( idOfSelectedSquaddie.value() ),
+							boardCoordinates );
+						orderGiven = true;
 					}
-					if( currentAction == PlayerAction::GRENADE )
+					if( currentAction == PlayerAction::GRENADE &&
+						ORDER_DISPLACEMENT_CONSTANT <= PlayerOrderMaxDistance< ShootGrenadeOrder >::MAX_DISTANCE_CONSTANT )
 					{
 						registry.emplace< ShootGrenadeOrder >( idOfSelectedSquaddie.value(),
-								registry.get< BoardPosition >( idOfSelectedSquaddie.value() ),
-								boardCoordinates );
+							registry.get< BoardPosition >( idOfSelectedSquaddie.value() ),
+							boardCoordinates );
+						targetOrder = true;
+						orderGiven = true;
+					}
+					if( orderData.has_value() == false && orderGiven )
+					{
+						orderCoordinates.push_back( std::tuple< entt::entity, sf::Vector2i, bool >(
+							idOfSelectedSquaddie.value(), boardCoordinates, targetOrder ) );
+						orderData = *( --orderCoordinates.end() );
+					}
+					else if( orderGiven ) {
 						std::get< 1 >( orderData.value().get() ) = boardCoordinates;
-						std::get< 2 >( orderData.value().get() ) = true;
+						std::get< 2 >( orderData.value().get() ) = targetOrder;
 					}
 				}
 			}

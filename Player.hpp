@@ -29,6 +29,11 @@ namespace StrategyGoo
 
 	};
 
+	template< typename PLAYER_ORDER_TYPE >
+	struct PlayerOrderMaxDistance {
+		const static size_t MAX_DISTANCE_CONSTANT = 0;
+	};
+
 	struct PlayerOrder {
 		virtual bool Tick( Squaddie& squaddie, entt::registry& registry ) = 0;
 	};
@@ -38,6 +43,11 @@ namespace StrategyGoo
 		BoardPosition from, to;
 		MoveOrder( BoardPosition from_, BoardPosition to_ );
 		bool Tick( Squaddie& squaddie, entt::registry& registry ) override;
+	};
+
+	template<>
+	struct PlayerOrderMaxDistance< MoveOrder > {
+		const static size_t MAX_DISTANCE_CONSTANT = 3;
 	};
 
 	struct ShootGrenadeOrder : public PlayerOrder
@@ -51,6 +61,11 @@ namespace StrategyGoo
 		size_t maxExplosionTime = 5;
 		bool killedGoo = false;
 		entt::entity grenadeID, explosionID;
+	};
+
+	template<>
+	struct PlayerOrderMaxDistance< ShootGrenadeOrder > {
+		const static size_t MAX_DISTANCE_CONSTANT = 5;
 	};
 }
 #endif
