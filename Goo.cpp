@@ -303,6 +303,7 @@ namespace StrategyGoo
 				);
 				if( gooParent != nullptr )
 				{
+					std::cout << "Deleting goo\n";
 					if( gooParent->RemoveGoo( to ) == false ) {
 						std::cerr << "ShootGrenadeOrder::Tick( Squaddie& squaddie, "
 							"entt::registry& registry ) : bool::Error: Failed to delete goo!\n";

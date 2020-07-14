@@ -23,12 +23,13 @@ namespace StrategyGoo
 
 	void GameplayManager::InitializeLevel()
 	{
-		CreateEntity< Squaddie >( BoardPosition( 1, 1 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );
-		CreateEntity< Squaddie >( BoardPosition( 4, 1 ) ).RefrenceSprite().SetCurrentDirection( Direction::NORTH );
-		CreateEntity< Squaddie >( BoardPosition( 1, 3 ) ).RefrenceSprite().SetCurrentDirection( Direction::WEST );
-		Goo& goo = CreateEntity< Goo >( BoardPosition( 8, 8 ) );
-		Goo::GooComponent& splot = goo.AddGoo( BoardPosition( 8, 9 ) );
-		goo.AddGoo( BoardPosition( 8, 10 ) );
+		//std::cout << ( int ) gameBoard[ 10 ][ 0 ].GetX() << "\n";
+		CreateEntity< Squaddie >( BoardPosition( 2, 4 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );
+		CreateEntity< Squaddie >( BoardPosition( 2, 5 ) ).RefrenceSprite().SetCurrentDirection( Direction::NORTH );
+		CreateEntity< Squaddie >( BoardPosition( 2, 6 ) ).RefrenceSprite().SetCurrentDirection( Direction::WEST );
+		Goo& goo = CreateEntity< Goo >( BoardPosition( 3, 3 ) );
+		for( size_t i = 0; i < 3; ++i )
+			goo.AddGoo( BoardPosition( 3 + RandomRange( 1, i ), 3 + RandomRange( 1, i ) ) );
 	}
 
 	void GameplayManager::InitilizeUIComponents()
