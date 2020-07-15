@@ -135,13 +135,16 @@ namespace StrategyGoo
 		{
 			status = RemoveEntityFromTile< GooComponentRefrence >( 
 					registry, goo[ toRemove ]->RefrenceBoardPosition(), board );
+			if( status == false )
+				std::cerr << "Goo::RemoveGoo( size_t ) : bool::Error: failed to remove entity from tile.\n";
 			registry.remove_all( goo[ toRemove ]->GetID() );
 			registry.destroy( goo[ toRemove ]->GetID() );
 			delete goo[ toRemove ];
 			goo.erase( goo.begin() + toRemove );
 		}
 		else {
-			std::cout << "to remove " << toRemove << " " << goo.size() << "\n";
+			std::cerr << "Goo::RemoveGoo( size_t ) : bool::Error: failed to remove element " << toRemove 
+					<< " from Goo::goo : std::vector< Goo::GooComponent > of size " << goo.size() << ".\n";
 		}
 		return status;
 	}
@@ -151,28 +154,36 @@ namespace StrategyGoo
 	{
 		if( spreadReach > 0 )
 		{
-			GooComponent* closest = ClosestToPoint( where, false, exclude );
-			GooComponent* furthest = ClosestToPoint( where, true, exclude );
-			if( closest != nullptr )
+			if( goo.size() == 1 )
 			{
-
-				auto& closestPosition = closest->RefrenceBoardPosition();
-				if( where == closestPosition )
+				BoardPosition unit = ToUnitVector< int >( where - goo[ 0 ]->RefrenceBoardPosition() );
+				auto& location = goo[ 0 ]->RefrenceBoardPosition();
+				if( MoveEntity< GooComponentRefrence >( registry, *goo[ 0 ],
+					location, location + unit, board ) == true ) {
+					location += unit;
+					goo[ 0 ]->RefrenceSprite().RefrenceSprite().setPosition( goo[ 0 ]->ToWorldPosition() );
 					return true;
-				if( furthest != nullptr )
+				}
+				else
 				{
-					BoardPosition unit = ToUnitVector< int >( where - closest->RefrenceBoardPosition() );
-					if( goo.size() == 1 )
+					std::cerr << "StrategyGoo::Goo::MoveToward( BoardPosition, size_t, bool, "
+						"std::vector< GooComponent* > ) : bool::Error: Single goo move failure!\n";
+					return false;
+				}
+			}
+			else
+			{
+				GooComponent* closest = ClosestToPoint( where, false, exclude );
+				GooComponent* furthest = ClosestToPoint( where, true, exclude );
+				if( closest != nullptr )
+				{
+
+					auto& closestPosition = closest->RefrenceBoardPosition();
+					if( where == closestPosition )
+						return true;
+					if( furthest != nullptr )
 					{
-						//std::cout << "Closest == Furthest!\n";
-						bool status = MoveEntity< GooComponentRefrence >( registry, GooComponentRefrence( *closest ),
-								closestPosition, closestPosition += unit, board );
-						if( status == true )
-							furthest->RefrenceSprite().RefrenceSprite().setPosition( furthest->ToWorldPosition() );
-						return status;
-					}
-					else
-					{
+						//BoardPosition unit = ToUnitVector< int >( where - closest->RefrenceBoardPosition() );
 						//std::cout << "Moving!\n";
 						auto empty = FindEmptyAround( *closest );
 						const size_t AMOUNT_OF_EMPTY_TILES = empty.size();
@@ -202,13 +213,13 @@ namespace StrategyGoo
 						else
 						{
 							std::cerr << "StrategyGoo::Goo::MoveToward( BoardPosition, size_t, bool, "
-									"std::vector< GooComponent* > ) : bool::Error: Move failure!\n";
+								"std::vector< GooComponent* > ) : bool::Error: Move failure!\n";
 							return false;
 						}
 						//std::cout << "Done A\n";
 					}
+					return MoveToward( where, spreadReach - 1, grow, exclude );
 				}
-				return MoveToward( where, spreadReach - 1, grow, exclude );
 			}
 		}
 		//std::cout << "Done B!\n";
@@ -317,12 +328,6 @@ namespace StrategyGoo
 							"entt::registry& registry ) : bool::Error: Failed to delete goo!\n";
 					}
 				}
-				else {
-					std::cerr << "NO GOO!\n";// "ShootGrenadeOrder::Tick( Squaddie& squaddie, "
-						//"entt::registry& registry ) : bool::Error: No goo to attack!\n";
-				}
-				
-					
 				killedGoo = true;
 			}
 			if( explosionTime++ >= maxExplosionTime )
