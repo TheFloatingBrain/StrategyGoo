@@ -23,7 +23,6 @@ namespace StrategyGoo
 
 	void GameplayManager::InitializeLevel()
 	{
-		//std::cout << ( int ) gameBoard[ 10 ][ 0 ].GetX() << "\n";
 		CreateEntity< Squaddie >( BoardPosition( 2, 4 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );
 		CreateEntity< Squaddie >( BoardPosition( 2, 5 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );
 		CreateEntity< Squaddie >( BoardPosition( 2, 6 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );
@@ -33,15 +32,12 @@ namespace StrategyGoo
 			BoardPosition( -1, 0 ), BoardPosition( 0, -1 ),
 			BoardPosition( -1, -1 ), BoardPosition( 1, 1 )
 		};
-		//std::cout << "Game board " << gameBoard.GetWidth() << ", " << gameBoard.GetHeight() << "\n";
-		//std::cout << "Game board " << gameBoard.GetSize() << "\n";
 		Goo& goo = CreateEntity< Goo >( lastPosition );
 		std::vector< BoardPosition > previousGooPositions;
 		for( size_t i = 0; i < 8; ++i )
 		{
 			BoardPosition currentPosition = lastPosition +
 				POSSIBLE_OFFSET_CONSTANT[ RandomRange( 0, 5 ) ];
-			//std::cout << "Random " << currentPosition.x << ", " << currentPosition.y << "\n";
 			if( previousGooPositions.size() > 0 )
 			{
 				for( size_t j = 0;
@@ -52,17 +48,9 @@ namespace StrategyGoo
 					POSSIBLE_OFFSET_CONSTANT[ j++ ] ) );
 			}
 			previousGooPositions.push_back( currentPosition );
-			//std::cout << "Adding " << currentPosition.x << ", " << gameBoard.GetWidth() << ", " << currentPosition.y << "\n";
-			//std::cout << "Derp " << ( currentPosition.y * gameBoard.GetWidth() )+ currentPosition.x << "\n";
 			goo.AddGoo( currentPosition );
 			lastPosition = currentPosition;
 		}
-
-		//for( auto& derp : previousGooPositions )
-		//	std::cout << derp.x << ", " << derp.y << "\n";
-		/*Goo& goo = CreateEntity< Goo >( BoardPosition( 8, 8 ) );
-		Goo::GooComponent& splot = goo.AddGoo( BoardPosition( 8, 7 ) );
-		goo.AddGoo( BoardPosition( 8, 6 ) );*/
 	}
 
 	void GameplayManager::InitilizeUIComponents()
@@ -117,43 +105,22 @@ namespace StrategyGoo
 
 	void GameplayManager::Update( sf::RenderWindow& window )
 	{
-		//std::cout << "Game state: " << ( int ) gameState << "\n";
 		switch( gameState )
 		{
 			case StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE : {
 				PlayerGiveOrdersStage( window );
 				break;
 			}
-			case StagesOfPlay::PLAYER_EXECUTE_ORDERS_STAGE : 
-			{
-				selectionSquare.SetActive( false );
-				bool allOrderTypesComplete = true;
-				allOrderTypesComplete = ( 
-						allOrderTypesComplete && UpdatePlayer< MoveOrder >() && 
-						UpdatePlayer< ShootGrenadeOrder >() );
-				if( allOrderTypesComplete )
-					gameState = StagesOfPlay::SLIME_MOVE_STAGE;
+			case StagesOfPlay::PLAYER_EXECUTE_ORDERS_STAGE : {
+				ExecuteAllPlayerOrders();
 				break;
 			}
-			case StagesOfPlay::SLIME_MOVE_STAGE : 
-			{
-				orderCoordinates.clear();
+			case StagesOfPlay::SLIME_MOVE_STAGE : {
 				GooMove( window );
-				gameState = ( ( registry.size< Goo::GooComponentRefrence >() > 0 ) ? 
-						StagesOfPlay::PLAYER_DAMAGE_STAGE : StagesOfPlay::WIN );
 				break;
 			}
-			case StagesOfPlay::PLAYER_DAMAGE_STAGE :
-			{
-				std::list< Squaddie::SquaddieRefrence > toDelete;
-				registry.view< Goo::GooComponentRefrence, Squaddie::SquaddieRefrence >().each(
-					[&]( Goo::GooComponentRefrence& tile, Squaddie::SquaddieRefrence& squaddie ) {
-						toDelete.push_back( squaddie );
-					} );
-				for( auto squaddie : toDelete )
-					RemoveSquaddie( squaddie );
-				gameState = ( ( registry.size< Squaddie::SquaddieRefrence >() > 0 ) ? 
-						StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE : StagesOfPlay::LOOSE );
+			case StagesOfPlay::PLAYER_DAMAGE_STAGE : {
+				PlayerDamageStage();
 				break;
 			}
 			case StagesOfPlay::LOOSE : {
@@ -215,19 +182,28 @@ namespace StrategyGoo
 			}
 		);
 		DrawGUI( window );
-		if( gameState == StagesOfPlay::WIN )
-		{
+		if( gameState == StagesOfPlay::WIN ) {
 			winSprite.Draw( window );
 			pressAnyKeySprite.Draw( window );
 		}
-		else if( gameState == StagesOfPlay::LOOSE )
-		{
+		else if( gameState == StagesOfPlay::LOOSE ) {
 			loseSprite.Draw( window );
 			pressAnyKeySprite.Draw( window );
 		}
 		window.display();
 	}
-
+	void GameplayManager::PlayerDamageStage()
+	{
+		std::list< Squaddie::SquaddieRefrence > toDelete;
+		registry.view< Goo::GooComponentRefrence, Squaddie::SquaddieRefrence >().each(
+				[&]( Goo::GooComponentRefrence& tile, Squaddie::SquaddieRefrence& squaddie ) {
+					toDelete.push_back( squaddie );
+				} );
+		for( auto squaddie : toDelete )
+			RemoveSquaddie( squaddie );
+		gameState = ( ( registry.size< Squaddie::SquaddieRefrence >() > 0 ) ?
+				StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE : StagesOfPlay::LOOSE );
+	}
 	void GameplayManager::GooMove( sf::RenderWindow& window )
 	{
 		auto view = registry.view< Squaddie::SquaddieRefrence >();
@@ -247,6 +223,8 @@ namespace StrategyGoo
 				}
 			}
 		}
+		gameState = ( ( registry.size< Goo::GooComponentRefrence >() > 0 ) ?
+				StagesOfPlay::PLAYER_DAMAGE_STAGE : StagesOfPlay::WIN );
 	}
 
 	template< typename ORDER_TYPE >
@@ -304,6 +282,18 @@ namespace StrategyGoo
 		for( Sprite< -1 > * uiElement : actionBarSprites )
 			uiElement->Draw( window );
 		cursorSprite.Draw( window );
+	}
+
+	void GameplayManager::ExecuteAllPlayerOrders()
+	{
+		orderCoordinates.clear();
+		selectionSquare.SetActive( false );
+		bool allOrderTypesComplete = true;
+		allOrderTypesComplete = (
+			allOrderTypesComplete && UpdatePlayer< MoveOrder >() &&
+			UpdatePlayer< ShootGrenadeOrder >() );
+		if( allOrderTypesComplete )
+			gameState = StagesOfPlay::SLIME_MOVE_STAGE;
 	}
 
 	void GameplayManager::PlayerGiveOrdersStage( sf::RenderWindow& window )

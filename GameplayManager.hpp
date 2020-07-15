@@ -46,6 +46,8 @@ namespace StrategyGoo
 			std::array< Sprite< -1 >*, 9 > uiElements;
 			std::array< Sprite< -1 >*, 6 > actionBarSprites;
 			PlayerAction currentAction = PlayerAction::NONE;
+			void PlayerDamageStage();
+			void ExecuteAllPlayerOrders();
 			void DrawGUI( sf::RenderWindow& window );
 			template< typename ORDER_TYPE >
 			bool UpdatePlayer();
