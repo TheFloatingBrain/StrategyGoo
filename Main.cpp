@@ -13,7 +13,7 @@ void PrintRect( sf::IntRect rect )
 
 int main( int argc, char** args )
 {
-	sf::RenderWindow window( sf::VideoMode( 1024, 768 ), "sf::RenderWindow" );
+	sf::RenderWindow window( sf::VideoMode( 1024, 768 ), "Biomass Containment Squad" );
 	entt::registry registry;
 	GameplayManager* manager = new GameplayManager{ registry };
 	sf::Clock frameRateController;

@@ -25,11 +25,44 @@ namespace StrategyGoo
 	{
 		//std::cout << ( int ) gameBoard[ 10 ][ 0 ].GetX() << "\n";
 		CreateEntity< Squaddie >( BoardPosition( 2, 4 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );
-		CreateEntity< Squaddie >( BoardPosition( 2, 5 ) ).RefrenceSprite().SetCurrentDirection( Direction::NORTH );
-		CreateEntity< Squaddie >( BoardPosition( 2, 6 ) ).RefrenceSprite().SetCurrentDirection( Direction::WEST );
-		Goo& goo = CreateEntity< Goo >( BoardPosition( 3, 3 ) );
-		for( size_t i = 0; i < 3; ++i )
-			goo.AddGoo( BoardPosition( 3 + RandomRange( 1, i ), 3 + RandomRange( 1, i ) ) );
+		CreateEntity< Squaddie >( BoardPosition( 2, 5 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );
+		CreateEntity< Squaddie >( BoardPosition( 2, 6 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );
+		auto lastPosition = BoardPosition( 8, 5 );
+		const BoardPosition POSSIBLE_OFFSET_CONSTANT[] = {
+			BoardPosition( 1, 0 ), BoardPosition( 0, 1 ),
+			BoardPosition( -1, 0 ), BoardPosition( 0, -1 ),
+			BoardPosition( -1, -1 ), BoardPosition( 1, 1 )
+		};
+		//std::cout << "Game board " << gameBoard.GetWidth() << ", " << gameBoard.GetHeight() << "\n";
+		//std::cout << "Game board " << gameBoard.GetSize() << "\n";
+		Goo& goo = CreateEntity< Goo >( lastPosition );
+		std::vector< BoardPosition > previousGooPositions;
+		for( size_t i = 0; i < 8; ++i )
+		{
+			BoardPosition currentPosition = lastPosition +
+				POSSIBLE_OFFSET_CONSTANT[ RandomRange( 0, 5 ) ];
+			//std::cout << "Random " << currentPosition.x << ", " << currentPosition.y << "\n";
+			if( previousGooPositions.size() > 0 )
+			{
+				for( size_t j = 0;
+					std::find( previousGooPositions.begin(),
+					previousGooPositions.end(), currentPosition ) !=
+					previousGooPositions.end() && currentPosition.y < gameBoard.GetHeight() && 
+					currentPosition.x < gameBoard.GetWidth(); currentPosition = ( lastPosition +
+					POSSIBLE_OFFSET_CONSTANT[ j++ ] ) );
+			}
+			previousGooPositions.push_back( currentPosition );
+			//std::cout << "Adding " << currentPosition.x << ", " << gameBoard.GetWidth() << ", " << currentPosition.y << "\n";
+			//std::cout << "Derp " << ( currentPosition.y * gameBoard.GetWidth() )+ currentPosition.x << "\n";
+			goo.AddGoo( currentPosition );
+			lastPosition = currentPosition;
+		}
+
+		//for( auto& derp : previousGooPositions )
+		//	std::cout << derp.x << ", " << derp.y << "\n";
+		/*Goo& goo = CreateEntity< Goo >( BoardPosition( 8, 8 ) );
+		Goo::GooComponent& splot = goo.AddGoo( BoardPosition( 8, 7 ) );
+		goo.AddGoo( BoardPosition( 8, 6 ) );*/
 	}
 
 	void GameplayManager::InitilizeUIComponents()

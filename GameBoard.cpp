@@ -1,5 +1,5 @@
 #include "GameBoard.hpp"
-
+#include <iostream>
 namespace StrategyGoo
 {
 	Tile::Tile( entt::registry& registry_, size_t x_, size_t y_, size_t width, size_t height ) : 
@@ -14,7 +14,6 @@ namespace StrategyGoo
 	entt::entity Tile::GetID() {
 		return id;
 	}
-
 
 	sf::Vector2f Tile::ToWorldPosition()
 	{
@@ -88,7 +87,7 @@ namespace StrategyGoo
 		ROW_CONSTANT( row ), WIDTH_CONSTANT( width ), tiles( tiles_ ) {}
 
 	Tile& GameBoard::Row::At( size_t index ) {
-		return tiles->at( ( ROW_CONSTANT * WIDTH_CONSTANT ) + index );
+		return tiles->at( ( index * WIDTH_CONSTANT ) + ROW_CONSTANT );
 	}
 
 	Tile& GameBoard::Row::operator[]( size_t index ) {

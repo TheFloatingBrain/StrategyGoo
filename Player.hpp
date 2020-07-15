@@ -65,7 +65,7 @@ namespace StrategyGoo
 
 	template<>
 	struct PlayerOrderMaxDistance< ShootGrenadeOrder > {
-		const static size_t MAX_DISTANCE_CONSTANT = 5;
+		const static size_t MAX_DISTANCE_CONSTANT = 100;
 	};
 }
 #endif

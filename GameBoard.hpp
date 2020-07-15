@@ -46,7 +46,9 @@ namespace StrategyGoo
 	{
 		explicit GameBoard( entt::registry& registry_, size_t width_, size_t height_, 
 				size_t tileWidth = TILE_WIDTH_CONSTANT, size_t tileHeight = TILE_HEIGHT_CONSTANT );
-
+		size_t GetSize() {
+			return tiles.size();
+		}
 		struct Row
 		{
 			explicit Row( std::vector< Tile >* tiles_, size_t width, size_t row );
