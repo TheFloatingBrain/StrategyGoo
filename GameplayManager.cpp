@@ -184,6 +184,11 @@ namespace StrategyGoo
 			}
 		);
 		DrawGUI( window );
+		registry.view< Sprite< 2 > >().each( [&](
+			Sprite< 2 >& sprite ) {
+				sprite.Draw( window );
+			}
+		);
 		if( gameState == StagesOfPlay::WIN ) {
 			winSprite.Draw( window );
 			pressAnyKeySprite.Draw( window );
@@ -208,6 +213,12 @@ namespace StrategyGoo
 	}
 	void GameplayManager::GooMove( sf::RenderWindow& window )
 	{
+		for( auto ent : debug ) {
+			registry.remove_all( ent );
+			registry.destroy( ent );
+		}
+		debug.clear();
+
 		auto view = registry.view< Squaddie::SquaddieRefrence >();
 		Goo* goo = nullptr;
 		if( view.size() > 0 )
@@ -222,9 +233,18 @@ namespace StrategyGoo
 						goo->MoveToward( squaddie.get().RefrenceBoardPosition() );
 					else
 						goo->MoveToward( squaddie.get().RefrenceBoardPosition(), 1, true );
+					for( auto& gooComp : goo->GetGoo() ) {
+						std::cout << "G: " << gooComp->RefrenceBoardPosition().x << ", " << gooComp->RefrenceBoardPosition().y << "\n";
+						auto ref = registry.create();
+						registry.emplace< Sprite< 2 > >( ref, "Hand" );
+						registry.get< Sprite< 2 > >( ref ).RefrenceSprite().setPosition( gameBoard.ToWorldCoordinates( gooComp->RefrenceBoardPosition() ) );
+						debug.push_back( ref );
+					}
 				}
 			}
 		}
+		std::cout << "Amount of entities " << entities.size() << "\n";
+		std::cout << "Goo detected " << ( goo == nullptr ) << "\n";
 		gameState = ( ( registry.size< Goo::GooComponentRefrence >() > 0 ) ?
 				StagesOfPlay::PLAYER_DAMAGE_STAGE : StagesOfPlay::WIN );
 	}

@@ -21,7 +21,7 @@ namespace StrategyGoo
 			Updator( registry_, start, board_, tileWidth, tileHeight, "CubeGoo1" ) {
 		InitilizeRefrences< GooRefrence, Goo >( *this );
 		RefrenceSprite().SetActive( false );
-		AddGoo( start );
+		//AddGoo( start );
 	}
 
 	Goo::GooComponent::GooComponent( entt::registry& registry_, BoardPosition start, GameBoard* board_,
@@ -140,6 +140,9 @@ namespace StrategyGoo
 			delete goo[ toRemove ];
 			goo.erase( goo.begin() + toRemove );
 		}
+		else {
+			std::cout << "to remove " << toRemove << " " << goo.size() << "\n";
+		}
 		return status;
 	}
 
@@ -162,8 +165,11 @@ namespace StrategyGoo
 					if( goo.size() == 1 )
 					{
 						//std::cout << "Closest == Furthest!\n";
-						return MoveEntity< GooComponentRefrence >( registry, GooComponentRefrence( *closest ),
+						bool status = MoveEntity< GooComponentRefrence >( registry, GooComponentRefrence( *closest ),
 								closestPosition, closestPosition += unit, board );
+						if( status == true )
+							furthest->RefrenceSprite().RefrenceSprite().setPosition( furthest->ToWorldPosition() );
+						return status;
 					}
 					else
 					{
@@ -193,8 +199,10 @@ namespace StrategyGoo
 							furthestPosition = newLocation;
 							furthest->RefrenceSprite().RefrenceSprite().setPosition( furthest->ToWorldPosition() );
 						}
-						else {
-							std::cout << "MOVE FAILURE\n";
+						else
+						{
+							std::cerr << "StrategyGoo::Goo::MoveToward( BoardPosition, size_t, bool, "
+									"std::vector< GooComponent* > ) : bool::Error: Move failure!\n";
 							return false;
 						}
 						//std::cout << "Done A\n";
@@ -309,6 +317,11 @@ namespace StrategyGoo
 							"entt::registry& registry ) : bool::Error: Failed to delete goo!\n";
 					}
 				}
+				else {
+					std::cerr << "NO GOO!\n";// "ShootGrenadeOrder::Tick( Squaddie& squaddie, "
+						//"entt::registry& registry ) : bool::Error: No goo to attack!\n";
+				}
+				
 					
 				killedGoo = true;
 			}

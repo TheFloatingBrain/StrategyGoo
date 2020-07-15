@@ -58,6 +58,7 @@ namespace StrategyGoo
 			GameBoard gameBoard;
 			entt::registry& registry;
 			void InitilizeUIComponents();
+			std::vector< entt::entity > debug;
 	};
 	//void CreateNewLevel();
 }
