@@ -34,6 +34,8 @@ namespace StrategyGoo
 		};
 		Goo& goo = CreateEntity< Goo >( lastPosition );
 		std::vector< BoardPosition > previousGooPositions;
+		sf::IntRect boardConstraints{ 0, 0, 
+				( int ) gameBoard.GetWidth(), ( int ) gameBoard.GetHeight() };
 		for( size_t i = 0; i < 8; ++i )
 		{
 			BoardPosition currentPosition = lastPosition +
@@ -43,9 +45,9 @@ namespace StrategyGoo
 				for( size_t j = 0;
 					std::find( previousGooPositions.begin(),
 					previousGooPositions.end(), currentPosition ) !=
-					previousGooPositions.end() && currentPosition.y < gameBoard.GetHeight() && 
-					currentPosition.x < gameBoard.GetWidth(); currentPosition = ( lastPosition +
-					POSSIBLE_OFFSET_CONSTANT[ j++ ] ) );
+					previousGooPositions.end() && 
+					boardConstraints.contains( currentPosition ); 
+					currentPosition = ( lastPosition + POSSIBLE_OFFSET_CONSTANT[ j++ ] ) );
 			}
 			previousGooPositions.push_back( currentPosition );
 			goo.AddGoo( currentPosition );
