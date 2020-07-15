@@ -39,15 +39,15 @@ namespace StrategyGoo
 		for( size_t i = 0; i < 8; ++i )
 		{
 			BoardPosition currentPosition = lastPosition +
-				POSSIBLE_OFFSET_CONSTANT[ RandomRange( 0, 5 ) ];
+					POSSIBLE_OFFSET_CONSTANT[ RandomRange( 0, 5 ) ];
 			if( previousGooPositions.size() > 0 )
 			{
 				for( size_t j = 0;
-					std::find( previousGooPositions.begin(),
-					previousGooPositions.end(), currentPosition ) !=
-					previousGooPositions.end() && 
-					boardConstraints.contains( currentPosition ); 
-					currentPosition = ( lastPosition + POSSIBLE_OFFSET_CONSTANT[ j++ ] ) );
+						std::find( previousGooPositions.begin(),
+						previousGooPositions.end(), currentPosition ) !=
+						previousGooPositions.end() && 
+						boardConstraints.contains( currentPosition ); 
+						currentPosition = ( lastPosition + POSSIBLE_OFFSET_CONSTANT[ j++ ] ) );
 			}
 			previousGooPositions.push_back( currentPosition );
 			goo.AddGoo( currentPosition );
