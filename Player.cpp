@@ -88,5 +88,11 @@ namespace StrategyGoo
 	ShootGrenadeOrder::ShootGrenadeOrder( BoardPosition from_, BoardPosition to_ ) : 
 			from( from_ ), to( to_ ) {}
 
-
+	FlamethrowerOrder::FlamethrowerOrder( Squaddie& squaddie, sf::Vector2i mousePosition )
+	{
+		direction = ALL_DIRECTIONS_CONSTANT[ 
+				ClosestFacing( ( mousePosition - squaddie.RefrenceBoardPosition() ) ) ];
+		squaddie.RefrenceSprite().SetCurrentDirection( 
+				( Direction ) ClosestFacing( squaddie.RefrenceBoardPosition() - mousePosition ) );
+	}
 }

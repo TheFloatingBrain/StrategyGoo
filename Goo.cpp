@@ -149,7 +149,12 @@ namespace StrategyGoo
 		return status;
 	}
 
-	// * TODO: Add wall avoidence later? Could be done throug exclude or by not allowing it in the rules of FindEmptySquares//
+	/*******************************************************************
+	* TODO: ************************************************************
+	*	* : Add wall avoidence later? Could be done throug exclude *****
+	*			or by not allowing it in the rules of FindEmptySquares *
+	*	* : Add other goo dection avoidance. ***************************
+	*******************************************************************/
 	bool Goo::MoveToward( BoardPosition where, size_t spreadReach, bool grow, std::vector< GooComponent* > exclude )
 	{
 		if( spreadReach > 0 )
@@ -322,7 +327,9 @@ namespace StrategyGoo
 				);
 				if( gooParent != nullptr )
 				{
-					std::cout << "Deleting goo\n";
+					#ifdef _DEBUG
+						std::cout << "Grenade deleting goo\n";
+					#endif
 					if( gooParent->RemoveGoo( to ) == false ) {
 						std::cerr << "ShootGrenadeOrder::Tick( Squaddie& squaddie, "
 							"entt::registry& registry ) : bool::Error: Failed to delete goo!\n";
@@ -341,4 +348,82 @@ namespace StrategyGoo
 		return status;
 	}
 
+	void FlamethrowerOrder::KillGoo( Squaddie& squaddie, entt::registry& registry )
+	{
+		auto squaddiePosition = squaddie.RefrenceBoardPosition();
+		auto directionVector = DIRECTION_VECTOR_FACINGS_CONSTANT[ ( size_t ) direction ];
+		std::vector< Goo::GooComponentRefrence > toRemove;
+		registry.view< Goo::GooComponentRefrence, Tile::TileRefrence >().each(
+			[&]( Goo::GooComponentRefrence& goo, Tile::TileRefrence& tile )
+			{
+				for( size_t i = 1; i <= maxFlameLength; ++i )
+				{
+					if( goo.get().RefrenceBoardPosition() == 
+							( squaddiePosition + ( directionVector * ( ( int ) i ) ) ) )
+						toRemove.push_back( goo );
+				}
+				//auto deltaPosition = goo.get().RefrenceBoardPosition() - squaddiePosition;
+				//if( ALL_DIRECTIONS_CONSTANT[ ClosestFacing( deltaPosition ) ] == direction &&
+				//	ConditionalMagnitude( deltaPosition ) < maxFlameLength )
+				//	toRemove.push_back( goo );
+			}
+		);
+		for( auto currentGoo : toRemove )
+		{
+			#ifdef _DEBUG
+				std::cout << "Flamethrower deleting goo\n";
+			#endif
+			Goo* gooParent = currentGoo.get().parent;
+			if( gooParent->RemoveGoo( currentGoo.get() ) == false ) {
+				std::cerr << "ShootGrenadeOrder::Tick( Squaddie& squaddie, "
+						"entt::registry& registry ) : bool::Error: Failed to delete goo!\n";
+			}
+		}
+		killedGoo = true;
+	}
+
+	void FlamethrowerOrder::CreateFlameSprite( Squaddie& squaddie, entt::registry& registry )
+	{
+		FlameSpriteType& flames = registry.get< FlameSpriteType >( flameID );
+		auto directionVector = DIRECTION_VECTOR_FACINGS_CONSTANT[ ( size_t ) direction ];
+		GameBoard* squaddieGameBoard = squaddie.GetBoard();
+		sf::IntRect confiningRectangle{ 0, 0, ( int ) squaddieGameBoard->GetWidth(), ( int ) squaddieGameBoard->GetHeight() };
+		const auto RESULTING_BOARD_POSITION_CONSTANT = 
+				squaddie.RefrenceBoardPosition() + ( directionVector * ( int ) ( ( flames.size() + 1 ) ) );
+		if( confiningRectangle.contains( RESULTING_BOARD_POSITION_CONSTANT ) )
+		{
+			flames.push_back( Sprite< 0 >( "CubeExplosion1" ) );
+			( *( --flames.end() ) ).RefrenceSprite().setPosition(
+					squaddie.GetBoard()->ToWorldCoordinates( RESULTING_BOARD_POSITION_CONSTANT ) );
+		}
+	}
+
+	bool FlamethrowerOrder::Tick( Squaddie& squaddie, entt::registry& registry )
+	{
+		if( killedGoo == false )
+		{
+			KillGoo( squaddie, registry );
+			flameID = registry.create();
+			registry.emplace< FlameSpriteType >( flameID );
+		}
+		FlameSpriteType& flames = registry.get< FlameSpriteType >( flameID );
+		const size_t CURRENT_FLAME_LENGTH_CONSTANT = flames.size();
+		if( ( flameTicks % flameTicksPerFlame ) == 0 )
+		{
+			if( ( flameTicks / flameTicksPerFlame ) == CURRENT_FLAME_LENGTH_CONSTANT &&
+				CURRENT_FLAME_LENGTH_CONSTANT < maxFlameLength )
+				CreateFlameSprite( squaddie, registry );
+			else if( ( 2 * flameTicks / flameTicksPerFlame ) == ( 2 * CURRENT_FLAME_LENGTH_CONSTANT ) &&
+					CURRENT_FLAME_LENGTH_CONSTANT >= 0 )
+				flames.pop_back();
+			else if( flameTicks >= ( 2 * flameTicksPerFlame * maxFlameLength ) )
+			{
+				registry.remove_all( flameID );
+				registry.destroy( flameID );
+				return true;
+			}
+		}
+		++flameTicks;
+		return false;
+	}
 }

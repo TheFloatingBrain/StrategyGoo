@@ -65,7 +65,33 @@ namespace StrategyGoo
 
 	template<>
 	struct PlayerOrderMaxDistance< ShootGrenadeOrder > {
-		const static size_t MAX_DISTANCE_CONSTANT = 100;
+		const static size_t MAX_DISTANCE_CONSTANT = 5;
 	};
+
+	struct FlamethrowerOrder;
+
+	template<>
+	struct PlayerOrderMaxDistance< FlamethrowerOrder > {
+		const static size_t MAX_DISTANCE_CONSTANT = 3;
+	};
+
+	struct FlamethrowerOrder : public PlayerOrder
+	{
+		using FlameSpriteType = std::vector< Sprite< 0 > >;
+		Direction direction;
+		FlamethrowerOrder( Squaddie& squaddie, sf::Vector2i mousePosition );
+		bool Tick( Squaddie& squaddie, entt::registry& registry ) override;
+		void KillGoo( Squaddie& squaddie, entt::registry& registry );
+		void CreateFlameSprite( Squaddie& squaddie, entt::registry& registry );
+		size_t maxFlameLength = PlayerOrderMaxDistance< FlamethrowerOrder >::MAX_DISTANCE_CONSTANT;
+		size_t flameTicks = 0;
+		size_t flameTicksPerFlame = 3;
+		size_t maxFlameTicks = maxFlameLength * flameTicksPerFlame;
+		bool killedGoo = false;
+		entt::entity flameID;
+	};
+
+
+
 }
 #endif

@@ -17,7 +17,7 @@ int main( int argc, char** args )
 	entt::registry registry;
 	GameplayManager* manager = new GameplayManager{ registry };
 	sf::Clock frameRateController;
-	float frameRate = 1.f / 60.f;
+	float frameRate = 1.f / 60.0f;
 	sf::View camera = window.getDefaultView();
 	while( window.isOpen() )
 	{
@@ -26,7 +26,7 @@ int main( int argc, char** args )
 		{
 			if( event.type == sf::Event::Closed )
 				window.close();
-			if( event.type = sf::Event::KeyReleased )
+			if( event.type == sf::Event::KeyPressed )
 			{
 				if( manager->GetGameState() == GameplayManager::StagesOfPlay::WIN ||
 					manager->GetGameState() == GameplayManager::StagesOfPlay::LOOSE ) {

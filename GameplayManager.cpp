@@ -45,10 +45,12 @@ namespace StrategyGoo
 				for( size_t j = 0;
 						std::find( previousGooPositions.begin(),
 						previousGooPositions.end(), currentPosition ) !=
-						previousGooPositions.end() && 
-						boardConstraints.contains( currentPosition ); 
+						previousGooPositions.end() &&
+						boardConstraints.contains( currentPosition );
 						currentPosition = ( lastPosition + POSSIBLE_OFFSET_CONSTANT[ j++ ] ) );
 			}
+			else if( boardConstraints.contains( currentPosition ) == false )
+					currentPosition = BoardPosition( 9, 5 );
 			previousGooPositions.push_back( currentPosition );
 			goo.AddGoo( currentPosition );
 			lastPosition = currentPosition;
@@ -183,6 +185,11 @@ namespace StrategyGoo
 				sprite.Draw( window );
 			}
 		);
+		registry.view< FlamethrowerOrder::FlameSpriteType >().each( [&]( FlamethrowerOrder::FlameSpriteType& flamethrowerSprites ) {
+			for( auto& sprite : flamethrowerSprites )
+				sprite.Draw( window );
+			} 
+		);
 		DrawGUI( window );
 		registry.view< Sprite< 2 > >().each( [&](
 			Sprite< 2 >& sprite ) {
@@ -229,10 +236,18 @@ namespace StrategyGoo
 				{
 					size_t squaddieToMoveToo = ( size_t ) RandomRange( 0, ( int ) view.size() - 1 );
 					auto squaddie = registry.get< Squaddie::SquaddieRefrence >( view[ squaddieToMoveToo ] );
-					if( RandomRange( 0, 10 ) >= 5 )
+					if( RandomRange( 0, 10 ) >= 8 )
+					{
 						goo->MoveToward( squaddie.get().RefrenceBoardPosition() );
+						goo->MoveToward( squaddie.get().RefrenceBoardPosition() );
+						goo->MoveToward( squaddie.get().RefrenceBoardPosition() );
+					}
 					else
+					{
 						goo->MoveToward( squaddie.get().RefrenceBoardPosition(), 1, true );
+						goo->MoveToward( squaddie.get().RefrenceBoardPosition(), 1, true );
+						goo->MoveToward( squaddie.get().RefrenceBoardPosition(), 1, true );
+					}
 					/*for( auto& gooComp : goo->GetGoo() ) {
 						std::cout << "G: " << gooComp->RefrenceBoardPosition().x << ", " << gooComp->RefrenceBoardPosition().y << "\n";
 						auto ref = registry.create();
@@ -313,7 +328,8 @@ namespace StrategyGoo
 		bool allOrderTypesComplete = true;
 		allOrderTypesComplete = (
 			allOrderTypesComplete && UpdatePlayer< MoveOrder >() &&
-			UpdatePlayer< ShootGrenadeOrder >() );
+			UpdatePlayer< ShootGrenadeOrder >() && 
+			UpdatePlayer< FlamethrowerOrder >() );
 		if( allOrderTypesComplete )
 			gameState = StagesOfPlay::SLIME_MOVE_STAGE;
 	}
@@ -355,6 +371,7 @@ namespace StrategyGoo
 					bool targetOrder = false;
 					registry.remove_if_exists< MoveOrder >( idOfSelectedSquaddie.value() );
 					registry.remove_if_exists< ShootGrenadeOrder >( idOfSelectedSquaddie.value() );
+					registry.remove_if_exists< FlamethrowerOrder >( idOfSelectedSquaddie.value() );
 					const auto PLAYER_COORDINATES_CONSTANT = registry.get< BoardPosition >( idOfSelectedSquaddie.value() );
 					auto boardCoordinates = gameBoard.ToBoardCoordinates( mousePosition );
 					PrintVect( boardCoordinates );
@@ -373,6 +390,14 @@ namespace StrategyGoo
 						registry.emplace< ShootGrenadeOrder >( idOfSelectedSquaddie.value(),
 							registry.get< BoardPosition >( idOfSelectedSquaddie.value() ),
 							boardCoordinates );
+						targetOrder = true;
+						orderGiven = true;
+					}
+					if( currentAction == PlayerAction::FLAME_THROWER &&
+						ORDER_DISPLACEMENT_CONSTANT <= PlayerOrderMaxDistance< FlamethrowerOrder >::MAX_DISTANCE_CONSTANT )
+					{
+						auto& squaddie = registry.get< Squaddie::SquaddieRefrence >( idOfSelectedSquaddie.value() );
+						registry.emplace< FlamethrowerOrder >( idOfSelectedSquaddie.value(), squaddie, boardCoordinates );
 						targetOrder = true;
 						orderGiven = true;
 					}
