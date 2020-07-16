@@ -45,10 +45,14 @@ namespace StrategyGoo
 			sf::IntRect actionBar;
 			std::array< Sprite< -1 >*, 9 > uiElements;
 			std::array< Sprite< -1 >*, 6 > actionBarSprites;
+			std::array< sf::Keyboard::Key, 5 > hotKeys{ sf::Keyboard::Num1, sf::Keyboard::Num2, 
+					sf::Keyboard::Num3, sf::Keyboard::Num4, sf::Keyboard::Num5
+			};
 			PlayerAction currentAction = PlayerAction::NONE;
 			void PlayerDamageStage();
 			void ExecuteAllPlayerOrders();
 			void DrawGUI( sf::RenderWindow& window );
+			void SelectCommand( sf::RenderWindow& window );
 			template< typename ORDER_TYPE >
 			bool UpdatePlayer();
 			void PlayerGiveOrdersStage( sf::RenderWindow& window );

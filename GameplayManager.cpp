@@ -11,7 +11,7 @@ namespace StrategyGoo
 			throwGrenade( "Grenade" ), defaultCursor( "Cursor" ), cursorSprite( "Cursor" ), selectionSquare( "SelectionSquare" ),
 			uiElements( { &move, &grenade, &flameThrower, &hand, &check, &leftArrow,
 			&rightArrow, &littleTarget, &littleMove } ), actionBarSprites( { &grenade, &flameThrower,
-			&move, &hand, &check, &defaultCursor } ), winSprite( "YouWin" ), loseSprite( "YouLose" ), pressAnyKeySprite( "PressAnyKey" )
+			&move, &hand, &check, &defaultCursor } ), winSprite( "YouWin" ), loseSprite( "YouLose" ), pressAnyKeySprite( "PressAnyKey" ) 
 	{
 		size_t count = 0;
 		for( Sprite< -1 >* element : uiElements ) {
@@ -282,14 +282,13 @@ namespace StrategyGoo
 		return allDone;
 	}
 	
-	void GameplayManager::DrawGUI( sf::RenderWindow& window )
+	void GameplayManager::SelectCommand( sf::RenderWindow& window )
 	{
-		sf::RectangleShape actionPanelRender;
-		actionPanelRender.setPosition( sf::Vector2f( ( float ) actionBar.left, ( float ) actionBar.top ) );
-		actionPanelRender.setSize( sf::Vector2f( ( float ) actionBar.width, ( float ) actionBar.height ) );
-		actionPanelRender.setFillColor( sf::Color( 97, 90, 90, 255 ) );
-		actionPanelRender.setOutlineColor( sf::Color( 14, 32, 232, 255 ) );
-		actionPanelRender.setOutlineThickness( 2.0f );
+		auto setCursorSprite = [&]() {
+			auto* toBeCursor = actionBarSprites[ ( size_t ) currentAction ];
+			cursorSprite = Sprite< -1 >( toBeCursor->GetSpriteName() );
+			cursorSprite.SetCurrentDirection( toBeCursor->GetCurrentDirection() );
+		};
 		if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) )
 		{
 			//-1 because the last sprite is the default cursor.//
@@ -297,7 +296,7 @@ namespace StrategyGoo
 			{
 				sf::Sprite& actionSprite = actionBarSprites[ i ]->RefrenceSprite();
 				sf::IntRect actionBoundingBox{ ( int ) actionSprite.getPosition().x,
-						( int ) actionSprite.getPosition().y, 64, 64 };
+					( int ) actionSprite.getPosition().y, 64, 64 };
 				if( actionBoundingBox.contains( sf::Mouse::getPosition( window ) ) == true ) {
 					currentAction = ( PlayerAction ) i;
 					break;
@@ -307,10 +306,37 @@ namespace StrategyGoo
 				gameState = StagesOfPlay::PLAYER_EXECUTE_ORDERS_STAGE;
 				currentAction = PlayerAction::NONE;
 			}
-			auto* toBeCursor = actionBarSprites[ ( size_t ) currentAction ];
-			cursorSprite = Sprite< -1 >( toBeCursor->GetSpriteName() );
-			cursorSprite.SetCurrentDirection( toBeCursor->GetCurrentDirection() );
+			setCursorSprite();
 		}
+		else
+		{
+			bool keyPressed = false;
+			for( size_t i = 0; i < hotKeys.size(); ++i ) {
+				if( sf::Keyboard::isKeyPressed( hotKeys[ i ] ) == true ) 
+				{
+					keyPressed = true;
+					currentAction = ( PlayerAction ) i;
+					break;
+				}
+			}
+			if( keyPressed == true )
+				setCursorSprite();
+		}
+	}
+
+	void GameplayManager::DrawGUI( sf::RenderWindow& window )
+	{
+		sf::RectangleShape actionPanelRender;
+		actionPanelRender.setPosition( sf::Vector2f( ( float ) actionBar.left, ( float ) actionBar.top ) );
+		actionPanelRender.setSize( sf::Vector2f( ( float ) actionBar.width, ( float ) actionBar.height ) );
+		actionPanelRender.setFillColor( sf::Color( 97, 90, 90, 255 ) );
+		actionPanelRender.setOutlineColor( sf::Color( 14, 32, 232, 255 ) );
+		actionPanelRender.setOutlineThickness( 2.0f );
+
+		SelectCommand( window );
+
+		
+
 		cursorSprite.RefrenceSprite().setPosition( ConvertVector< float, int >( sf::Mouse::getPosition( window ) ) );
 		window.draw( actionPanelRender );
 		leftArrow.Draw( window );
