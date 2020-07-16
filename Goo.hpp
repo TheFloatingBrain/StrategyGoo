@@ -11,6 +11,7 @@ namespace BioGooContainmentSquad
 		using GooRefrence = std::reference_wrapper< Goo >;
 		Goo( entt::registry& registry_, BoardPosition start, 
 				GameBoard* board_, size_t tileWidth, size_t tileHeight );
+		~Goo();
 		struct GooComponent : Entity
 		{
 			Goo* parent;

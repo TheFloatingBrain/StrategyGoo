@@ -23,6 +23,10 @@ namespace BioGooContainmentSquad
 		RefrenceSprite().SetActive( false );
 		//AddGoo( start );
 	}
+	Goo::~Goo() {
+		for( GooComponent* currentGoo : goo )
+			delete currentGoo;
+	}
 
 	Goo::GooComponent::GooComponent( entt::registry& registry_, BoardPosition start, GameBoard* board_,
 			size_t tileWidth, size_t tileHeight, Goo* parent_ ) : 

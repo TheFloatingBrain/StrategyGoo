@@ -17,6 +17,11 @@ namespace BioGooContainmentSquad
 		std::vector< LOADED_SPRITE_DATA_TYPE > spritesLoaded;
 	}
 
+	void CleanUpTextureMemory() {
+		delete Detail::masterTexture;
+		delete Detail::masterSpriteBuffer;
+	}
+
 	template< int LAYER_CONSTANT >
 	Sprite< LAYER_CONSTANT >::Sprite( std::string spriteName_, Direction currentDirection_ ) : currentDirection( currentDirection_ ), currentFrame( 0 )
 	{

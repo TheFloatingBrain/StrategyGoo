@@ -21,6 +21,12 @@ namespace BioGooContainmentSquad
 		InitializeLevel();
 	}
 
+	GameplayManager::~GameplayManager()
+	{
+		for( Entity* currentEntity : entities )
+			delete currentEntity;
+	}
+
 	void GameplayManager::InitializeLevel()
 	{
 		CreateEntity< Squaddie >( BoardPosition( 2, 4 ) ).RefrenceSprite().SetCurrentDirection( Direction::SOUTH );

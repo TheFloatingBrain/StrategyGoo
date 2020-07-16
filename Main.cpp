@@ -13,7 +13,7 @@ void PrintRect( sf::IntRect rect )
 
 int main( int argc, char** args )
 {
-	sf::RenderWindow window( sf::VideoMode( 1024, 768 ), "Biomass Containment Squad" );
+	sf::RenderWindow window( sf::VideoMode( 1024, 768 ), "Bio Goo Containment Squad" );
 	entt::registry registry;
 	GameplayManager* manager = new GameplayManager{ registry };
 	sf::Clock frameRateController;
@@ -29,8 +29,10 @@ int main( int argc, char** args )
 			if( event.type == sf::Event::KeyPressed )
 			{
 				if( manager->GetGameState() == GameplayManager::StagesOfPlay::WIN ||
-					manager->GetGameState() == GameplayManager::StagesOfPlay::LOOSE ) {
+					manager->GetGameState() == GameplayManager::StagesOfPlay::LOOSE )
+				{
 					registry = entt::registry();
+					delete manager;
 					manager = new GameplayManager{ registry };
 				}
 			}
@@ -42,6 +44,8 @@ int main( int argc, char** args )
 			manager->Render( window );
 		}
 	}
+	delete manager;
+	BioGooContainmentSquad::CleanUpTextureMemory();
 	return 0;
 }
 

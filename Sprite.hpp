@@ -62,6 +62,8 @@ namespace BioGooContainmentSquad
 		extern std::vector< LOADED_SPRITE_DATA_TYPE > spritesLoaded;
 	}
 
+	void CleanUpTextureMemory();
+
 	const std::string DEFAULT_SPRITE_NAME_CONSTANT = "DEFAULT_SPRITE_NAME";
 	const std::string DEFAULT_JSON_DATA_CONSTANT = "DEFAULT_JSON_DATA_NAME";
 

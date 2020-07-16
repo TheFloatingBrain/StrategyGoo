@@ -7,7 +7,7 @@ namespace BioGooContainmentSquad
 	struct GameplayManager
 	{
 		GameplayManager( entt::registry& registry_, size_t width = 16, size_t height = 12 );
-
+		~GameplayManager();
 		enum class PlayerAction : size_t
 		{
 			GRENADE = 0,
@@ -64,6 +64,5 @@ namespace BioGooContainmentSquad
 			void InitilizeUIComponents();
 			std::vector< entt::entity > debug;
 	};
-	//void CreateNewLevel();
 }
 #endif
