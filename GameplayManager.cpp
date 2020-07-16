@@ -292,7 +292,6 @@ namespace StrategyGoo
 		actionPanelRender.setOutlineThickness( 2.0f );
 		if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) )
 		{
-			currentAction = PlayerAction::NONE;
 			//-1 because the last sprite is the default cursor.//
 			for( size_t i = 0; i < actionBarSprites.size() - 1; ++i )
 			{
@@ -374,7 +373,6 @@ namespace StrategyGoo
 					registry.remove_if_exists< FlamethrowerOrder >( idOfSelectedSquaddie.value() );
 					const auto PLAYER_COORDINATES_CONSTANT = registry.get< BoardPosition >( idOfSelectedSquaddie.value() );
 					auto boardCoordinates = gameBoard.ToBoardCoordinates( mousePosition );
-					PrintVect( boardCoordinates );
 					const auto ORDER_DISPLACEMENT_CONSTANT = ConditionalMagnitude< int >( boardCoordinates - PLAYER_COORDINATES_CONSTANT );
 					if( currentAction == PlayerAction::MOVE &&
 						ORDER_DISPLACEMENT_CONSTANT <= PlayerOrderMaxDistance< MoveOrder >::MAX_DISTANCE_CONSTANT )
