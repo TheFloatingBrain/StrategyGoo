@@ -2,7 +2,7 @@
 #ifdef _DEBUG
 #include <iostream>
 #endif
-namespace StrategyGoo
+namespace BioGooContainmentSquad
 {
 	bool ComparePosition( sf::Vector2f first, sf::Vector2f second ) {
 		return ( abs( first.x - second.x ) < 1 ) &&

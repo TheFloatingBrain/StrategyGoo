@@ -2,7 +2,7 @@
 #include <list>
 #include <iostream>
 #include <typeindex>
-namespace StrategyGoo
+namespace BioGooContainmentSquad
 {
 	GameplayManager::GameplayManager( entt::registry& registry_, size_t width, size_t height ) :
 			registry( registry_ ), gameBoard( registry_, width, height ), move( "Move" ),
@@ -332,11 +332,7 @@ namespace StrategyGoo
 		actionPanelRender.setFillColor( sf::Color( 97, 90, 90, 255 ) );
 		actionPanelRender.setOutlineColor( sf::Color( 14, 32, 232, 255 ) );
 		actionPanelRender.setOutlineThickness( 2.0f );
-
 		SelectCommand( window );
-
-		
-
 		cursorSprite.RefrenceSprite().setPosition( ConvertVector< float, int >( sf::Mouse::getPosition( window ) ) );
 		window.draw( actionPanelRender );
 		leftArrow.Draw( window );

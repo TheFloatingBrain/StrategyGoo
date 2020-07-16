@@ -1,6 +1,6 @@
 #include "GameBoard.hpp"
 #include <iostream>
-namespace StrategyGoo
+namespace BioGooContainmentSquad
 {
 	Tile::Tile( entt::registry& registry_, size_t x_, size_t y_, size_t width, size_t height ) : 
 			registry( registry_ ), x( x_ ), y( y_ ), WIDTH_CONSTANT( width ), HEIGHT_CONSTANT( height )

@@ -2,7 +2,7 @@
 
 #ifndef TILE_TAGGING_HEADER_HPP
 #define TILE_TAGGING_HEADER_HPP
-namespace StrategyGoo
+namespace BioGooContainmentSquad
 {
 	template< typename REFRENCE_TYPE >
 	bool AddEntityToTile( entt::registry& registry, REFRENCE_TYPE toRefrence, BoardPosition tile, GameBoard* board )

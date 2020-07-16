@@ -1,0 +1,106 @@
+{
+	"Desk2/sizeAbove/Desk2_Above_E": {
+		"frame": {
+			"x": 226,
+			"y": 0,
+			"width": 60,
+			"height": 80
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"Desk2/sizeAbove/Desk2_Above_N": {
+		"frame": {
+			"x": 226,
+			"y": 82,
+			"width": 60,
+			"height": 80
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"Desk2/sizeAbove/Desk2_Above_NE": {
+		"frame": {
+			"x": 0,
+			"y": 0,
+			"width": 80,
+			"height": 99
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"Desk2/sizeAbove/Desk2_Above_NW": {
+		"frame": {
+			"x": 82,
+			"y": 0,
+			"width": 80,
+			"height": 99
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"Desk2/sizeAbove/Desk2_Above_S": {
+		"frame": {
+			"x": 164,
+			"y": 0,
+			"width": 60,
+			"height": 86
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	},
+	"Desk2/sizeAbove/Desk2_Above_SE": {
+		"frame": {
+			"x": 0,
+			"y": 101,
+			"width": 80,
+			"height": 99
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"Desk2/sizeAbove/Desk2_Above_SW": {
+		"frame": {
+			"x": 82,
+			"y": 101,
+			"width": 80,
+			"height": 99
+		},
+		"sourceSize": {
+			"width": 130,
+			"height": 194
+		},
+		"rotated": false
+	},
+	"Desk2/sizeAbove/Desk2_Above_W": {
+		"frame": {
+			"x": 164,
+			"y": 88,
+			"width": 60,
+			"height": 86
+		},
+		"sourceSize": {
+			"width": 98,
+			"height": 162
+		},
+		"rotated": false
+	}
+}

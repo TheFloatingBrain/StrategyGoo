@@ -1,8 +1,8 @@
 #ifndef GAMEPLAY_MANAGER_HEADER_HPP
 #define GAMEPLAY_MANAGER_HEADER_HPP
-#include "Goo.hpp"
+#include "PlayerOrders.hpp"
 
-namespace StrategyGoo
+namespace BioGooContainmentSquad
 {
 	struct GameplayManager
 	{
@@ -57,7 +57,7 @@ namespace StrategyGoo
 			bool UpdatePlayer();
 			void PlayerGiveOrdersStage( sf::RenderWindow& window );
 			void GooMove( sf::RenderWindow& window );
-			std::vector< Updator* > entities;
+			std::vector< Entity* > entities;
 			std::optional< entt::entity > idOfSelectedSquaddie;
 			GameBoard gameBoard;
 			entt::registry& registry;

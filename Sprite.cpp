@@ -7,7 +7,7 @@
 
 #include <string_view>
 
-namespace StrategyGoo
+namespace BioGooContainmentSquad
 {
 	namespace Detail
 	{

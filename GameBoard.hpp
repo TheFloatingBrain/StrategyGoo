@@ -3,7 +3,7 @@
 #include <entt/entt.hpp>
 #include "Sprite.hpp"
 
-namespace StrategyGoo
+namespace BioGooContainmentSquad
 {
 	const size_t TILE_WIDTH_CONSTANT = 64;
 	const size_t TILE_HEIGHT_CONSTANT = 64;

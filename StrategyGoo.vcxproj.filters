@@ -39,13 +39,16 @@
     <ClCompile Include="VectorUtility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Goo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Updator.cpp">
+    <ClCompile Include="PlayerOrders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Squaddie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,19 +68,22 @@
     <ClInclude Include="GameplayManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Player.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="VectorUtility.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Goo.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Updator.hpp">
+    <ClInclude Include="TileTagging.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TileTagging.hpp">
+    <ClInclude Include="PlayerOrders.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Squaddie.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,17 +1,17 @@
-#include "Player.hpp"
+#include "Squaddie.hpp"
 #ifndef GOO_HEADER_HPP
 #define GOO_HEADER_HPP
 
-namespace StrategyGoo
+namespace BioGooContainmentSquad
 {
 	size_t RandomRange( int min, int max );
 
-	struct Goo : public Updator
+	struct Goo : public Entity
 	{
 		using GooRefrence = std::reference_wrapper< Goo >;
 		Goo( entt::registry& registry_, BoardPosition start, 
 				GameBoard* board_, size_t tileWidth, size_t tileHeight );
-		struct GooComponent : Updator
+		struct GooComponent : Entity
 		{
 			Goo* parent;
 			GooComponent( entt::registry& registry_, BoardPosition start,

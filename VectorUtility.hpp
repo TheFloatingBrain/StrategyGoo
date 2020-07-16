@@ -3,7 +3,7 @@
 
 #ifndef VECTOR_UTILITY_HEADER_HPP
 #define VECTOR_UTILITY_HEADER_HPP
-namespace StrategyGoo
+namespace BioGooContainmentSquad
 {
 
 	template< typename SCALER_TYPE = int >

@@ -3,7 +3,7 @@
 #include <SFML/System.hpp>
 #include "GameplayManager.hpp"
 
-using namespace StrategyGoo;
+using namespace BioGooContainmentSquad;
 
 void PrintRect( sf::IntRect rect )
 {

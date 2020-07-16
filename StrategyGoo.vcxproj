@@ -159,9 +159,10 @@
     <ClCompile Include="GameplayManager.cpp" />
     <ClCompile Include="Goo.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerOrders.cpp" />
+    <ClCompile Include="Squaddie.cpp" />
     <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="Updator.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="VectorUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,10 +171,11 @@
     <ClInclude Include="GameBoard.hpp" />
     <ClInclude Include="GameplayManager.hpp" />
     <ClInclude Include="Goo.hpp" />
-    <ClInclude Include="Player.hpp" />
+    <ClInclude Include="PlayerOrders.hpp" />
+    <ClInclude Include="Squaddie.hpp" />
     <ClInclude Include="Sprite.hpp" />
     <ClInclude Include="TileTagging.hpp" />
-    <ClInclude Include="Updator.hpp" />
+    <ClInclude Include="Entity.hpp" />
     <ClInclude Include="VectorUtility.hpp" />
   </ItemGroup>
   <ItemGroup>

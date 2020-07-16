@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <optional>
 
-namespace StrategyGoo
+namespace BioGooContainmentSquad
 {
 	enum class Direction : unsigned short
 	{
