@@ -183,31 +183,18 @@ namespace BioGooContainmentSquad
 	void GameplayManager::Render( sf::RenderWindow& window )
 	{
 		window.clear();
+		sf::View test = window.getView();
+		test.setRotation( 30.f );
+		window.setView( test );
 		std::vector< std::reference_wrapper< Sprite > > toDraw;
-//		registry.view< Sprite/*< 1 >*/ >().each( [&]( auto& sprite ) {
 
-//			sprite.Draw( window );
-//			}
-//		);
-//		registry.view< Sprite/*< 0 >*/, Goo::GooComponentRefrence >().each( [ & ](
-//			Sprite/*< 0 >*/& sprite, Goo::GooComponentRefrence& goo ) {
-//				sprite.Draw( window );
-//			}
-//		);
 		if( gameState == StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE )
 		{
 			toDraw.push_back( selectionSquare );
 			toDraw.push_back( littleMove );
 			toDraw.push_back( littleTarget );
-			//selectionSquare.Draw( window );
-			//littleMove.Draw( window );
-			//littleTarget.Draw( window );
 		}
-//		registry.view< Sprite/*< 0 >*/ >( entt::exclude< Goo::GooComponentRefrence > ).each( [&](
-//			Sprite/*< 0 >*/& sprite ) {
-//				sprite.Draw( window );
-//			}
-//		);
+
 		DrawGUI( window );
 
 		for( auto* uiElement : emplacedUI )
@@ -221,19 +208,13 @@ namespace BioGooContainmentSquad
 		registry.view< FlamethrowerOrder::FlameSpriteType >().each( [&]( FlamethrowerOrder::FlameSpriteType& flamethrowerSprites ) {
 			for( auto& sprite : flamethrowerSprites )
 				toDraw.push_back( sprite );
-				//sprite.Draw( window );
 			} 
 		);
-		//std::cout << " I AM A UNICORN WIZARD\n";
+
 		std::sort( toDraw.begin(), toDraw.end(), []( std::reference_wrapper< Sprite > first, std::reference_wrapper< Sprite > second ) {
 				return first.get().GetLayer() < second.get().GetLayer();
 			} 
 		);
-//		registry.view< Sprite/*< 2 >*/ >().each( [&](
-//			Sprite/*< 2 >*/ & sprite ) {
-//				sprite.Draw( window );
-//			}
-//		);
 
 		window.draw( actionPanelRender );
 
@@ -378,15 +359,9 @@ namespace BioGooContainmentSquad
 		}
 	}
 
-	void GameplayManager::DrawGUI( sf::RenderWindow& window )
-	{
+	void GameplayManager::DrawGUI( sf::RenderWindow& window ) {
 		SelectCommand( window );
 		cursorSprite.RefrenceSprite().setPosition( ConvertVector< float, int >( sf::Mouse::getPosition( window ) ) );
-		//leftArrow.Draw( window );
-		//rightArrow.Draw( window );
-		//for( Sprite* uiElement : actionBarSprites )
-		//	uiElement->Draw( window );
-		//cursorSprite.Draw( window );
 	}
 
 	void GameplayManager::ExecuteAllPlayerOrders()
