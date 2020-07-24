@@ -29,7 +29,7 @@ namespace BioGooContainmentSquad
 		const size_t GetTileWidthConstant();
 		const size_t GetTileHeightConstant();
 
-		Sprite< 1 >& RefrenceSprite();
+		Sprite& RefrenceSprite();
 
 		entt::entity GetID();
 

@@ -10,15 +10,14 @@ namespace BioGooContainmentSquad
 
 	bool MoveOrder::Tick( Squaddie& squaddie, entt::registry& registry )
 	{
-		const auto SPRITE_POSITION_CONSTANT = squaddie.RefrenceSprite().RefrenceSprite().getPosition();
+		const auto SPRITE_POSITION_CONSTANT = squaddie.RefrenceSprite().GetPosition();
 		const auto TO_WORLD_POSITION_CONSTANT = squaddie.GetBoard()->ToWorldCoordinates( to );
 		const auto DISPLACEMENT_VECTOR_CONSTANT = TO_WORLD_POSITION_CONSTANT - SPRITE_POSITION_CONSTANT;
 		squaddie.RefrenceSprite().SetCurrentDirection(
 			ALL_DIRECTIONS_CONSTANT[ ClosestFacing( from - to ) ] );
-		//PrintVect( ToUnitVector< int >( from - to ) );
 		if( ComparePosition( SPRITE_POSITION_CONSTANT, TO_WORLD_POSITION_CONSTANT ) == false ) {
 			auto unit = ToUnitVector< float >( TO_WORLD_POSITION_CONSTANT - SPRITE_POSITION_CONSTANT ).result;
-			squaddie.RefrenceSprite().RefrenceSprite().move( unit * squaddie.GetSpeed() );
+			squaddie.RefrenceSprite().Move( unit * squaddie.GetSpeed() );
 			return false;
 		}
 		else {
@@ -42,8 +41,8 @@ namespace BioGooContainmentSquad
 	bool ShootGrenadeOrder::Tick( Squaddie& squaddie, entt::registry& registry )
 	{
 		bool status = false;
-		auto getSpriteComponent = [&]( entt::entity id ) -> Sprite< 0 >& {
-			return registry.get< Sprite< 0 > >( id );
+		auto getSpriteComponent = [&]( entt::entity id ) -> Sprite& {
+			return registry.get< Sprite >( id );
 		};
 		auto getBoardPositionComponent = [&]( entt::entity id ) -> BoardPosition& {
 			return registry.get< BoardPosition >( id );
@@ -61,9 +60,10 @@ namespace BioGooContainmentSquad
 		{
 			//std::cout << "A\n";
 			grenadeID = registry.create();
-			registry.emplace< Sprite< 0 > >( grenadeID, "Grenade" );
+			registry.emplace< Sprite >( grenadeID, "Grenade", 3 );
 			registry.emplace< BoardPosition >( grenadeID, from );
 			updateSprite( grenadeID, from );
+			registry.get< Sprite >( grenadeID ).RefrenceSprite().scale( .3f, .3f );
 			createdGrenade = true;
 		}
 		else if( createdGrenade == true && detonatedGrenade == false )
@@ -77,7 +77,7 @@ namespace BioGooContainmentSquad
 				registry.remove_all( grenadeID );
 				registry.destroy( grenadeID );
 				explosionID = registry.create();
-				registry.emplace< Sprite< 0 > >( explosionID, "CubeExplosion1" );
+				registry.emplace< Sprite >( explosionID, "CubeExplosion1", 3 );
 				registry.emplace< BoardPosition >( explosionID, to );
 				updateSprite( explosionID, to );
 				detonatedGrenade = true;
@@ -167,7 +167,7 @@ namespace BioGooContainmentSquad
 			squaddie.RefrenceBoardPosition() + ( directionVector * ( int ) ( ( flames.size() + 1 ) ) );
 		if( confiningRectangle.contains( RESULTING_BOARD_POSITION_CONSTANT ) )
 		{
-			flames.push_back( Sprite< 0 >( "CubeExplosion1" ) );
+			flames.push_back( Sprite( "CubeExplosion1", 3 ) );
 			( *( --flames.end() ) ).RefrenceSprite().setPosition(
 				squaddie.GetBoard()->ToWorldCoordinates( RESULTING_BOARD_POSITION_CONSTANT ) );
 		}

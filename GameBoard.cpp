@@ -6,8 +6,8 @@ namespace BioGooContainmentSquad
 			registry( registry_ ), x( x_ ), y( y_ ), WIDTH_CONSTANT( width ), HEIGHT_CONSTANT( height )
 	{
 		id = registry.create();
-		registry.emplace< Sprite< 1 > >( id, "FloorTile0" );
-		RefrenceSprite().RefrenceSprite().setPosition( ( float ) x * TILE_WIDTH_CONSTANT, ( float ) y * HEIGHT_CONSTANT );
+		registry.emplace< Sprite >( id, "FloorTile0", 0 );
+		RefrenceSprite().SetPosition( ( float ) x * TILE_WIDTH_CONSTANT, ( float ) y * HEIGHT_CONSTANT );
 		registry.emplace< TileRefrence >( id, ( *this ) );
 	}
 
@@ -32,8 +32,8 @@ namespace BioGooContainmentSquad
 		return y;
 	}
 
-	Sprite< 1 >& Tile::RefrenceSprite() {
-		return registry.get< Sprite< 1 > >( id );
+	Sprite& Tile::RefrenceSprite() {
+		return registry.get< Sprite >( id );
 	}
 
 	const size_t Tile::GetTileWidthConstant() {

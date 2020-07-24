@@ -67,10 +67,11 @@ namespace BioGooContainmentSquad
 	const std::string DEFAULT_SPRITE_NAME_CONSTANT = "DEFAULT_SPRITE_NAME";
 	const std::string DEFAULT_JSON_DATA_CONSTANT = "DEFAULT_JSON_DATA_NAME";
 
-	template< int LAYER_CONSTANT = 0 >
 	struct Sprite
 	{
-		Sprite( std::string spriteName_, Direction currentDirection_ = DEFAULT_DIRECTION );
+		static const int DEFAULT_LAYER_CONSTANT = 0;
+
+		Sprite( std::string spriteName_, int layer_ = DEFAULT_LAYER_CONSTANT, Direction currentDirection_ = DEFAULT_DIRECTION );
 
 		void Draw( sf::RenderWindow& toRenderTo );
 
@@ -90,6 +91,7 @@ namespace BioGooContainmentSquad
 		size_t ObtainAmountOfAnimations();
 		ANIMATION_TYPE ObtainAnimation( size_t animation );
 
+		void SetLayer( int layer_ );
 		void SetSprite( sf::Sprite sprite_ );
 		void SetCurrentDirection( Direction currentDirection_ );
 		void SetFrames( FRAMES_TYPE frames_ );
@@ -101,8 +103,7 @@ namespace BioGooContainmentSquad
 		void SetAnimationActive( bool animationActive_ );
 		void SetAnimationRate( float animationRate_ );
 
-
-		int GetLayerConstant();
+		int GetLayer();
 		std::string GetSpriteName();
 		sf::Sprite GetSprite();
 		FRAMES_TYPE GetFrames();
@@ -115,6 +116,7 @@ namespace BioGooContainmentSquad
 		sf::IntRect GetPlaceInSpriteSheet();
 		bool GetAnimationActive();
 		float GetAnimationRate();
+		const sf::Vector2f& GetPosition();
 
 		static sf::IntRect LoadSpriteImage( std::string spriteName, sf::Texture* buffer = nullptr, 
 				sf::Image* spriteBuffer = nullptr, std::vector< LOADED_SPRITE_DATA_TYPE >* loadedSprites = nullptr );
@@ -126,8 +128,12 @@ namespace BioGooContainmentSquad
 		void InitializeSprite( std::string spriteName_ );
 		static FRAMES_TYPE FrameDataFromJSONMetaData( std::string metaData, std::string spriteName );
 
-		
-
+		void SetPosition( sf::Vector2f position );
+		void SetPosition( float x, float y );
+		void SetOrientation( float orientation );
+		void Move( sf::Vector2f displacement );
+		void Move( float x, float y );
+		void Rotate( float angle );
 
 		operator sf::Sprite();
 		sf::Sprite& operator*();
@@ -135,7 +141,7 @@ namespace BioGooContainmentSquad
 		std::vector< ANIMATION_TYPE >& RefrenceAnimations();
 		ANIMATION_TYPE& RefrenceAnimation( size_t animation );
 		protected:
-			int layer = 0;
+			int layer;
 			void SetCurrentAnimation( size_t currentAnimation_ );
 			std::string spriteName = DEFAULT_SPRITE_NAME_CONSTANT;
 			sf::Sprite sprite;

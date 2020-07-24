@@ -171,6 +171,7 @@
     <ClInclude Include="GameBoard.hpp" />
     <ClInclude Include="GameplayManager.hpp" />
     <ClInclude Include="Goo.hpp" />
+    <ClInclude Include="Obstical.hpp" />
     <ClInclude Include="PlayerOrders.hpp" />
     <ClInclude Include="Squaddie.hpp" />
     <ClInclude Include="Sprite.hpp" />

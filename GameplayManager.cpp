@@ -11,18 +11,18 @@ namespace BioGooContainmentSquad
 			throwGrenade( "Grenade" ), defaultCursor( "Cursor" ), cursorSprite( "Cursor" ), selectionSquare( "SelectionSquare" ),
 			uiElements( { &move, &grenade, &flameThrower, &hand, &check, &leftArrow,
 			&rightArrow, &littleTarget, &littleMove } ), actionBarSprites( { &grenade, &flameThrower,
-			&move, &hand, &check, &defaultCursor } ), winSprite( "YouWin" ), loseSprite( "YouLose" ), pressAnyKeySprite( "PressAnyKey" ) 
+			&move, &hand, &check, &defaultCursor } ), winSprite( "YouWin" ), loseSprite( "YouLose" ), pressAnyKeySprite( "PressAnyKey" ), 
+			emplacedUI( { &grenade, &flameThrower, &move, &hand, &check, &cursorSprite, &leftArrow, &rightArrow } )
 	{
 		size_t count = 0;
-		for( Sprite< -1 >* element : uiElements ) {
+		for( Sprite* element : uiElements ) {
 			element->RefrenceSprite().setPosition( ( float ) ( 64 + ( 64 * count++ ) ), 128.f );
 		}
 		InitilizeUIComponents();
 		InitializeLevel();
 	}
 
-	GameplayManager::~GameplayManager()
-	{
+	GameplayManager::~GameplayManager() {
 		for( Entity* currentEntity : entities )
 			delete currentEntity;
 	}
@@ -65,10 +65,17 @@ namespace BioGooContainmentSquad
 
 	void GameplayManager::InitilizeUIComponents()
 	{
+		for( auto* sprite : emplacedUI )
+			sprite->SetLayer( 4 );
 		actionBar.left = 320;
 		actionBar.top = 704;
 		actionBar.width = 64 * 7;
 		actionBar.height = 64;
+		actionPanelRender.setPosition( sf::Vector2f( ( float ) actionBar.left, ( float ) actionBar.top ) );
+		actionPanelRender.setSize( sf::Vector2f( ( float ) actionBar.width, ( float ) actionBar.height ) );
+		actionPanelRender.setFillColor( sf::Color( 97, 90, 90, 255 ) );
+		actionPanelRender.setOutlineColor( sf::Color( 14, 32, 232, 255 ) );
+		actionPanelRender.setOutlineThickness( 2.0f );
 		leftArrow.SetCurrentDirection( Direction::WEST );
 		( *leftArrow ).setPosition( ( float ) actionBar.left, ( float ) actionBar.top );
 		rightArrow.SetCurrentDirection( Direction::EAST );
@@ -85,9 +92,13 @@ namespace BioGooContainmentSquad
 		( *littleTarget ).scale( .5f, .5f );
 		littleMove.SetActive( false );
 		littleTarget.SetActive( false );
+		littleMove.SetLayer( 4 );
+		littleTarget.SetLayer( 4 );
 		defaultCursor.SetCurrentDirection( Direction::SOUTH );
 		defaultCursor.SetActive( false );
 		cursorSprite.SetCurrentDirection( defaultCursor.GetCurrentDirection() );
+		cursorSprite.SetLayer( 5 );
+		defaultCursor.SetLayer( 5 );
 		selectionSquare.SetActive( false );
 		( *winSprite ).setPosition( ( float ) actionBar.left, 128.0f );
 		( *winSprite ).scale( 6.f, 4.f );
@@ -98,6 +109,7 @@ namespace BioGooContainmentSquad
 		( *pressAnyKeySprite ).setPosition( ( float ) actionBar.left, 384 );
 		( *pressAnyKeySprite ).scale( 8.f, 4.f );
 		pressAnyKeySprite.SetCurrentDirection( Direction::EAST );
+		selectionSquare.SetLayer( 1 );
 	}
 
 	template< typename ENTITY_TYPE >
@@ -171,37 +183,71 @@ namespace BioGooContainmentSquad
 	void GameplayManager::Render( sf::RenderWindow& window )
 	{
 		window.clear();
-		registry.view< Sprite< 1 > >().each( [&]( auto& sprite ) {
-			sprite.Draw( window );
-			}
-		);
-		registry.view< Sprite< 0 >, Goo::GooComponentRefrence >().each( [ & ]( 
-			Sprite< 0 >& sprite, Goo::GooComponentRefrence& goo ) {
-				sprite.Draw( window );
-			}
-		);
+		std::vector< std::reference_wrapper< Sprite > > toDraw;
+//		registry.view< Sprite/*< 1 >*/ >().each( [&]( auto& sprite ) {
+
+//			sprite.Draw( window );
+//			}
+//		);
+//		registry.view< Sprite/*< 0 >*/, Goo::GooComponentRefrence >().each( [ & ](
+//			Sprite/*< 0 >*/& sprite, Goo::GooComponentRefrence& goo ) {
+//				sprite.Draw( window );
+//			}
+//		);
 		if( gameState == StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE )
 		{
-			selectionSquare.Draw( window );
-			littleMove.Draw( window );
-			littleTarget.Draw( window );
+			toDraw.push_back( selectionSquare );
+			toDraw.push_back( littleMove );
+			toDraw.push_back( littleTarget );
+			//selectionSquare.Draw( window );
+			//littleMove.Draw( window );
+			//littleTarget.Draw( window );
 		}
-		registry.view< Sprite< 0 > >( entt::exclude< Goo::GooComponentRefrence > ).each( [&](
-			Sprite< 0 >& sprite ) {
-				sprite.Draw( window );
+//		registry.view< Sprite/*< 0 >*/ >( entt::exclude< Goo::GooComponentRefrence > ).each( [&](
+//			Sprite/*< 0 >*/& sprite ) {
+//				sprite.Draw( window );
+//			}
+//		);
+		DrawGUI( window );
+
+		for( auto* uiElement : emplacedUI )
+			toDraw.push_back( *uiElement );
+
+		registry.view< Sprite >().each( [&]( auto& sprite ) {
+				toDraw.push_back( sprite );
 			}
 		);
+
 		registry.view< FlamethrowerOrder::FlameSpriteType >().each( [&]( FlamethrowerOrder::FlameSpriteType& flamethrowerSprites ) {
 			for( auto& sprite : flamethrowerSprites )
-				sprite.Draw( window );
+				toDraw.push_back( sprite );
+				//sprite.Draw( window );
 			} 
 		);
-		DrawGUI( window );
-		registry.view< Sprite< 2 > >().each( [&](
-			Sprite< 2 >& sprite ) {
-				sprite.Draw( window );
-			}
+		//std::cout << " I AM A UNICORN WIZARD\n";
+		std::sort( toDraw.begin(), toDraw.end(), []( std::reference_wrapper< Sprite > first, std::reference_wrapper< Sprite > second ) {
+				return first.get().GetLayer() < second.get().GetLayer();
+			} 
 		);
+//		registry.view< Sprite/*< 2 >*/ >().each( [&](
+//			Sprite/*< 2 >*/ & sprite ) {
+//				sprite.Draw( window );
+//			}
+//		);
+
+		window.draw( actionPanelRender );
+
+		bool actionPanelDrawn = false;
+
+		for( auto sprite : toDraw )
+		{
+			if( actionPanelDrawn == false && sprite.get().GetLayer() == 4 ) {
+				actionPanelDrawn = true;
+				window.draw( actionPanelRender );
+			}
+			sprite.get().Draw( window );
+		}
+
 		if( gameState == StagesOfPlay::WIN ) {
 			winSprite.Draw( window );
 			pressAnyKeySprite.Draw( window );
@@ -290,10 +336,12 @@ namespace BioGooContainmentSquad
 	
 	void GameplayManager::SelectCommand( sf::RenderWindow& window )
 	{
-		auto setCursorSprite = [&]() {
+		auto setCursorSprite = [&]()
+		{
 			auto* toBeCursor = actionBarSprites[ ( size_t ) currentAction ];
-			cursorSprite = Sprite< -1 >( toBeCursor->GetSpriteName() );
+			cursorSprite = Sprite( toBeCursor->GetSpriteName() );
 			cursorSprite.SetCurrentDirection( toBeCursor->GetCurrentDirection() );
+			cursorSprite.SetLayer( 5 );
 		};
 		if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) )
 		{
@@ -332,20 +380,13 @@ namespace BioGooContainmentSquad
 
 	void GameplayManager::DrawGUI( sf::RenderWindow& window )
 	{
-		sf::RectangleShape actionPanelRender;
-		actionPanelRender.setPosition( sf::Vector2f( ( float ) actionBar.left, ( float ) actionBar.top ) );
-		actionPanelRender.setSize( sf::Vector2f( ( float ) actionBar.width, ( float ) actionBar.height ) );
-		actionPanelRender.setFillColor( sf::Color( 97, 90, 90, 255 ) );
-		actionPanelRender.setOutlineColor( sf::Color( 14, 32, 232, 255 ) );
-		actionPanelRender.setOutlineThickness( 2.0f );
 		SelectCommand( window );
 		cursorSprite.RefrenceSprite().setPosition( ConvertVector< float, int >( sf::Mouse::getPosition( window ) ) );
-		window.draw( actionPanelRender );
-		leftArrow.Draw( window );
-		rightArrow.Draw( window );
-		for( Sprite< -1 > * uiElement : actionBarSprites )
-			uiElement->Draw( window );
-		cursorSprite.Draw( window );
+		//leftArrow.Draw( window );
+		//rightArrow.Draw( window );
+		//for( Sprite* uiElement : actionBarSprites )
+		//	uiElement->Draw( window );
+		//cursorSprite.Draw( window );
 	}
 
 	void GameplayManager::ExecuteAllPlayerOrders()
@@ -386,11 +427,11 @@ namespace BioGooContainmentSquad
 			}
 			selectionSquare.SetActive( true );
 			selectionSquare.RefrenceSprite().setPosition(
-					registry.get< Sprite< 0 > >( idOfSelectedSquaddie.value() ).RefrenceSprite().getPosition() );
+					registry.get< Sprite >( idOfSelectedSquaddie.value() ).RefrenceSprite().getPosition() );
 			if( sf::Mouse::isButtonPressed( sf::Mouse::Button::Right ) == true )
 			{
-				if( RectangleFromVectors< float >( registry.get< Sprite< 0 > >(
-					idOfSelectedSquaddie.value() ).RefrenceSprite().getPosition(),
+				if( RectangleFromVectors< float >( registry.get< Sprite >(
+					idOfSelectedSquaddie.value() ).GetPosition(),
 					sf::Vector2f( 64.f, 64.f ) ).contains(
 					ConvertVector< float, int >( mousePosition ) ) == false )
 				{

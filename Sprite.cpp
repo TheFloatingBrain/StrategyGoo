@@ -22,8 +22,8 @@ namespace BioGooContainmentSquad
 		delete Detail::masterSpriteBuffer;
 	}
 
-	template< int LAYER_CONSTANT >
-	Sprite< LAYER_CONSTANT >::Sprite( std::string spriteName_, Direction currentDirection_ ) : currentDirection( currentDirection_ ), currentFrame( 0 )
+	
+	Sprite::Sprite( std::string spriteName_, int layer_, Direction currentDirection_ ) : layer( layer_ ), currentDirection( currentDirection_ ), currentFrame( 0 )
 	{
 		InitializeSprite( spriteName_ );
 		ConstructDefaultAnimation();
@@ -31,8 +31,8 @@ namespace BioGooContainmentSquad
 		sprite.setTextureRect( frames[ 0 ][ 0 ] );
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::ConstructDefaultAnimation()
+	
+	void Sprite::ConstructDefaultAnimation()
 	{
 		ANIMATION_TYPE newAnimation;
 		for( size_t i = 0; i < frames.size(); ++i )
@@ -44,8 +44,8 @@ namespace BioGooContainmentSquad
 		animations.push_back( newAnimation );
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::Animate()
+	
+	void Sprite::Animate()
 	{
 		bool animate = animationActive;
 		if( animate == true && animationRate != 1.f )
@@ -66,41 +66,36 @@ namespace BioGooContainmentSquad
 		}
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::Draw( sf::RenderWindow& toRenderTo )
+	
+	void Sprite::Draw( sf::RenderWindow& toRenderTo )
 	{
 		if( active )
 			toRenderTo.draw( sprite );
 		Animate();
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::ChangeAnimation( size_t to ) {
+	
+	void Sprite::ChangeAnimation( size_t to ) {
 		currentAnimation = to;
 		//currentFrame = 0;
 	}
 
-	template< int LAYER_CONSTANT >
-	std::vector< sf::IntRect > Sprite< LAYER_CONSTANT >::ObtainFramesForDirection( Direction spriteDirection ) {
+	
+	std::vector< sf::IntRect > Sprite::ObtainFramesForDirection( Direction spriteDirection ) {
 		return frames[ ( unsigned short ) spriteDirection ];
 	}
 
-	template< int LAYER_CONSTANT >
-	std::vector< size_t > Sprite< LAYER_CONSTANT >::ObtainAnimationFramesForDirection( Direction spriteDirection ) {
+	
+	std::vector< size_t > Sprite::ObtainAnimationFramesForDirection( Direction spriteDirection ) {
 		return animations[ currentAnimation ][ ( unsigned short ) spriteDirection ];
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::SetAnimationRate( float animationRate_ ) {
+	
+	void Sprite::SetAnimationRate( float animationRate_ ) {
 		animationRate = animationRate_;
 	}
-	template< int LAYER_CONSTANT >
-	int Sprite< LAYER_CONSTANT >::GetLayerConstant() {
-		return LAYER_CONSTANT;
-	}
-
-	template< int LAYER_CONSTANT >
-	sf::IntRect Sprite< LAYER_CONSTANT >::ObtainAnimationFrameBounds( size_t animation, Direction spriteDirection, size_t frame ) {
+		
+	sf::IntRect Sprite::ObtainAnimationFrameBounds( size_t animation, Direction spriteDirection, size_t frame ) {
 		/*std::cerr << "-------\nSprite Direction " << ( unsigned int ) spriteDirection << " frame size " << frames.size() << "\n";
 		std::cerr << "Animation " << animation << " animations size " << animations.size() << "\n";
 		std::cerr << "Sprite Direction " << ( unsigned int ) spriteDirection << " animation size " << animations[ animation ].size() << "\n";
@@ -109,23 +104,23 @@ namespace BioGooContainmentSquad
 				animations[ animation ][ ( unsigned short ) spriteDirection ][ frame ] ];
 	}
 
-	template< int LAYER_CONSTANT >
-	sf::IntRect Sprite< LAYER_CONSTANT >::ObtainCurrentAnimationFrameBounds( Direction spriteDirection, size_t frame ) {
+	
+	sf::IntRect Sprite::ObtainCurrentAnimationFrameBounds( Direction spriteDirection, size_t frame ) {
 		return ObtainAnimationFrameBounds( currentAnimation, spriteDirection, frame );
 	}
 
-	template< int LAYER_CONSTANT >
-	size_t Sprite< LAYER_CONSTANT >::ObtainFramesForAnimation( Direction spriteDirection, size_t animation ) {
+	
+	size_t Sprite::ObtainFramesForAnimation( Direction spriteDirection, size_t animation ) {
 		return animations[ animation ][ ( unsigned short ) spriteDirection ].size();
 	}
 
-	template< int LAYER_CONSTANT >
-	size_t Sprite< LAYER_CONSTANT >::ObtainFramesForCurrentAnimation() {
+	
+	size_t Sprite::ObtainFramesForCurrentAnimation() {
 		return ObtainFramesForAnimation( currentDirection, currentAnimation );
 	}
 
-	template< int LAYER_CONSTANT >
-	std::vector< sf::IntRect > Sprite< LAYER_CONSTANT >::ObtainIntRectAnimationFramesForDirection( size_t animation, Direction spriteDirection )
+	
+	std::vector< sf::IntRect > Sprite::ObtainIntRectAnimationFramesForDirection( size_t animation, Direction spriteDirection )
 	{
 		std::vector< sf::IntRect > framesForAnimation;
 		const size_t AMOUNT_OF_FRAMES_CONSTANT = animations[ currentAnimation ][ 
@@ -136,149 +131,161 @@ namespace BioGooContainmentSquad
 		return framesForAnimation;
 	}
 
-	template< int LAYER_CONSTANT >
-	std::vector< sf::IntRect > Sprite< LAYER_CONSTANT >::ObtainIntRectCurrentAnimationFramesForDirection( Direction spriteDirection ) {
+	
+	std::vector< sf::IntRect > Sprite::ObtainIntRectCurrentAnimationFramesForDirection( Direction spriteDirection ) {
 		return ObtainIntRectAnimationFramesForDirection( currentAnimation, spriteDirection );
 	}
 
-	template< int LAYER_CONSTANT >
-	sf::IntRect Sprite< LAYER_CONSTANT >::ObtainFrameBounds( Direction spriteDirection, size_t frame ) {
+	
+	sf::IntRect Sprite::ObtainFrameBounds( Direction spriteDirection, size_t frame ) {
 		return frames[ ( unsigned short ) spriteDirection ][ frame ];
 	}
 
-	template< int LAYER_CONSTANT >
-	bool Sprite< LAYER_CONSTANT >::IsDirectionAvailible( Direction spriteDirection ) {
+	
+	bool Sprite::IsDirectionAvailible( Direction spriteDirection ) {
 		return frames[ ( unsigned short ) spriteDirection ].size() == 0;
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::ModifyTexture( const sf::Texture& texture ) {
+	
+	void Sprite::ModifyTexture( const sf::Texture& texture ) {
 		sprite.setTexture( texture );
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::AddAnimation( ANIMATION_TYPE toAdd ) {
+	
+	void Sprite::AddAnimation( ANIMATION_TYPE toAdd ) {
 		animations.push_back( toAdd );
 	}
 
-	template< int LAYER_CONSTANT >
-	size_t Sprite< LAYER_CONSTANT >::ObtainAmountOfAnimations() {
+	
+	size_t Sprite::ObtainAmountOfAnimations() {
 		return animations.size();
 	}
 
-	template< int LAYER_CONSTANT >
-	ANIMATION_TYPE Sprite< LAYER_CONSTANT >::ObtainAnimation( size_t animation ) {
+	
+	ANIMATION_TYPE Sprite::ObtainAnimation( size_t animation ) {
 		return animations[ animation ];
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::SetSprite( sf::Sprite sprite_ ) {
+	void Sprite::SetLayer( int layer_ ) {
+		layer = layer_;
+	}
+
+	
+	void Sprite::SetSprite( sf::Sprite sprite_ ) {
 		sprite = sprite_;
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::SetCurrentDirection( Direction currentDirection_ ) {
+	
+	void Sprite::SetCurrentDirection( Direction currentDirection_ ) {
 		currentDirection = currentDirection_;
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::SetFrames( FRAMES_TYPE frames_ ) {
+	
+	void Sprite::SetFrames( FRAMES_TYPE frames_ ) {
 		frames = frames_;
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::SetAnimations( std::vector< ANIMATION_TYPE > animations_ ) {
+	
+	void Sprite::SetAnimations( std::vector< ANIMATION_TYPE > animations_ ) {
 		animations = animations_;
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::SetCurrentFrame( size_t currentFrame_ ) {
+	
+	void Sprite::SetCurrentFrame( size_t currentFrame_ ) {
 		currentFrame = currentFrame_;
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::SetCurrentAnimation( size_t currentAnimation_ ) {
+	
+	void Sprite::SetCurrentAnimation( size_t currentAnimation_ ) {
 		currentAnimation = currentAnimation_;
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::SetActive( bool active_ ) {
+	
+	void Sprite::SetActive( bool active_ ) {
 		active = active_;
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::SetJSONData( std::string jsonData_ ) {
+	
+	void Sprite::SetJSONData( std::string jsonData_ ) {
 		jsonData = jsonData_;
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::SetPlaceInSpriteSheet( sf::IntRect placeInSpriteSheet_ ) {
+	
+	void Sprite::SetPlaceInSpriteSheet( sf::IntRect placeInSpriteSheet_ ) {
 		placeInSpriteSheet = placeInSpriteSheet_;
 
 	}
 
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::SetAnimationActive( bool animationActive_ ) {
+	
+	void Sprite::SetAnimationActive( bool animationActive_ ) {
 		animationActive = animationActive_;
 	}
 
-	template< int LAYER_CONSTANT >
-	std::string Sprite< LAYER_CONSTANT >::GetSpriteName() {
+	int Sprite::GetLayer() {
+		return layer;
+	}
+
+	
+	std::string Sprite::GetSpriteName() {
 		return spriteName;
 	}
 
-	template< int LAYER_CONSTANT >
-	sf::Sprite Sprite< LAYER_CONSTANT >::GetSprite() {
+	
+	sf::Sprite Sprite::GetSprite() {
 		return sprite;
 	}
 
-	template< int LAYER_CONSTANT >
-	FRAMES_TYPE Sprite< LAYER_CONSTANT >::GetFrames() {
+	
+	FRAMES_TYPE Sprite::GetFrames() {
 		return frames;
 	}
 
-	template< int LAYER_CONSTANT >
-	std::vector< ANIMATION_TYPE > Sprite< LAYER_CONSTANT >::GetAnimations() {
+	
+	std::vector< ANIMATION_TYPE > Sprite::GetAnimations() {
 		return animations;
 	}
 
-	template< int LAYER_CONSTANT >
-	Direction Sprite< LAYER_CONSTANT >::GetCurrentDirection() {
+	
+	Direction Sprite::GetCurrentDirection() {
 		return currentDirection;
 	}
 
-	template< int LAYER_CONSTANT >
-	size_t Sprite< LAYER_CONSTANT >::GetCurrentFrame() {
+	
+	size_t Sprite::GetCurrentFrame() {
 		return currentFrame;
 	}
 
-	template< int LAYER_CONSTANT >
-	size_t Sprite< LAYER_CONSTANT >::GetCurrentAnimation() {
+	
+	size_t Sprite::GetCurrentAnimation() {
 		return currentAnimation;
 	}
 
-	template< int LAYER_CONSTANT >
-	bool Sprite< LAYER_CONSTANT >::GetActive() {
+	
+	bool Sprite::GetActive() {
 		return active;
 	}
 
-	template< int LAYER_CONSTANT >
-	std::string Sprite< LAYER_CONSTANT >::GetJSONData() {
+	
+	std::string Sprite::GetJSONData() {
 		return jsonData;
 	}
 
-	template< int LAYER_CONSTANT >
-	sf::IntRect Sprite< LAYER_CONSTANT >::GetPlaceInSpriteSheet() {
+	
+	sf::IntRect Sprite::GetPlaceInSpriteSheet() {
 		return placeInSpriteSheet;
 	}
 
-	template< int LAYER_CONSTANT >
-	bool Sprite< LAYER_CONSTANT >::GetAnimationActive() {
+	
+	bool Sprite::GetAnimationActive() {
 		return animationActive;
 	}
-	template< int LAYER_CONSTANT >
-	float Sprite< LAYER_CONSTANT >::GetAnimationRate() {
+	
+	float Sprite::GetAnimationRate() {
 		return animationRate;
+	}
+
+	const sf::Vector2f& Sprite::GetPosition() {
+		return sprite.getPosition();
 	}
 
 
@@ -286,8 +293,8 @@ namespace BioGooContainmentSquad
 
 	const std::string ASSETS_FOLDER_CONSTANT = "Assets";
 
-	template< int LAYER_CONSTANT >
-	std::optional< int > Sprite< LAYER_CONSTANT >::ObtainLoadedSpriteIndex( std::string spriteName,
+	
+	std::optional< int > Sprite::ObtainLoadedSpriteIndex( std::string spriteName,
 			std::vector< LOADED_SPRITE_DATA_TYPE >* loadedSprites )
 	{
 		if( loadedSprites == nullptr )
@@ -300,8 +307,8 @@ namespace BioGooContainmentSquad
 		return std::nullopt;
 	}
 
-	template< int LAYER_CONSTANT >
-	sf::IntRect Sprite< LAYER_CONSTANT >::LoadSpriteImage( std::string spriteName, sf::Texture* buffer,
+	
+	sf::IntRect Sprite::LoadSpriteImage( std::string spriteName, sf::Texture* buffer,
 			sf::Image* spriteBuffer, std::vector< LOADED_SPRITE_DATA_TYPE >* loadedSprites )
 	{
 		if( buffer == nullptr )
@@ -346,8 +353,8 @@ namespace BioGooContainmentSquad
 		return spriteSourceBounds;
 	}
 
-	template< int LAYER_CONSTANT >
-	std::string Sprite< LAYER_CONSTANT >::LoadJSONData( std::string spriteName )
+	
+	std::string Sprite::LoadJSONData( std::string spriteName )
 	{
 		const std::string JSON_FILE_NAME_CONSTANT = ( ( ASSETS_FOLDER_CONSTANT + "/" ) +
 			spriteName + ( "/" + ( SPRITE_FILE_NAME_ROOT_CONSTANT + ".json" ) ) );
@@ -361,14 +368,14 @@ namespace BioGooContainmentSquad
 			jsonFile.close();
 		}
 		else {
-			std::cerr << "StrategyGoo::Sprite< LAYER_CONSTANT >::LoadJSONData( std::string ) : void::Error: failed to read file " <<
+			std::cerr << "StrategyGoo::Sprite::LoadJSONData( std::string ) : void::Error: failed to read file " <<
 					JSON_FILE_NAME_CONSTANT << "\n";
 		}
 		return jsonDataStream.str();
 	}
 
-	template< int LAYER_CONSTANT >
-	LOADED_SPRITE_DATA_TYPE Sprite< LAYER_CONSTANT >::LoadSprite( std::string spriteName, sf::Texture* buffer,
+	
+	LOADED_SPRITE_DATA_TYPE Sprite::LoadSprite( std::string spriteName, sf::Texture* buffer,
 			sf::Image* spriteBuffer, std::vector< LOADED_SPRITE_DATA_TYPE >* loadedSprites )
 	{
 		const auto SPRITE_INDEX_CONSTANT = ObtainLoadedSpriteIndex( spriteName, loadedSprites );
@@ -390,8 +397,8 @@ namespace BioGooContainmentSquad
 		return loadedSprites->at( SPRITE_INDEX_CONSTANT.value() );
 	}
 	
-	template< int LAYER_CONSTANT >
-	void Sprite< LAYER_CONSTANT >::InitializeSprite( std::string spriteName_ )
+	
+	void Sprite::InitializeSprite( std::string spriteName_ )
 	{
 		spriteName = spriteName_;
 		auto data = LoadSprite( spriteName );
@@ -407,8 +414,8 @@ namespace BioGooContainmentSquad
 
 	const size_t SPRITE_SHEET_PACKER_MAX_POWER_OF_10_CONSTANT = 2;
 
-	template< int LAYER_CONSTANT >
-	FRAMES_TYPE Sprite< LAYER_CONSTANT >::FrameDataFromJSONMetaData( std::string metaData, std::string spriteName )
+	
+	FRAMES_TYPE Sprite::FrameDataFromJSONMetaData( std::string metaData, std::string spriteName )
 	{
 		FRAMES_TYPE frames;
 		auto json = nlohmann::json::parse( metaData );
@@ -443,7 +450,7 @@ namespace BioGooContainmentSquad
 				frames[ i ].push_back( jsonDataToFrame( json[ DIRECTION_CONSTANT ] ) );
 			else
 			{
-				std::cerr << "StrategyGoo::Sprite< LAYER_CONSTANT >::FrameDataFromJSONMetaData( std::string, std::string ) : "
+				std::cerr << "StrategyGoo::Sprite::FrameDataFromJSONMetaData( std::string, std::string ) : "
 						"FRAMES_TYPE::Error: Failed to load frames for \"" <<
 						STRING_DIRECTIONS_ABBREVIATIONS_CONSTANT[ i ] << "\" direction.\n";
 			}
@@ -451,33 +458,52 @@ namespace BioGooContainmentSquad
 		return frames;
 	}
 
-	template< int LAYER_CONSTANT >
-	Sprite< LAYER_CONSTANT >::operator sf::Sprite() {
+	void Sprite::SetPosition( sf::Vector2f position ) {
+		sprite.setPosition( position );
+	}
+
+	void Sprite::SetPosition( float x, float y ) {
+		return sprite.setPosition( x, y );
+	}
+
+	void Sprite::SetOrientation( float orientation ) {
+		sprite.setRotation( orientation );
+	}
+
+	void Sprite::Move( sf::Vector2f displacement ) {
+		sprite.move( displacement );
+	}
+
+	void Sprite::Move( float x, float y ) {
+		sprite.move( x, y );
+	}
+
+	void Sprite::Rotate( float angle ) {
+		sprite.rotate( angle );
+	}
+
+	
+	Sprite::operator sf::Sprite() {
 		return sprite;
 	}
 	
-	template< int LAYER_CONSTANT >
-	sf::Sprite& Sprite< LAYER_CONSTANT >::operator*() {
+	
+	sf::Sprite& Sprite::operator*() {
 		return RefrenceSprite();
 	}
 	
-	template< int LAYER_CONSTANT >
-	sf::Sprite& Sprite< LAYER_CONSTANT >::RefrenceSprite() {
+	
+	sf::Sprite& Sprite::RefrenceSprite() {
 		return sprite;
 	}
 	
-	template< int LAYER_CONSTANT >
-	std::vector< ANIMATION_TYPE >& Sprite< LAYER_CONSTANT >::RefrenceAnimations() {
+	
+	std::vector< ANIMATION_TYPE >& Sprite::RefrenceAnimations() {
 		return animations;
 	}
 	
-	template< int LAYER_CONSTANT >
-	ANIMATION_TYPE& Sprite< LAYER_CONSTANT >::RefrenceAnimation( size_t animation ) {
+	
+	ANIMATION_TYPE& Sprite::RefrenceAnimation( size_t animation ) {
 		return animations[ animation ];
 	}
-
-	template Sprite< -1 >;
-	template Sprite< 0 >;
-	template Sprite< 1 >;
-	template Sprite< 2 >;
 }

@@ -16,8 +16,10 @@ namespace BioGooContainmentSquad
 		using UpdatorRefrence = std::reference_wrapper< Entity >;
 		virtual void Update() = 0;
 		virtual void UpdateGraphics() {};
+		void TranslateToBoard( sf::Vector2i displacement );
+		void TranslateToWorld( sf::Vector2f displacement );
 		BoardPosition& RefrenceBoardPosition();
-		Sprite< 0 >& RefrenceSprite();
+		Sprite& RefrenceSprite();
 		entt::registry& RefrenceRegistry();
 		entt::entity GetID();
 		GameBoard* GetBoard();

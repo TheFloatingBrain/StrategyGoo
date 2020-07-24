@@ -52,7 +52,7 @@ namespace BioGooContainmentSquad
 
 	struct FlamethrowerOrder : public PlayerOrder
 	{
-		using FlameSpriteType = std::vector< Sprite< 0 > >;
+		using FlameSpriteType = std::vector< Sprite >;
 		Direction direction;
 		FlamethrowerOrder( Squaddie& squaddie, sf::Vector2i mousePosition );
 		bool Tick( Squaddie& squaddie, entt::registry& registry ) override;

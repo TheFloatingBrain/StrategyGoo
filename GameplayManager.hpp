@@ -37,18 +37,20 @@ namespace BioGooContainmentSquad
 		void RemoveSquaddie( Squaddie::SquaddieRefrence toRemove );
 			void InitializeLevel();
 		protected:
-			Sprite< -1 > move, grenade, flameThrower, check, hand, leftArrow, 
+			Sprite move, grenade, flameThrower, check, hand, leftArrow, 
 					rightArrow, littleTarget, littleMove, throwGrenade, defaultCursor, 
 					cursorSprite, selectionSquare, winSprite, loseSprite, pressAnyKeySprite;
 			StagesOfPlay gameState = StagesOfPlay::PLAYER_GIVE_ORDERS_STAGE;
 			std::vector< std::tuple< entt::entity, sf::Vector2i, bool > > orderCoordinates;
 			sf::IntRect actionBar;
-			std::array< Sprite< -1 >*, 9 > uiElements;
-			std::array< Sprite< -1 >*, 6 > actionBarSprites;
+			std::array< Sprite*, 9 > uiElements;
+			std::array< Sprite*, 6 > actionBarSprites;
+			std::array< Sprite*, 8 > emplacedUI;
 			std::array< sf::Keyboard::Key, 5 > hotKeys{ sf::Keyboard::Num1, sf::Keyboard::Num2, 
 					sf::Keyboard::Num3, sf::Keyboard::Num4, sf::Keyboard::Num5
 			};
 			PlayerAction currentAction = PlayerAction::NONE;
+			sf::RectangleShape actionPanelRender;
 			void PlayerDamageStage();
 			void ExecuteAllPlayerOrders();
 			void DrawGUI( sf::RenderWindow& window );
@@ -63,6 +65,7 @@ namespace BioGooContainmentSquad
 			entt::registry& registry;
 			void InitilizeUIComponents();
 			std::vector< entt::entity > debug;
+			entt::entity thisID;
 	};
 }
 #endif

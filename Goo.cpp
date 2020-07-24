@@ -30,12 +30,15 @@ namespace BioGooContainmentSquad
 
 	Goo::GooComponent::GooComponent( entt::registry& registry_, BoardPosition start, GameBoard* board_,
 			size_t tileWidth, size_t tileHeight, Goo* parent_ ) : 
-			Entity( registry_, start, board_, tileWidth, tileHeight, "CubeGoo1" ), parent( parent_ ) {
+			Entity( registry_, start, board_, tileWidth, tileHeight, "CubeGoo1" ), parent( parent_ )
+	{
 		InitilizeRefrences< Goo::GooComponentRefrence, Goo::GooComponent >( *this );
 		MakeGooAnimation();
-		RefrenceSprite().RefrenceSprite().scale( .63f, .5f );
-		RefrenceSprite().RefrenceSprite().setOrigin( 0.f, 16.f );
-		RefrenceSprite().SetAnimationRate( 1.f / 5.f );
+		auto& sprite = RefrenceSprite();
+		sprite.RefrenceSprite().scale( .63f, .5f );
+		sprite.RefrenceSprite().setOrigin( 0.f, 16.f );
+		sprite.SetAnimationRate( 1.f / 5.f );
+		sprite.SetLayer( 2 );
 	}
 
 	void Goo::GooComponent::MakeGooAnimation()
@@ -170,7 +173,7 @@ namespace BioGooContainmentSquad
 				if( MoveEntity< GooComponentRefrence >( registry, *goo[ 0 ],
 					location, location + unit, board ) == true ) {
 					location += unit;
-					goo[ 0 ]->RefrenceSprite().RefrenceSprite().setPosition( goo[ 0 ]->ToWorldPosition() );
+					goo[ 0 ]->RefrenceSprite().SetPosition( goo[ 0 ]->ToWorldPosition() );
 					return true;
 				}
 				else
@@ -217,7 +220,7 @@ namespace BioGooContainmentSquad
 						{
 							//std::cout << "Move made\n";
 							furthestPosition = newLocation;
-							furthest->RefrenceSprite().RefrenceSprite().setPosition( furthest->ToWorldPosition() );
+							furthest->RefrenceSprite().SetPosition( furthest->ToWorldPosition() );
 						}
 						else
 						{

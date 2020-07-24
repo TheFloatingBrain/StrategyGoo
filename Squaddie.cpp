@@ -5,6 +5,7 @@ namespace BioGooContainmentSquad
 	Squaddie::Squaddie( entt::registry& registry_, BoardPosition start, GameBoard* board_, size_t tileWidth, size_t tileHeight ) :
 		Entity( registry_, start, board_, tileWidth, tileHeight, "Squaddie" ) {
 		InitilizeRefrences< SquaddieRefrence, Squaddie >( *this );
+		RefrenceSprite().SetLayer( 2 );
 	}
 
 	Squaddie& Squaddie::ObtainThis() {
