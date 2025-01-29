@@ -165,6 +165,7 @@ namespace BioGooContainmentSquad
 			if( idOfSelectedSquaddie.value() == toRemove.get().GetID() )
 				idOfSelectedSquaddie = std::nullopt;
 		}
+		auto toRemoveId = toRemove.get().GetID();
 		RemoveEntityFromTile< Squaddie::SquaddieRefrence >( registry,
 			toRemove.get().RefrenceBoardPosition(), toRemove.get().GetBoard() );
 		for( size_t i = 0; i < entities.size(); ++i )
@@ -176,8 +177,8 @@ namespace BioGooContainmentSquad
 				break;
 			}
 		}
-		registry.remove_all( toRemove.get().GetID() );
-		registry.destroy( toRemove.get().GetID() );
+		registry.remove_all( toRemoveId );
+		registry.destroy( toRemoveId );
 	}
 
 	void GameplayManager::Render( sf::RenderWindow& window )
